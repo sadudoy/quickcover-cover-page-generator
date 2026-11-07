@@ -1,5 +1,11 @@
 node_modules/
-reference/rendered/
 .DS_Store
 *.log
-/reference
+.vscode/
+.idea/
+
+# Ignore rendered scratch PNGs while preserving reference PDFs
+reference/rendered/*.png
+reference/rendered/**/*.png
+reference/rendered/audit/
+reference/rendered/phase7b/

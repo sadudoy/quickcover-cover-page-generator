@@ -403,6 +403,19 @@ function updateCourseLists() {
     });
     hintEl.style.display = isVisible ? 'block' : 'none';
   }
+
+  // Dynamic placeholder for Course Code input (Phase 7B)
+  if (courseCodeInput) {
+    if (!deptInputVal) {
+      courseCodeInput.placeholder = 'Select department first';
+    } else if (!levelVal || !termVal) {
+      courseCodeInput.placeholder = 'Select level & term first';
+    } else if (currentFilteredCourses.length === 0) {
+      courseCodeInput.placeholder = 'Type course code';
+    } else {
+      courseCodeInput.placeholder = 'Select or type course code';
+    }
+  }
 }
 
 /**

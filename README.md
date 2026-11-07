@@ -1,86 +1,85 @@
 # Quick Cover
 
-Quick Cover is a zero-dependency, client-side web application designed to generate standardized, print-ready university assignment and lab-report cover pages matching institutional templates exactly.
+**Quick Cover** is a zero-dependency, client-side web application designed to generate standardized, print-ready university assignment and lab-report cover pages matching institutional templates with pixel-accurate precision.
 
-Built with vanilla HTML5, CSS3, and JavaScript ES modules — **no frameworks, no bundler, no build step, no external dependencies**.
+Built entirely with **vanilla HTML5, CSS3, and JavaScript ES modules** — no frameworks, no bundlers, no build steps, and no external dependencies.
+
+---
+
+## Features
+
+- **Pixel-Accurate A4 Cover Layout**: Complies with institutional specifications (exact 210mm × 297mm single-page A4 format).
+- **Dual Document Types**: Seamlessly toggle between **Lab Report** (includes Experiment Date) and **Assignment** layouts.
+- **Dynamic Multi-Teacher Support**: Add, edit, or remove multiple teachers/instructors with automatic card height balancing and a shared, pinned signature line.
+- **Cascading Course Catalogue**: Intelligent auto-complete for course codes and course titles based on department, level, and term.
+- **Built-in Defaults**: Pre-configured defaults for Bangladesh Army University of Science and Technology (BAUST) and CSE.
+- **Logo Support**: Bundled institutional default logo with instant user logo upload and one-click reset.
+- **100% Local Processing & Persistence**: Automatic draft auto-save and logo caching using LocalStorage and IndexedDB. Zero data ever leaves the browser.
+- **Vector Print-to-PDF**: Exports directly through the browser print dialog as a single-page vector PDF with zero UI chrome leaks.
+- **Fully Responsive**: Adapts across mobile (360px), tablet (768px), desktop (1280px), and ultrawide (1920px).
+
+---
+
+## Tech Stack
+
+- **Markup**: Semantic HTML5 (landmarks, accessible labels, live regions)
+- **Styling**: Modern CSS3 (CSS Custom Properties, Flexbox, CSS Grid, `@page`, `@media print`)
+- **Scripting**: Vanilla JavaScript ES Modules (`create.js`, `storage.js`, `site.js`)
+- **Testing**: Built-in Node.js test runner (`node:test`, `node:assert`) and Chromium DevTools Protocol (CDP) for end-to-end browser automation
 
 ---
 
 ## Quick Start
 
-### 1. Run the Development Server
+### 1. Run the Local Development Server
 Start the built-in local static server (zero external packages required):
 ```bash
 npm run dev
 ```
-- Landing Page: [http://localhost:5173/](http://localhost:5173/)
-- Tool Page: [http://localhost:5173/create.html](http://localhost:5173/create.html)
+- **Landing Page**: [http://localhost:5173/](http://localhost:5173/)
+- **Tool Page**: [http://localhost:5173/create.html](http://localhost:5173/create.html)
 
-### 2. Run Tests
+### 2. Run the Automated Tests
 Execute the unit and smoke test suite using Node's built-in test runner:
 ```bash
 npm test
 ```
 
-To run end-to-end browser automation suites via Chromium DevTools Protocol (CDP):
+### 3. Run End-to-End Verification Suites
+Run browser automation suites via Chromium DevTools Protocol:
 ```bash
-node scripts/test-golden-path.js    # 12-step full student workflow E2E test
-node scripts/test-defaults.js       # Pre-filled defaults & cascade hint test
+node scripts/test-golden-path.js    # 12-step complete student workflow E2E test
 node scripts/test-phase6-print.js   # Precision A4 vector print fidelity test
-node scripts/test-responsive.js     # Multi-viewport responsive audit (360-1920px)
+node scripts/test-phase4-interactions.js  # Dynamic multi-teacher test
+node scripts/test-phase5-interactions.js  # Persistence and cross-tab sync test
+node scripts/test-defaults.js       # Pre-filled defaults & cascade hint test
 ```
 
 ---
 
-## Project Structure Overview
+## Production Deployment
 
-```text
-cover-page-generator/
-├── client/                     # Static client-side web application
-│   ├── index.html              # Landing page
-│   ├── create.html             # Interactive cover page generator tool
-│   ├── cover-lab.html          # Static lab report template reference
-│   ├── cover-assignment.html   # Static assignment template reference
-│   ├── assets/                 # Static media (default institution logo)
-│   ├── css/
-│   │   ├── cover.css           # Exact A4 cover layout (FROZEN contract)
-│   │   ├── site.css            # Global tokens, typography bump, base styles
-│   │   ├── form.css            # Tool workspace grid, form controls, preview scaling
-│   │   ├── landing.css         # Landing page hero cards and feature grid
-│   │   └── print.css           # Print-to-PDF stylesheet (@page A4, chrome hidden)
-│   ├── js/
-│   │   ├── create.js           # Live preview binding, cascade, teachers, defaults
-│   │   ├── storage.js          # Two-layer persistence (localStorage + IndexedDB)
-│   │   ├── site.js             # Shared site behavior
-│   │   └── main.js             # Client entry point
-│   └── data/
-│       └── dropdowns.json      # University, department, and course catalogue
-├── docs/                       # Technical documentation and specifications
-│   ├── PROJECT_SPEC.md         # Requirements, data models, and specifications
-│   ├── ARCHITECTURE.md         # Technical architecture and design decisions
-│   ├── DEVELOPMENT.md          # Developer onboarding, storage contracts, freeze rules
-│   ├── TESTING.md              # Test execution guide and script inventory
-│   ├── PROJECT_STATUS.md       # Implementation milestones and phase matrix
-│   └── DESIGN_ANALYSIS.md      # Dual reference PDF comparative analysis
-├── tests/                      # Automated test suites
-│   ├── index.js                # Test runner entry
-│   ├── smoke.test.js           # Structural and CSS/HTML invariant tests
-│   └── unit.test.js            # Pure logic unit tests (defaults, cascade, migration)
-├── scripts/                    # Development server and CDP test automation scripts
-│   ├── dev-server.js           # Static HTTP dev server
-│   ├── test-golden-path.js     # 12-step E2E student journey test
-│   ├── test-defaults.js        # Defaults and cascade hint CDP test
-│   ├── test-responsive.js      # Responsive multi-viewport capture script
-│   ├── test-phase6-print.js    # Print-to-PDF fidelity test
-│   └── analyze-print-pdf.py    # PyMuPDF vector PDF verification helper
-└── reference/                  # Institutional reference PDFs and default logo
-```
+Because Quick Cover is a 100% static client-side application, it requires **zero build steps** and can be deployed directly to any static web host.
+
+- **Netlify**: Drag-and-drop the `client/` directory into the Netlify dashboard, or configure publish directory as `client`.
+- **Vercel**: Deploy the repository and set the root directory or output directory to `client`.
+- **GitHub Pages**: Set GitHub Pages source to the branch and point to the `client/` directory (or publish via GitHub Actions).
+
+For detailed deployment and maintenance instructions, see the [Handover Guide](docs/HANDOVER.md).
 
 ---
 
 ## Documentation Links
-- [`docs/PROJECT_SPEC.md`](docs/PROJECT_SPEC.md) — Comprehensive product requirements and data schema.
-- [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) — Development workflow, storage contracts, and freeze rules.
-- [`docs/TESTING.md`](docs/TESTING.md) — Testing guide and CDP script inventory.
-- [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — Current implementation milestones and roadmap.
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Architecture and design decisions.
+
+- [`docs/HANDOVER.md`](docs/HANDOVER.md) — Comprehensive guide for updating course data, defaults, logo, and deploying.
+- [`docs/PROJECT_SPEC.md`](docs/PROJECT_SPEC.md) — Product specifications, data schema, and technical rules.
+- [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — Current implementation milestones and verified status.
+- [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) — Development workflow, storage contracts, and CSS freeze invariants.
+- [`docs/TESTING.md`](docs/TESTING.md) — Testing strategy and script inventory.
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Architectural overview and design principles.
+
+---
+
+## License
+
+MIT © 2026 Quick Cover.

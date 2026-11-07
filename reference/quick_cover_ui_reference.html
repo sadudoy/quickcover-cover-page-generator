@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Cover — UI Reference</title>
+<style>
+:root{--blue:#145bea;--blue-dark:#104bc4;--ink:#172033;--muted:#697386;--line:#e5e9f1;--surface:#fff;--bg:#f6f8fc;--soft:#eef4ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#fff}button,input,select,textarea{font:inherit}button{cursor:pointer}.shell{max-width:1200px;margin:auto;padding:0 28px}
+.nav{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #edf0f5;background:#fff}.brand{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:750;letter-spacing:-.8px}.brand-mark{width:34px;height:38px;border-radius:8px;background:var(--blue);display:grid;place-items:center;color:#fff}.brand-mark svg{width:22px}.brand span span{color:var(--blue)}.navlinks{display:flex;gap:34px;align-items:center}.navlinks a{font-size:14px;color:#4e586b;text-decoration:none}.navlinks a:hover{color:var(--blue)}.btn{border:0;border-radius:9px;padding:12px 18px;background:var(--blue);color:#fff;font-weight:650;font-size:14px;box-shadow:0 4px 10px #145bea20;transition:.18s}.btn:hover{background:var(--blue-dark);transform:translateY(-1px)}.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none}.btn.small{padding:9px 14px}
+.hero{background:linear-gradient(115deg,#f5f8ff 0%,#edf3ff 100%);overflow:hidden}.hero-inner{min-height:510px;display:grid;grid-template-columns:1.03fr .97fr;align-items:center;gap:40px;padding-top:30px;padding-bottom:45px}.eyebrow{font-size:12px;font-weight:750;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:18px}.hero h1{font-size:clamp(48px,6vw,72px);line-height:1.02;letter-spacing:-3.8px;margin:0 0 22px;font-weight:800}.hero h1 span{color:var(--blue)}.hero-copy{font-size:21px;line-height:1.5;color:#39445a;max-width:540px;margin:0 0 27px}.benefits{display:flex;flex-wrap:wrap;gap:22px;margin:0 0 30px;color:#354158;font-size:14px}.benefits span{display:flex;align-items:center;gap:8px}.benefits b{color:var(--blue);font-size:17px}.hero-art{height:390px;position:relative;display:flex;align-items:center;justify-content:center}.blob{position:absolute;width:390px;height:310px;border-radius:48% 52% 44% 56%;background:#dce8ff;transform:rotate(-10deg)}.mock-doc{position:absolute;width:225px;height:300px;background:#fff;box-shadow:0 18px 38px #23365a25;border:1px solid #e7eaf0;padding:28px 20px;text-align:center;display:flex;flex-direction:column;align-items:center}.mock-doc.back{transform:translate(105px,15px) rotate(9deg);opacity:.92}.mock-doc.front{transform:translate(-18px,-3px) rotate(-7deg)}.seal{width:42px;height:42px;border:3px double #172033;border-radius:50%;display:grid;place-items:center;font-size:17px;margin-bottom:14px}.doc-university{font-size:11px;font-weight:750;line-height:1.4}.doc-rule{height:1px;background:#202b3d;width:100%;margin:15px 0}.doc-title{font-size:17px;font-weight:800;margin:4px 0}.doc-sub{font-size:10px;font-weight:650;margin:8px 0}.doc-lines{width:100%;margin-top:18px;display:grid;gap:9px}.doc-lines i{height:5px;background:#e5e9f0;border-radius:3px}.section{padding:78px 0}.section-head{text-align:center;max-width:600px;margin:0 auto 38px}.section-head h2{font-size:34px;letter-spacing:-1.2px;margin:0 0 10px}.section-head p{color:var(--muted);line-height:1.6;margin:0}.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.feature{border:1px solid var(--line);border-radius:13px;padding:24px;background:#fff}.feature-icon{width:40px;height:40px;background:var(--soft);color:var(--blue);border-radius:10px;display:grid;place-items:center;font-size:19px;margin-bottom:18px}.feature h3{font-size:16px;margin:0 0 8px}.feature p{font-size:14px;line-height:1.6;color:var(--muted);margin:0}.how{background:var(--bg)}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;text-align:center}.step-no{width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;margin:0 auto 14px;font-weight:700}.steps h3{font-size:16px;margin:0 0 7px}.steps p{font-size:14px;color:var(--muted);line-height:1.5;margin:0}.cta{text-align:center;padding:64px 20px}.cta h2{font-size:32px;letter-spacing:-1px;margin:0 0 12px}.cta p{color:var(--muted);margin:0 0 22px}.footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:13px}.footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.footer a{color:var(--muted);text-decoration:none;margin-left:18px}
+.editor-page{display:none;min-height:100vh;background:#f4f6fa}.editor-top{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px}.editor-top .brand{font-size:20px}.editor-actions{display:flex;gap:10px}.workspace{max-width:1500px;margin:0 auto;padding:18px;display:grid;grid-template-columns:420px minmax(0,1fr);gap:16px;min-height:calc(100vh - 68px)}.panel{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 8px #15264a08}.form-panel{padding:20px;height:fit-content}.panel-title{display:flex;align-items:center;gap:10px;font-weight:750;font-size:16px;margin:0 0 20px}.panel-title .pencil{color:var(--blue);font-size:19px}.field{margin-bottom:15px}.field label{display:block;font-size:12px;font-weight:700;color:#39445a;margin-bottom:7px}.field input,.field select{width:100%;height:39px;border:1px solid #d9deea;border-radius:7px;padding:0 11px;color:#202a3c;background:#fff;outline:none;font-size:13px}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #145bea15}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}.segmented{display:grid;grid-template-columns:1fr 1fr;gap:8px}.segmented button{height:37px;border:1px solid #d9deea;background:#fff;border-radius:7px;font-size:13px;color:#344054}.segmented button.active{background:var(--blue);border-color:var(--blue);color:#fff}.hint{font-size:11px;color:#8a93a3;margin-top:5px}.full{width:100%}.preview-panel{padding:18px;background:#edf0f5;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:700px}.preview-toolbar{width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:#626d80;font-size:12px}.paper-wrap{width:min(100%,650px);display:flex;justify-content:center;padding:8px}.paper{width:420px;min-height:594px;background:#fff;box-shadow:0 3px 18px #1e2a421a;padding:55px 42px 40px;text-align:center;color:#101828;display:flex;flex-direction:column;align-items:center;font-family:"Times New Roman",serif}.paper-logo{width:58px;height:58px;border:2px solid #202b3d;border-radius:50%;display:grid;place-items:center;font-size:22px;margin-bottom:15px}.paper-university{font-size:17px;font-weight:700;line-height:1.35;white-space:pre-line}.paper-rule{height:1px;background:#1f2937;width:100%;margin:22px 0 20px}.paper-type{font-size:21px;font-weight:700;margin-bottom:7px}.paper-on{font-size:14px;margin-bottom:14px}.paper-topic{font-size:16px;font-weight:700;line-height:1.4;min-height:42px}.paper-meta{margin-top:43px;font-size:13px;line-height:1.9}.paper-dept{font-size:13px;font-weight:700;margin-top:24px;line-height:1.5}.paper-date{font-size:13px;font-weight:700;margin-top:22px}.editor-note{font-size:11px;color:#7a8495;margin-top:12px;text-align:center}
+@media(max-width:850px){.hero-inner{grid-template-columns:1fr;gap:0;padding-top:65px}.hero-art{height:330px}.navlinks{display:none}.feature-grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr;gap:25px}.workspace{grid-template-columns:1fr}.preview-panel{min-height:660px;grid-row:2}.form-panel{grid-row:1}.paper{width:min(420px,100%);min-height:auto;aspect-ratio:210/297;padding:12% 10% 8%}.paper-university{font-size:clamp(12px,3vw,17px)}.paper-type{font-size:clamp(16px,4vw,21px)}.paper-topic{font-size:clamp(12px,3vw,16px)}.paper-meta,.paper-dept,.paper-date{font-size:clamp(10px,2.5vw,13px)}}
+@media(max-width:520px){.shell{padding:0 19px}.nav{height:66px}.hero h1{font-size:49px;letter-spacing:-2.7px}.hero-copy{font-size:18px}.benefits{gap:13px;flex-direction:column}.hero-art{height:290px}.blob{width:290px;height:230px}.mock-doc{transform:scale(.83)}.mock-doc.front{transform:translate(-10px,-3px) rotate(-7deg) scale(.83)}.mock-doc.back{transform:translate(75px,12px) rotate(9deg) scale(.83)}.section{padding:58px 0}.section-head h2{font-size:28px}.editor-top{padding:0 14px}.editor-top .brand{font-size:17px}.editor-actions .secondary{display:none}.workspace{padding:10px;gap:10px}.form-panel{padding:15px}.preview-panel{padding:10px;min-height:500px}.paper-wrap{padding:0}.two-col{gap:8px}}
+@media print{body *{visibility:hidden}.paper,.paper *{visibility:visible}.paper{position:absolute;left:0;top:0;width:210mm;height:297mm;box-shadow:none;margin:0;padding:25mm 20mm}.preview-panel{background:#fff;padding:0}.editor-top,.form-panel,.preview-toolbar,.editor-note{display:none!important}}
+</style>
+</head>
+<body>
+<div id="landing">
+  <header class="nav shell">
+    <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l5 5v13H6z"/><path d="M15 3v6h5M9 13h8M9 17h8"/></svg></div><span>Quick <span>Cover</span></span></div>
+    <nav class="navlinks"><a href="#home">Home</a><a href="#features">Features</a><a href="#how">How it works</a><a href="#faq">FAQ</a></nav>
+    <button class="btn small" onclick="showEditor()">Generate Now&nbsp; →</button>
+  </header>
+  <main id="home">
+    <section class="hero"><div class="shell hero-inner">
+      <div>
+        <div class="eyebrow">A better first page for every submission</div>
+        <h1>Quick <span>Cover</span></h1>
+        <p class="hero-copy">Create clean, professional lab report and assignment cover pages in just a few moments.</p>
+        <div class="benefits"><span><b>↯</b> Fast &amp; easy</span><span><b>▤</b> Live document preview</span><span><b>↓</b> Print-ready PDF</span></div>
+        <button class="btn" onclick="showEditor()">Start Generating&nbsp; →</button>
+      </div>
+      <div class="hero-art" aria-label="Sample academic cover pages">
+        <div class="blob"></div>
+        <div class="mock-doc back"><div class="seal">QC</div><div class="doc-university">YOUR UNIVERSITY<br>DEPARTMENT NAME</div><div class="doc-rule"></div><div class="doc-title">Assignment</div><div class="doc-lines"><i></i><i></i><i></i><i></i></div></div>
+        <div class="mock-doc front"><div class="seal">QC</div><div class="doc-university">YOUR UNIVERSITY<br>DEPARTMENT NAME</div><div class="doc-rule"></div><div class="doc-title">Lab Report</div><div class="doc-sub">on</div><div class="doc-sub">[Your Topic Here]</div><div class="doc-lines"><i></i><i></i><i></i></div></div>
+      </div>
+    </div></section>
+    <section class="section shell" id="features"><div class="section-head"><div class="eyebrow">Made for students</div><h2>Everything you need. Nothing you don't.</h2><p>A straightforward way to make your academic submissions look organized and professional.</p></div>
+      <div class="feature-grid">
+        <article class="feature"><div class="feature-icon">▤</div><h3>Live preview</h3><p>See your cover page take shape while you enter your information.</p></article>
+        <article class="feature"><div class="feature-icon">✎</div><h3>Simple details form</h3><p>Add your course, topic, name, ID and department in one clear workspace.</p></article>
+        <article class="feature"><div class="feature-icon">↓</div><h3>PDF ready to print</h3><p>Generate a neat A4 cover page that is ready to download and submit.</p></article>
+      </div>
+    </section>
+    <section class="section how" id="how"><div class="shell"><div class="section-head"><div class="eyebrow">Three simple steps</div><h2>From blank page to done.</h2><p>No design skills or document formatting required.</p></div><div class="steps">
+      <div><div class="step-no">1</div><h3>Choose a document</h3><p>Select Lab Report or Assignment to get started.</p></div>
+      <div><div class="step-no">2</div><h3>Fill in your details</h3><p>Enter your academic information and check the live preview.</p></div>
+      <div><div class="step-no">3</div><h3>Download your PDF</h3><p>Save your A4 cover page and attach it to your submission.</p></div>
+    </div></div></section>
+    <section class="cta" id="faq"><h2>Your next cover page starts here.</h2><p>Spend less time formatting. Focus on your work.</p><button class="btn" onclick="showEditor()">Create a cover page&nbsp; →</button></section>
+  </main>
+  <footer class="footer"><div class="shell footer-inner"><span>© 2026 Quick Cover. A simpler way to prepare submissions.</span><span><a href="#features">Features</a><a href="#how">How it works</a><a href="#faq">FAQ</a></span></div></footer>
+</div>
+<div id="editor" class="editor-page">
+  <header class="editor-top">
+    <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l5 5v13H6z"/><path d="M15 3v6h5M9 13h8M9 17h8"/></svg></div><span>Quick <span>Cover</span></span></div>
+    <div class="editor-actions"><button class="btn secondary small" onclick="showLanding()">← Back to Home</button><button class="btn small" onclick="window.print()">↓ Download PDF</button></div>
+  </header>
+  <div class="workspace">
+    <section class="panel form-panel">
+      <h2 class="panel-title"><span class="pencil">▧</span> Your Information</h2>
+      <div class="field"><label>Document Type</label><div class="segmented"><button id="labBtn" class="active" onclick="setType('Lab Report')">Lab Report</button><button id="assignBtn" onclick="setType('Assignment')">Assignment</button></div></div>
+      <div class="field"><label for="university">University / Institution</label><input id="university" value="Bangladesh University of Engineering and Technology" oninput="updatePreview()"></div>
+      <div class="field"><label for="topic">Title / Topic</label><input id="topic" value="Introduction to Operating Systems" oninput="updatePreview()"></div>
+      <div class="two-col">
+        <div class="field"><label for="student">Submitted By</label><input id="student" value="Your Name" oninput="updatePreview()"></div>
+        <div class="field"><label for="studentid">ID / Roll No.</label><input id="studentid" value="Your ID" oninput="updatePreview()"></div>
+      </div>
+      <div class="field"><label for="course">Course Title (optional)</label><input id="course" placeholder="e.g. Operating Systems" oninput="updatePreview()"></div>
+      <div class="field"><label for="coursecode">Course Code (optional)</label><input id="coursecode" placeholder="e.g. CSE 3201" oninput="updatePreview()"></div>
+      <div class="field"><label for="department">Department</label><input id="department" value="Computer Science and Engineering" oninput="updatePreview()"></div>
+      <div class="field"><label for="date">Submission Date</label><input id="date" type="date" value="2026-11-16" oninput="updatePreview()"></div>
+      <div class="field"><label for="teacher">Submitted To (optional)</label><input id="teacher" placeholder="Teacher's name and designation" oninput="updatePreview()"></div>
+      <button class="btn full" onclick="updatePreview()">↻&nbsp; Update Preview</button>
+      <p class="hint">This is a visual reference prototype. PDF download uses your browser's Print → Save as PDF.</p>
+    </section>
+    <section class="panel preview-panel">
+      <div class="preview-toolbar"><span>LIVE PREVIEW</span><span>A4 · Portrait</span></div>
+      <div class="paper-wrap"><div class="paper" id="paper">
+        <div class="paper-logo">QC</div>
+        <div class="paper-university" id="pUniversity">Bangladesh University of Engineering and Technology</div>
+        <div class="paper-rule"></div>
+        <div class="paper-type" id="pType">Lab Report</div><div class="paper-on">on</div>
+        <div class="paper-topic" id="pTopic">Introduction to Operating Systems</div>
+        <div class="paper-meta"><div><b>Submitted By:</b></div><div id="pStudent">Your Name</div><div id="pId">ID: Your ID</div><div id="pCourse"></div><div id="pCode"></div></div>
+        <div class="paper-dept" id="pDepartment">Department of Computer Science and Engineering</div>
+        <div class="paper-dept" id="pTeacher"></div>
+        <div class="paper-date" id="pDate">Date: 16 November 2026</div>
+      </div></div>
+      <div class="editor-note">Your changes appear in the document preview as you type.</div>
+    </section>
+  </div>
+</div>
+<script>
+let documentType='Lab Report';
+function showEditor(){document.getElementById('landing').style.display='none';document.getElementById('editor').style.display='block';window.scrollTo(0,0);updatePreview()}
+function showLanding(){document.getElementById('editor').style.display='none';document.getElementById('landing').style.display='block';window.scrollTo(0,0)}
+function setType(type){documentType=type;document.getElementById('labBtn').classList.toggle('active',type==='Lab Report');document.getElementById('assignBtn').classList.toggle('active',type==='Assignment');document.getElementById('pType').textContent=type;updatePreview()}
+function val(id){return document.getElementById(id).value.trim()}
+function setText(id,text){document.getElementById(id).textContent=text}
+function updatePreview(){
+ setText('pUniversity',val('university')||'University / Institution');
+ setText('pType',documentType);
+ setText('pTopic',val('topic')||'Your title or topic');
+ setText('pStudent',val('student')||'Student name');
+ setText('pId',val('studentid')?'ID: '+val('studentid'):'');
+ setText('pCourse',val('course')?'Course: '+val('course'):'');
+ setText('pCode',val('coursecode')?'Course Code: '+val('coursecode'):'');
+ setText('pDepartment',val('department')?'Department of '+val('department'):'');
+ setText('pTeacher',val('teacher')?'Submitted To: '+val('teacher'):'');
+ const d=val('date');setText('pDate',d?'Date: '+new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}):'');
+}
+updatePreview();
+</script>
+</body>
+</html>
