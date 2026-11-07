@@ -137,18 +137,16 @@ async function run() {
   report('Step 2: Type name into entry 2 updates preview', step2.count === 2 && step2.text2.includes('Engr. Lab Instructor'),
     `entries count: ${step2.count}, entry 2 text: "${step2.text2}"`);
 
-  // 3. Type role into entry 2 -> preview shows "<role>: <name>"
+  // 3. Verify no role input exists and preview always shows "Teacher Name: <name>"
   const step3 = await cdp.eval(`(() => {
-    const row1Role = document.querySelector('.teacher-row[data-index="1"] .t-role');
-    row1Role.value = 'Lab Instructor';
-    row1Role.dispatchEvent(new Event('input', { bubbles: true }));
-
+    const roleInput = document.querySelector('.teacher-row .t-role');
     const previewEntries = document.querySelectorAll('[data-field="teachers-list"] .teacher-entry');
     const line1 = previewEntries[1] ? previewEntries[1].querySelector('.teacher-line-name').textContent : '';
-    return { line1 };
+    return { hasRoleInput: !!roleInput, line1 };
   })()`);
-  report('Step 3: Type role into entry 2 shows "<role>: <name>"', step3.line1.includes('Lab Instructor:') && step3.line1.includes('Engr. Lab Instructor'),
-    `line1 text: "${step3.line1}"`);
+  report('Step 3: No role input exists in teacher row and preview shows "Teacher Name: <name>"',
+    step3.hasRoleInput === false && step3.line1.includes('Teacher Name:') && step3.line1.includes('Engr. Lab Instructor'),
+    `hasRoleInput: ${step3.hasRoleInput}, line1: "${step3.line1}"`);
 
   // 4. Leave designation blank for entry 2 -> no "Designation:" line for entry 2
   const step4 = await cdp.eval(`(() => {
@@ -191,13 +189,9 @@ async function run() {
   report('Step 6: Remove button disabled on last remaining entry', step6.wasDisabled === true && step6.formRows === 1,
     `wasDisabled: ${step6.wasDisabled}, remaining rows: ${step6.formRows}`);
 
-  // 7. Reload -> teachers array restored (including roles)
-  // Let's add role and designation to teacher 1 first, wait for debounce, then reload
+  // 7. Reload -> teachers array restored (name, designation - no role)
   await cdp.eval(`(() => {
-    const r = document.querySelector('.teacher-row[data-index="0"] .t-role');
     const d = document.querySelector('.teacher-row[data-index="0"] .t-designation');
-    r.value = 'Course Teacher';
-    r.dispatchEvent(new Event('input', { bubbles: true }));
     d.value = 'Professor';
     d.dispatchEvent(new Event('input', { bubbles: true }));
   })()`);
@@ -209,15 +203,15 @@ async function run() {
   await new Promise(r => setTimeout(r, 1200));
 
   const step7 = await cdp.eval(`(() => {
-    const roleVal = document.querySelector('.teacher-row[data-index="0"] .t-role').value;
+    const hasRoleInput = !!document.querySelector('.teacher-row[data-index="0"] .t-role');
     const nameVal = document.querySelector('.teacher-row[data-index="0"] .t-name').value;
     const desigVal = document.querySelector('.teacher-row[data-index="0"] .t-designation').value;
     const previewLine = document.querySelector('[data-field="teachers-list"] .teacher-line-name').textContent;
-    return { roleVal, nameVal, desigVal, previewLine };
+    return { hasRoleInput, nameVal, desigVal, previewLine };
   })()`);
-  report('Step 7: Reload restores teachers array with role, name, designation',
-    step7.roleVal === 'Course Teacher' && step7.nameVal === 'Dr. Primary Teacher' && step7.desigVal === 'Professor',
-    `restored: role="${step7.roleVal}", name="${step7.nameVal}", desig="${step7.desigVal}"`);
+  report('Step 7: Reload restores teachers array with name and designation (no role)',
+    step7.hasRoleInput === false && step7.nameVal === 'Dr. Primary Teacher' && step7.desigVal === 'Professor' && step7.previewLine.includes('Teacher Name:'),
+    `hasRole: ${step7.hasRoleInput}, name="${step7.nameVal}", desig="${step7.desigVal}"`);
 
   // 8. Seed an old draft ({teacherName:"Old Name",teacherDesignation:"Old Rank"}) under covercraft-draft-v1 -> load page -> migrated
   const step8 = await cdp.eval(`(async () => {
@@ -237,13 +231,13 @@ async function run() {
     const rows = document.querySelectorAll('.teacher-row');
     const nameVal = rows[0].querySelector('.t-name').value;
     const desigVal = rows[0].querySelector('.t-designation').value;
-    const roleVal = rows[0].querySelector('.t-role').value;
+    const hasRole = !!rows[0].querySelector('.t-role');
     const previewText = document.querySelector('[data-field="teachers-list"]').textContent;
-    return { rowCount: rows.length, roleVal, nameVal, desigVal, previewText };
+    return { rowCount: rows.length, hasRole, nameVal, desigVal, previewText };
   })()`);
-  report('Step 8: Old draft schema silently migrated to teachers array',
-    step8Result.rowCount === 1 && step8Result.nameVal === 'Old Name' && step8Result.desigVal === 'Old Rank' && step8Result.roleVal === '',
-    `name="${step8Result.nameVal}", desig="${step8Result.desigVal}", preview="${step8Result.previewText.trim()}"`);
+  report('Step 8: Old draft schema silently migrated to teachers array without role',
+    step8Result.rowCount === 1 && step8Result.nameVal === 'Old Name' && step8Result.desigVal === 'Old Rank' && step8Result.hasRole === false && step8Result.previewText.includes('Teacher Name:'),
+    `name="${step8Result.nameVal}", desig="${step8Result.desigVal}", hasRole=${step8Result.hasRole}`);
 
   // 9. Doc-type switch -> teachers array preserved (no reset)
   const step9 = await cdp.eval(`(() => {
@@ -263,14 +257,11 @@ async function run() {
   // Switch back to lab-report for step 10
   await cdp.eval(`document.querySelector('input[name="doc-type"][value="lab-report"]').click()`);
 
-  // 10. Single teacher with role empty -> preview shows "Teacher Name: <name>" and "Designation: <designation>", signature line position intact
+  // 10. Single teacher default layout -> preview shows "Teacher Name: <name>" and "Designation: <designation>", signature line position intact
   const step10 = await cdp.eval(`(() => {
-    const row0Role = document.querySelector('.teacher-row[data-index="0"] .t-role');
     const row0Name = document.querySelector('.teacher-row[data-index="0"] .t-name');
     const row0Desig = document.querySelector('.teacher-row[data-index="0"] .t-designation');
 
-    row0Role.value = '';
-    row0Role.dispatchEvent(new Event('input', { bubbles: true }));
     row0Name.value = 'Md. Teacher Name';
     row0Name.dispatchEvent(new Event('input', { bubbles: true }));
     row0Desig.value = 'Assistant Professor';

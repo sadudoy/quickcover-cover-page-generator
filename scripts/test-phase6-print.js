@@ -182,8 +182,6 @@ try {
       document.getElementById('submission-date').dispatchEvent(new Event('input', { bubbles: true }));
 
       const row1 = document.querySelector('.teacher-row');
-      row1.querySelector('.t-role').value = 'Course Teacher';
-      row1.querySelector('.t-role').dispatchEvent(new Event('input', { bubbles: true }));
       row1.querySelector('.t-name').value = 'Dr. Mohammad Shamsul Arefin';
       row1.querySelector('.t-name').dispatchEvent(new Event('input', { bubbles: true }));
       row1.querySelector('.t-designation').value = 'Professor & Head';
@@ -310,8 +308,6 @@ try {
       document.getElementById('add-teacher').click();
       const rows = document.querySelectorAll('.teacher-row');
       const row2 = rows[1];
-      row2.querySelector('.t-role').value = 'Lab Instructor';
-      row2.querySelector('.t-role').dispatchEvent(new Event('input', { bubbles: true }));
       row2.querySelector('.t-name').value = 'Engr. Sadman Sakib';
       row2.querySelector('.t-name').dispatchEvent(new Event('input', { bubbles: true }));
       row2.querySelector('.t-designation').value = 'Lecturer';
@@ -351,8 +347,6 @@ try {
     (() => {
       document.getElementById('add-teacher').click();
       let rows = document.querySelectorAll('.teacher-row');
-      rows[2].querySelector('.t-role').value = 'Course Coordinator';
-      rows[2].querySelector('.t-role').dispatchEvent(new Event('input', { bubbles: true }));
       rows[2].querySelector('.t-name').value = 'Prof. Dr. Third Teacher';
       rows[2].querySelector('.t-name').dispatchEvent(new Event('input', { bubbles: true }));
       rows[2].querySelector('.t-designation').value = 'Professor';
@@ -360,8 +354,6 @@ try {
 
       document.getElementById('add-teacher').click();
       rows = document.querySelectorAll('.teacher-row');
-      rows[3].querySelector('.t-role').value = 'Adjunct Faculty';
-      rows[3].querySelector('.t-role').dispatchEvent(new Event('input', { bubbles: true }));
       rows[3].querySelector('.t-name').value = 'Engr. Fourth Teacher';
       rows[3].querySelector('.t-name').dispatchEvent(new Event('input', { bubbles: true }));
       rows[3].querySelector('.t-designation').value = 'Assistant Professor';
@@ -452,6 +444,50 @@ try {
     console.log(`[PASS] Print with Logo: 1 page, exact A4, image rendered properly`);
   } else {
     throw new Error(`[FAIL] Print with Logo failed: ${JSON.stringify(analysisLogo)}`);
+  }
+
+  // =========================================================================
+  // Test 4b: Print With Default Logo (Fresh visit, no upload)
+  // =========================================================================
+  console.log('\n--- Test 4b: Print With Default Logo (Fresh Visit, No Upload) ---');
+  await cdp.eval(`(() => { localStorage.clear(); })()`);
+  await cdp.send('Page.reload');
+  await new Promise(r => setTimeout(r, 1200));
+
+  const defaultLogoCheck = await cdp.eval(`(() => {
+    const img = document.querySelector('.logo-box img.logo-img');
+    return img ? img.getAttribute('src') : '';
+  })()`);
+
+  if (!defaultLogoCheck.includes('default-logo.png')) {
+    throw new Error(`Default logo not found in preview: ${defaultLogoCheck}`);
+  }
+
+  const pdfDefaultLogoResult = await cdp.send('Page.printToPDF', {
+    printBackground: true,
+    preferCSSPageSize: true,
+    marginTop: 0,
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0
+  });
+
+  const pdfDefaultLogoPath = path.join(RENDERED_DIR, 'print-default-logo.pdf');
+  fs.writeFileSync(pdfDefaultLogoPath, Buffer.from(pdfDefaultLogoResult.data, 'base64'));
+  const pngDefaultLogoPath = path.join(RENDERED_DIR, 'print-default-logo.png');
+  const analysisDefaultLogo = runPdfAnalysis(pdfDefaultLogoPath, {
+    expected: [
+      'Bangladesh Army University of Science and Technology (BAUST), Saidpur',
+      'Department of Computer Science and Engineering (CSE)'
+    ],
+    forbidden: FORBIDDEN_CHROME,
+    render_png: pngDefaultLogoPath
+  });
+
+  if (analysisDefaultLogo.page_count === 1 && analysisDefaultLogo.is_a4) {
+    console.log(`[PASS] Print with Default Logo: 1 page, exact A4, default institution logo printed successfully`);
+  } else {
+    throw new Error(`[FAIL] Print with Default Logo failed: ${JSON.stringify(analysisDefaultLogo)}`);
   }
 
   // =========================================================================

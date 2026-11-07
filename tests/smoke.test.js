@@ -282,11 +282,14 @@ test('smoke: client/create.html does NOT contain teacher-name or teacher-designa
   );
 });
 
-test('smoke: client/js/create.js references teacher datalists', () => {
+test('smoke: client/create.html and create.js do not reference teacher-roles-list; create.js references teacher-designations-list', () => {
   const createJsPath = path.join(ROOT_DIR, 'client', 'js', 'create.js');
   const js = fs.readFileSync(createJsPath, 'utf-8');
+  const createHtmlPath = path.join(ROOT_DIR, 'client', 'create.html');
+  const html = fs.readFileSync(createHtmlPath, 'utf-8');
 
-  assert.equal(js.includes('teacher-roles-list'), true, 'create.js must reference teacher-roles-list');
+  assert.equal(html.includes('teacher-roles-list'), false, 'create.html must NOT contain teacher-roles-list');
+  assert.equal(js.includes('teacher-roles-list'), false, 'create.js must NOT reference teacher-roles-list');
   assert.equal(js.includes('teacher-designations-list'), true, 'create.js must reference teacher-designations-list');
 });
 
@@ -628,4 +631,47 @@ test('smoke: client/css/print.css hides chrome (.site-header, .form-panel, .site
   assert.match(printCss, /\.form-panel[^}]*display:\s*none\s*!important/s, 'print.css must hide .form-panel');
   assert.match(printCss, /\.site-footer[^}]*display:\s*none\s*!important/s, 'print.css must hide .site-footer');
   assert.match(printCss, /transform:\s*none\s*!important/, 'print.css must contain transform: none !important');
+});
+
+/* Phase 07: Final Polish & Hardening Assertions */
+
+test('smoke: client/assets/default-logo.png exists and is a valid non-empty PNG image', () => {
+  const logoPath = path.join(ROOT_DIR, 'client', 'assets', 'default-logo.png');
+  assert.equal(fs.existsSync(logoPath), true, 'client/assets/default-logo.png must exist');
+  const stat = fs.statSync(logoPath);
+  assert.ok(stat.size > 0, 'default-logo.png must have non-zero size');
+  const buf = fs.readFileSync(logoPath);
+  assert.equal(buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4E && buf[3] === 0x47, true, 'default-logo.png must have PNG magic header');
+});
+
+test('smoke: client/js/create.js contains DEFAULT_FORM_VALUES and Reset logo handling', () => {
+  const createJs = fs.readFileSync(path.join(ROOT_DIR, 'client', 'js', 'create.js'), 'utf-8');
+  assert.match(createJs, /DEFAULT_FORM_VALUES/, 'create.js must contain DEFAULT_FORM_VALUES constant');
+  assert.match(createJs, /Reset logo|handleResetLogo|Logo reset to default/i, 'create.js must implement Reset logo handler');
+});
+
+test('smoke: client/js/ code quality hardening (no console.log/debug/info, debugger, or TODO/FIXME)', () => {
+  const jsFiles = ['create.js', 'storage.js', 'site.js', 'main.js'];
+  jsFiles.forEach((file) => {
+    const filePath = path.join(ROOT_DIR, 'client', 'js', file);
+    if (!fs.existsSync(filePath)) return;
+    const content = fs.readFileSync(filePath, 'utf-8');
+    assert.equal(/console\.(log|debug|info)\(/.test(content), false, `${file} must not contain console.log/debug/info`);
+    assert.equal(/\bdebugger\b/.test(content), false, `${file} must not contain debugger statement`);
+    assert.equal(/\b(TODO|FIXME|XXX|HACK)\b/.test(content), false, `${file} must not contain TODO/FIXME/XXX/HACK`);
+  });
+});
+
+test('smoke: no inline on*= event handlers in client/*.html', () => {
+  const htmlFiles = ['index.html', 'create.html', 'cover-lab.html', 'cover-assignment.html'];
+  htmlFiles.forEach((file) => {
+    const filePath = path.join(ROOT_DIR, 'client', file);
+    if (!fs.existsSync(filePath)) return;
+    const content = fs.readFileSync(filePath, 'utf-8');
+    assert.equal(/\son[a-z]+=/i.test(content), false, `${file} must not contain inline on*= event handlers`);
+  });
+});
+
+test('smoke: unit tests file tests/unit.test.js exists', () => {
+  assert.equal(fs.existsSync(path.join(ROOT_DIR, 'tests', 'unit.test.js')), true, 'tests/unit.test.js must exist');
 });

@@ -77,26 +77,39 @@ Two academic progress fields are strictly constrained to fixed departmental opti
 
 ### 5.3 Category C: Multiple Teachers Management ("Submitted To" Block)
 - Supports one or more instructors in a single "Submitted To" block (e.g. Course Teacher + Lab Instructor).
-- **Data Model**: Dynamic list of teacher entries:
+- **Data Model**: Dynamic list of teacher entries (simplified in Phase 7 to remove custom Role prefix):
   ```json
   [
-    { "role": "Course Teacher", "name": "Prof. Dr. Jane Doe", "designation": "Professor & Head of Department" },
-    { "role": "Lab Instructor", "name": "John Smith", "designation": "Lecturer" }
+    { "name": "Prof. Dr. Jane Doe", "designation": "Professor & Head of Department" },
+    { "name": "John Smith", "designation": "Lecturer" }
   ]
   ```
 - **Fields**:
-  - `role`: Optional datalist (`Course Teacher`, `Lab Instructor`, `Supervisor`, `Thesis Supervisor`, `Academic Advisor`). If omitted, display defaults to `Teacher Name:`.
-  - `name`: Required for preview display.
-  - `designation`: Optional datalist (`Lecturer`, `Assistant Professor`, `Associate Professor`, `Professor`, `Adjunct Faculty`).
+  - `name`: Required for preview display. Rendered on line 1 as `Teacher Name: <name>`.
+  - `designation`: Optional datalist (`Lecturer`, `Assistant Professor`, `Associate Professor`, `Professor`, `Adjunct Faculty`). Rendered on line 2 as `Designation: <designation>` if non-empty.
 - **UI Interaction**: Form provides an "+ Add teacher" action and individual "Remove" (`×`) buttons for each entry (disabled when only 1 teacher remains).
 - **Rendering Constraints (Option A Architecture)**:
   - Default (1 teacher): matches Phase 2 reference geometry pixel-for-pixel.
   - Multi-teacher (2+ teachers): entries stack vertically inside `[data-field="teachers-list"]`. A single shared "Signature & Date: _________________" line remains pinned at the bottom of the card.
   - Card Growth: Both bottom cards (`Submitted By` and `Submitted To`) stretch downward together in unison to accommodate additional teachers while preserving min-height.
+- **Backward Migration**: Legacy drafts containing `role` properties are accepted on load and rewritten without role on next save.
 
-### 5.4 Category D: Logo Upload & Session Persistence
-- Students can upload a custom university logo/crest image (PNG, JPEG, SVG, WebP; maximum 2MB).
-- **Session Persistence**: Uploaded logo persists in IndexedDB (`covercraft` / `logo` / `current`) with transparent `localStorage` fallback.
+### 5.4 Category D: Form Defaults & Cascade Hints
+- **Pre-filled Defaults**: New visitors without a saved draft see starting defaults:
+  - University: `"Bangladesh Army University of Science and Technology (BAUST), Saidpur"`
+  - Department: `"Department of Computer Science and Engineering (CSE)"`
+  - Level: `"2"`
+  - Term: `"II"`
+- **Draft Precedence**: Defaults apply ONLY when no draft exists. If a returning user has a draft (even with explicit empty fields), the draft takes precedence.
+- **"Start Over" Reset**: Clicking "Start over" resets default fields to these pre-filled values (not blank) and blanks all other fields.
+- **Cascade Hint**: CSE currently has no seeded courses in `dropdowns.json`. When a department is recognized in the catalogue but the filtered course list is empty, a subtle hint is surfaced:
+  > *"No preset courses for this department, level and term. Type the course code directly, or change the department."*
+
+### 5.5 Category E: Institution Logo & Session Persistence
+- **Default Logo**: By default, the official institution logo (`client/assets/default-logo.png`, copied from `reference/defaultLogo/logo.png`) is displayed in the preview and printed in PDFs.
+- **Custom Upload**: Students can upload a custom university logo/crest image (PNG, JPEG, SVG, WebP; maximum 2MB), which replaces the default logo.
+- **Reset Logo**: Clicking "Reset logo" removes the custom upload and reverts to the default logo.
+- **Session Persistence**: Uploaded logo persists in IndexedDB (`covercraft-db` / `logos` / `covercraft-logo`) with transparent `localStorage` fallback.
 - **Draft Persistence**: Form fields auto-save to `localStorage` (`covercraft-draft-v1`) with 500ms debounce and automatic migration for older draft schemas.
 
 ---

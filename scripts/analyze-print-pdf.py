@@ -25,19 +25,22 @@ def analyze_pdf(pdf_path, expected_strings=None, forbidden_strings=None, render_
     
     # Extract text
     text = page.get_text()
+    norm_text = " ".join(text.split())
     
     # Check expected strings
     missing_strings = []
     if expected_strings:
         for s in expected_strings:
-            if s not in text:
+            norm_s = " ".join(s.split())
+            if norm_s not in norm_text:
                 missing_strings.append(s)
                 
     # Check forbidden strings (chrome)
     leaked_chrome = []
     if forbidden_strings:
         for s in forbidden_strings:
-            if s in text:
+            norm_s = " ".join(s.split())
+            if norm_s in norm_text:
                 leaked_chrome.append(s)
                 
     # Fonts analysis

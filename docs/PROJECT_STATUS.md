@@ -4,27 +4,37 @@
 
 | Phase | Description | Status | Verification Notes |
 | :--- | :--- | :--- | :--- |
-| **Phase 01** | **Dual Reference Intake, Foundation & Analysis** | **IMPLEMENTED — VERIFIED** | Both `lab-report-demo.pdf` and `assignment-demo.pdf` confirmed present and rasterized. Dev server active, smoke tests pass, comparative analysis complete with recommendation for single shared template. |
-| **Phase 02** | **Static Cover Template & Exact CSS A4 Geometry** | **IMPLEMENTED — VERIFIED** | Created `client/css/cover.css`, `client/cover-lab.html`, `client/cover-assignment.html`, and `scripts/render-cover.js`. Visual match against reference PNGs verified via headless Chrome screenshots. Smoke tests pass. |
-| **Phase 03** | **Interactive Form, Live Preview & Persistence** | **IMPLEMENTED — VERIFIED** | Interactive tool at `/create.html`, live event bindings, cascading course dropdowns (`dropdowns.json`), IndexedDB logo storage with localStorage fallback, form draft persistence. Automated CDP interaction suite verified. |
-| **Phase 04** | **Multiple Teachers: Dynamic "Submitted To" List** | **IMPLEMENTED — VERIFIED** | Dynamic teacher rows (role, name, designation datalists), remove/add buttons, single signature line pinned at bottom, synchronized card auto-growth, schema migration. 10/10 automated CDP interaction tests pass. |
-| **Phase 04.5** | **Professional Site Design & Landing Page** | **IMPLEMENTED — VERIFIED** | Shared design system in `client/css/site.css`, `client/css/landing.css`, `client/js/site.js`, semantic landing page at `/index.html` with inline stroke SVGs and A4 wireframe mockup, restyled `/create.html` and `form.css` with token system. Multi-viewport screenshots verified. |
-| **Phase 04.6** | **Quick Cover Rebrand + UI Reference Pattern Match** | **IMPLEMENTED — VERIFIED** | Rebranded project to "Quick Cover" across package.json, HTML, README, and docs. Extracted pattern from `quick_cover_ui_reference.html` into `docs/UI_REFERENCE_ANALYSIS.md`. Aligned `create.html` and `form.css` with 420px/flexible workspace grid, segmented buttons, input styling, and `#edf0f5` preview panel framing with neutral-disciplined shadows. 32 smoke tests pass, 10/10 interaction tests pass. |
-| **Phase 05** | **Print-to-PDF Export & Print CSS Hardening** | **PLANNED** | Precision `@page` print stylesheet, export button, zero-margin edge printing, print-mode verification. |
+| **Phase 01** | **Dual Reference Intake, Foundation & Analysis** | **IMPLEMENTED — VERIFIED** | Both reference PDFs verified and rasterized; dev server and comparative analysis complete. |
+| **Phase 02** | **Static Cover Template & Exact CSS A4 Geometry** | **IMPLEMENTED — VERIFIED** | `cover.css` frozen at SHA-256 hash `055132E8...9320EE`, static lab/assignment covers verified pixel-accurate. |
+| **Phase 03** | **Interactive Form, Live Preview & Persistence** | **IMPLEMENTED — VERIFIED** | Live preview data binding, course cascade, IndexedDB logo persistence with fallback, localStorage draft. |
+| **Phase 04** | **Multiple Teachers: Dynamic List & Reference Alignment** | **IMPLEMENTED — VERIFIED** | Dynamic add/remove teacher rows, shared pinned signature line, dual-page layout match from reference. |
+| **Phase 04.5/04.6** | **Quick Cover Rebrand & Design System Alignment** | **IMPLEMENTED — VERIFIED** | Clean design system tokens, landing page at `/index.html`, neutral shadows, inline SVGs, zero AI clichés. |
+| **Phase 05** | **Persistence Polish: Reset, Feedback & Cross-Tab** | **IMPLEMENTED — VERIFIED** | Safe form reset, storage status feedback, QuotaExceededError handling, cross-tab sync via storage events. |
+| **Phase 06** | **Export & Print Fidelity** | **IMPLEMENTED — VERIFIED** | `@page` A4 portrait print stylesheet (`print.css`), zero chrome leaks, vector Times New Roman text in PDF. |
+| **Phase 07** | **Final Polish: Teacher Role Removal, Defaults, Logo, A11Y, Tests** | **IMPLEMENTED — NOT VERIFIED** | Teacher model simplified to `{ name, designation }`, default values pre-filled (BAUST/CSE/2/II), default logo bundled, responsive verified at 360/768/1280/1920px, WCAG AA contrast, unit test suite (node:test), 12-step golden path test. |
 
 ---
 
-## 2. Reference Asset Confirmation
-- [x] **Lab Report Reference**: Confirmed present at [`reference/lab-report-demo.pdf`](file:///d:/CSE/Projects/cover-page-generator/reference/lab-report-demo.pdf) (94,482 bytes).
-- [x] **Assignment Reference**: Confirmed present at [`reference/assignment-demo.pdf`](file:///d:/CSE/Projects/cover-page-generator/reference/assignment-demo.pdf) (92,204 bytes).
-- [x] **Rendered Visuals**: Both rasterized at 200 DPI in [`reference/rendered/`](file:///d:/CSE/Projects/cover-page-generator/reference/rendered/).
-- [x] **Viewport Screenshots**: Captured in [`reference/rendered/`](file:///d:/CSE/Projects/cover-page-generator/reference/rendered/) (`landing-360.png`, `landing-768.png`, `landing-1280.png`, `create-768.png`, `create-1280.png`).
+## 2. Deferred Features
+The following capabilities were explicitly evaluated and deferred for future roadmaps:
+1. **PNG / Image Export**: Print-to-PDF provides pure vector fidelity without canvas rasterization artifacts or memory spikes; client-side PNG canvas export deferred.
+2. **Offline Progressive Web App (PWA)**: ServiceWorker caching and Web App Manifest deferred.
+3. **Dark Mode UI**: Pure light theme matching physical paper editing context; automatic dark mode switching deferred.
+4. **Teacher Role Custom Field**: Removed in Phase 7 to streamline cover layout; deferred if user requests custom role prefix support.
+5. **"No Logo at All" Option**: Currently toggles between custom user logo and default BAUST institutional logo; completely blank header box option deferred.
+6. **CSE Department Course Data Seeding**: CSE department currently has no seeded course entries in `dropdowns.json`; cascade hint is surfaced until data is populated.
 
 ---
 
-## 3. Active Technical TBDs
-- [x] **TBD-04**: Multi-teacher layout rules: Settled via Option A with auto-growing synchronized bottom cards and single shared signature line.
-- [x] **TBD-05**: Course catalog preset data to embed in `client/data/dropdowns.json`.
-- [x] **TBD-06**: Logo storage mechanism (`IndexedDB` with `localStorage` fallback).
-- **TBD-07**: Cross-platform system font fallbacks for Times New Roman.
-- **TBD-08**: Offline PWA caching strategy (deferred).
+## 3. Known Limitations
+1. **A4 Dimension Tolerance**: Print-to-PDF dimensions render at 209.89mm × 297.01mm (~0.1mm under spec due to 72 pt/in rounding in browser engines).
+2. **Browser Print Engine**: Export relies on native Chromium/browser print-to-PDF subsystem (`window.print()`).
+3. **No User Accounts / Cloud Sync**: Drafts and logos are stored strictly on the local device (localStorage + IndexedDB).
+4. **Catalogue Completeness**: `dropdowns.json` contains full course data for EEE; other departments (such as CSE) rely on manual typing with the cascade hint displayed.
+
+---
+
+## 4. Manual Actions Required Before Phase 8 (Deployment)
+1. Ensure production static hosting serves root `/` as landing page and `/create.html` as the generator tool.
+2. Verify MIME type headers (`image/png`, `text/css`, `application/json`) on host environment.
+3. Confirm host does not alter static assets or inject scripts.

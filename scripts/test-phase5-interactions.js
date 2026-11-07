@@ -123,8 +123,6 @@ try {
       document.getElementById('student-id').dispatchEvent(new Event('input', { bubbles: true }));
 
       const row1 = document.querySelector('.teacher-row');
-      row1.querySelector('.t-role').value = 'Lead Instructor';
-      row1.querySelector('.t-role').dispatchEvent(new Event('input', { bubbles: true }));
       row1.querySelector('.t-name').value = 'Dr. Test Professor';
       row1.querySelector('.t-name').dispatchEvent(new Event('input', { bubbles: true }));
     })()
@@ -180,20 +178,20 @@ try {
 
   if (
     res2 &&
-    res2.u === '' &&
+    res2.u.includes('BAUST') &&
     res2.n === '' &&
     res2.rowsCount === 1 &&
     res2.draftInLs === null &&
-    res2.status === 'Cleared.' &&
+    res2.status === 'Reset to defaults.' &&
     lastDialogMessage.includes('Clear all fields')
   ) {
-    console.log(`[PASS] Step 2: "Start over" clears form and draft with confirmation dialog`);
+    console.log(`[PASS] Step 2: "Start over" clears form and draft with confirmation dialog (resets to defaults)`);
   } else {
     throw new Error(`[FAIL] Step 2: Reset assertion failed: ${JSON.stringify(res2)}`);
   }
 
   // ---------------------------------------------------------------------------
-  // Step 3: Corrupt the draft -> "{not json", reload -> form is blank,
+  // Step 3: Corrupt the draft -> "{not json", reload -> form resets,
   // status shows "Previous draft could not be restored.", no exception thrown.
   // ---------------------------------------------------------------------------
   await cdpA.eval(`localStorage.setItem('covercraft-draft-v1', '{corrupt json')`);
@@ -212,7 +210,6 @@ try {
 
   if (
     res3 &&
-    res3.u === '' &&
     res3.status === 'Previous draft could not be restored.' &&
     res3.draftInLs === null
   ) {

@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="css/form.css">
   <link rel="stylesheet" href="css/print.css" media="print">
 </head>
-<body>
+<body class="tool-body">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <noscript>
@@ -18,21 +18,20 @@
     </div>
   </noscript>
 
-  <!-- Shared Header (Tool Page) -->
-  <header class="site-header">
-    <div class="container site-header-inner">
+  <header class="site-header border-bottom">
+    <div class="container-fluid site-header-inner">
       <a class="brand" href="index.html" aria-label="Quick Cover home">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 3h9l5 5v13H6z"/>
             <path d="M15 3v6h5M9 13h8M9 17h8"/>
           </svg>
         </span>
-        <span class="brand-text">Quick <span>Cover</span></span>
+        <span class="brand-text">QuickCover</span>
       </a>
       <nav class="site-nav" aria-label="Primary">
-        <a href="index.html" class="btn btn-secondary btn-sm">← Back to home</a>
-        <button type="button" id="print-cover" class="btn btn-primary btn-sm">Print / Save as PDF</button>
+        <a href="index.html" class="btn btn-ghost btn-sm">← Exit Tool</a>
+        <button type="button" id="print-cover" class="btn btn-primary btn-sm">Save PDF / Print</button>
       </nav>
     </div>
   </header>
@@ -42,12 +41,11 @@
       <!-- Left Column: Form Panel -->
       <section class="panel form-panel" aria-label="Cover page details">
         <div class="form-header">
-          <h1 class="panel-title">Your Information</h1>
-          <button type="button" id="clear-form" class="btn btn-secondary btn-sm">Start over</button>
+          <h1 class="panel-title">Document Details</h1>
+          <button type="button" id="clear-form" class="btn btn-secondary btn-sm">Reset</button>
         </div>
 
-        <form id="cover-form" autocomplete="off" onsubmit="return false;">
-          <!-- 1. Document Type (Segmented Toggle) -->
+        <form id="cover-form" autocomplete="off">
           <div class="field">
             <label class="field-label">Document Type</label>
             <div class="segmented">
@@ -62,25 +60,22 @@
             </div>
           </div>
 
-          <!-- 2. University Name -->
           <div class="field">
             <label for="university">University / Institution</label>
-            <input list="universities-list" id="university" placeholder="e.g. Bangladesh Army University of Science and Technology (BAUST), Saidpur">
+            <input class="input" list="universities-list" id="university" placeholder="e.g. BAUST, Saidpur">
             <datalist id="universities-list"></datalist>
           </div>
 
-          <!-- 3. Department -->
           <div class="field">
             <label for="department">Department</label>
-            <input list="departments-list" id="department" placeholder="e.g. Department of Computer Science and Engineering (CSE)">
+            <input class="input" list="departments-list" id="department" placeholder="e.g. Computer Science and Engineering">
             <datalist id="departments-list"></datalist>
           </div>
 
-          <!-- 4 & 5. Level & Term -->
           <div class="two-col">
             <div class="field">
               <label for="level">Level</label>
-              <select id="level">
+              <select class="input" id="level">
                 <option value="">—</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -90,7 +85,7 @@
             </div>
             <div class="field">
               <label for="term">Term</label>
-              <select id="term">
+              <select class="input" id="term">
                 <option value="">—</option>
                 <option value="I">I</option>
                 <option value="II">II</option>
@@ -98,78 +93,64 @@
             </div>
           </div>
 
-          <!-- 6. Course Code -->
           <div class="field">
             <label for="course-code">Course Code</label>
-            <input list="course-codes-list" id="course-code" autocomplete="off" placeholder="Select department, level and term to narrow">
+            <input class="input" list="course-codes-list" id="course-code" autocomplete="off" placeholder="Select level/term first">
             <datalist id="course-codes-list"></datalist>
+            <p class="cascade-hint caption" id="cascade-hint" style="display: none;">
+              No preset courses for this department, level and term. Type the course code directly, or change the department.
+            </p>
           </div>
 
-          <!-- 7. Course Title -->
           <div class="field">
             <label for="course-title">Course Title</label>
-            <input list="course-titles-list" id="course-title" autocomplete="off" placeholder="Course Title">
+            <input class="input" list="course-titles-list" id="course-title" autocomplete="off" placeholder="Course Title">
             <datalist id="course-titles-list"></datalist>
           </div>
 
-          <!-- 8. Report/Assignment No. -->
           <div class="field">
             <label for="doc-number" id="doc-number-label">Report no.:</label>
-            <input id="doc-number" placeholder="e.g. 01">
+            <input class="input" id="doc-number" placeholder="e.g. 01">
           </div>
 
-          <!-- 9. Report/Assignment Title -->
           <div class="field">
             <label for="doc-title" id="doc-title-label">Report Title:</label>
-            <input id="doc-title" placeholder="e.g. Implementation of Responsive Static Cover Template">
+            <input class="input" id="doc-title" placeholder="Title of the assignment or report">
           </div>
 
-          <!-- 10. Comment -->
           <div class="field">
             <label for="comment">Comment</label>
-            <textarea id="comment" placeholder="Optional comments or teacher remarks"></textarea>
+            <textarea class="input textarea" id="comment" placeholder="Optional comments..."></textarea>
           </div>
 
-          <!-- 11 & 12. Student Name & Student ID -->
           <div class="two-col">
             <div class="field">
               <label for="student-name">Student Name</label>
-              <input id="student-name" placeholder="Full Name">
+              <input class="input" id="student-name" placeholder="Full Name">
             </div>
             <div class="field">
               <label for="student-id">Student ID</label>
-              <input id="student-id" placeholder="e.g. 210101001">
+              <input class="input" id="student-id" placeholder="e.g. 210101001">
             </div>
           </div>
 
-          <!-- 13. Experiment Date (Lab Report only) -->
           <div class="field" id="experiment-date-group">
             <label for="experiment-date">Experiment Date</label>
-            <input type="date" id="experiment-date">
+            <input class="input" type="date" id="experiment-date">
           </div>
 
-          <!-- 14. Submission Date -->
           <div class="field">
             <label for="submission-date">Submission Date</label>
-            <input type="date" id="submission-date">
+            <input class="input" type="date" id="submission-date">
           </div>
 
-          <!-- 15. Teachers (Multi-Teacher Dynamic List) -->
-          <fieldset id="teachers-fieldset" class="field">
+          <fieldset id="teachers-fieldset" class="field fieldset-group">
             <legend class="field-label">Submitted To (Teachers)</legend>
             <div id="teachers-form-container">
               <!-- Dynamically populated by create.js -->
             </div>
-            <button type="button" id="add-teacher" class="btn btn-secondary btn-sm">Add teacher</button>
+            <button type="button" id="add-teacher" class="btn btn-secondary btn-sm">+ Add Teacher</button>
           </fieldset>
-
-          <datalist id="teacher-roles-list">
-            <option value="Course Teacher">
-            <option value="Lab Instructor">
-            <option value="Supervisor">
-            <option value="Thesis Supervisor">
-            <option value="Academic Advisor">
-          </datalist>
 
           <datalist id="teacher-designations-list">
             <option value="Lecturer">
@@ -179,30 +160,29 @@
             <option value="Adjunct Faculty">
           </datalist>
 
-          <!-- 16. Logo Upload -->
           <div class="field">
             <label for="logo-upload">University Logo</label>
             <div class="logo-upload-controls">
-              <input type="file" id="logo-upload" accept="image/*">
+              <input class="file-input" type="file" id="logo-upload" accept="image/*">
               <div class="logo-btn-row">
-                <button type="button" id="remove-logo" class="btn btn-secondary btn-sm">Remove logo</button>
+                <button type="button" id="remove-logo" class="btn btn-ghost btn-sm text-danger" aria-label="Reset to default logo">Reset logo</button>
               </div>
               <span id="logo-error" class="error-text" role="alert"></span>
             </div>
           </div>
 
-          <!-- 17. Storage Status Line -->
-          <p id="storage-status" class="storage-status" role="status" aria-live="polite"></p>
-          <p class="hint">Changes are saved automatically to local storage and update the preview live.</p>
+          <div class="form-footer">
+            <p id="storage-status" class="storage-status" role="status" aria-live="polite"></p>
+            <p class="hint">Changes are saved automatically to local storage and update the preview live.</p>
+          </div>
         </form>
       </section>
 
       <!-- Right Column: Live A4 Preview -->
       <section class="panel preview-panel" aria-label="A4 cover preview">
         <div class="preview-toolbar">
-          <span>LIVE PREVIEW</span>
-          <span class="print-hint caption">In the print dialog, choose &lsquo;Save as PDF&rsquo; as the destination to download.</span>
-          <span>A4 · Portrait</span>
+          <span class="badge">LIVE PREVIEW</span>
+          <span class="print-hint caption">In the print dialog, choose 'Save as PDF' as the destination to download.</span>
         </div>
 
         <div class="paper-wrap">
@@ -213,13 +193,9 @@
                 <h1 class="university-header" data-field="university-name"></h1>
                 <h2 class="department-header" data-field="department-name"></h2>
 
-                <!-- Institutional Logo Placeholder -->
-                <div class="logo-box" aria-label="University Logo Placeholder">
-                  <svg viewBox="0 0 139 136" width="36.78mm" height="35.97mm" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="139" height="136" fill="#e5e7eb" stroke="#9ca3af" stroke-width="2" rx="4"/>
-                    <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="bold" fill="#4b5563">LOGO</text>
-                    <text x="50%" y="65%" text-anchor="middle" dominant-baseline="middle" font-family="'Times New Roman', Times, serif" font-size="11" fill="#6b7280">36.8 × 36 mm</text>
-                  </svg>
+                <!-- Institutional Logo -->
+                <div class="logo-box" data-field="logo" aria-label="Institution Logo">
+                  <img class="logo-img" src="assets/default-logo.png" alt="Default institution logo">
                 </div>
 
                 <!-- Title Banner & Measured Underline Bar -->
@@ -314,34 +290,45 @@
             </div>
           </div>
         </div>
-        <div class="editor-note">Your changes appear in the document preview as you type.</div>
       </section>
     </div>
   </main>
 
-  <!-- Shared Footer (Tool Page) -->
   <footer class="site-footer">
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand">
-          <a class="brand" href="index.html" aria-label="Quick Cover home">
-            <span class="brand-mark" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M6 3h9l5 5v13H6z"/>
-                <path d="M15 3v6h5M9 13h8M9 17h8"/>
+          <a class="brand" href="index.html">
+            <span class="brand-mark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 3h9l5 5v13H6z"/><path d="M15 3v6h5M9 13h8M9 17h8"/>
               </svg>
             </span>
-            <span class="brand-text">Quick <span>Cover</span></span>
+            <span class="brand-text">QuickCover</span>
           </a>
           <p class="small">Cover pages for university assignments and lab reports.</p>
         </div>
+        
+        <div class="footer-developer">
+          <h4 class="footer-heading">Developer</h4>
+          <p class="dev-name">Sad Ibna Forid</p>
+          <div class="dev-links">
+            <a href="https://github.com/sadudoy" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://linkedin.com/in/sadudoy" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://wa.me/8801776942272" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="mailto:sadudoy29@gmail.com">Email</a>
+          </div>
+        </div>
+
         <nav class="footer-nav" aria-label="Footer">
-          <a href="create.html">Open the tool</a>
+          <h4 class="footer-heading">Navigation</h4>
           <a href="index.html">← Back to home</a>
         </nav>
       </div>
-      <p class="caption footer-fineprint">All processing happens in your browser. No account required. Drafts and logos are stored locally on this device.</p>
-      <p class="caption">© <span id="year">2026</span> Quick Cover</p>
+      <div class="footer-bottom">
+        <p class="caption footer-fineprint">All processing happens locally. No account required. Drafts and logos are stored locally on this device.</p>
+        <p class="caption">© <span id="year">2026</span> Quick Cover</p>
+      </div>
     </div>
   </footer>
 

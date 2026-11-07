@@ -1,5 +1,5 @@
 /**
- * CoverCraft — Interactive Form & Live Preview Controller
+ * Quick Cover — Interactive Form & Live Preview Controller
  * Handles datalist cascading, auto-fill, live A4 preview binding,
  * multi-teacher dynamic management, logo upload validation/persistence,
  * and debounced draft persistence with seamless backward migration.
@@ -12,11 +12,19 @@ import {
   saveDraft,
   loadDraft,
   clearDraft,
-  isFallback,
   isStorageAvailable
 } from './storage.js';
 
-const DEFAULT_LOGO_SVG = `<svg viewBox="0 0 139 136" width="36.78mm" height="35.97mm" xmlns="http://www.w3.org/2000/svg"><rect width="139" height="136" fill="#e5e7eb" stroke="#9ca3af" stroke-width="2" rx="4"/><text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="bold" fill="#4b5563">LOGO</text><text x="50%" y="65%" text-anchor="middle" dominant-baseline="middle" font-family="'Times New Roman', Times, serif" font-size="11" fill="#6b7280">36.8 × 36 mm</text></svg>`;
+export const DEFAULT_LOGO_SVG = `<svg viewBox="0 0 139 136" width="36.78mm" height="35.97mm" xmlns="http://www.w3.org/2000/svg"><rect width="139" height="136" fill="#e5e7eb" stroke="#9ca3af" stroke-width="2" rx="4"/><text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="bold" fill="#4b5563">LOGO</text><text x="50%" y="65%" text-anchor="middle" dominant-baseline="middle" font-family="'Times New Roman', Times, serif" font-size="11" fill="#6b7280">36.8 × 36 mm</text></svg>`;
+
+export const DEFAULT_FORM_VALUES = {
+  university: 'Bangladesh Army University of Science and Technology (BAUST), Saidpur',
+  department: 'Department of Computer Science and Engineering (CSE)',
+  level: '2',
+  term: 'II'
+};
+
+const isBrowser = typeof document !== 'undefined';
 
 let dropdownData = {
   universities: [],
@@ -29,54 +37,56 @@ let saveTimeout = null;
 let isApplyingRemoteChange = false;
 let lastStatusMessage = '';
 let lastStatusTime = 0;
+let currentLogoState = 'default'; // 'user' | 'default' | 'none'
 
-// Multi-Teacher State (Phase 4)
-let teachers = [{ role: '', name: '', designation: '' }];
+// Multi-Teacher State (Phase 7: role removed, { name, designation })
+let teachers = [{ name: '', designation: '' }];
 
-// Form DOM Elements
-const docTypeRadios = document.querySelectorAll('input[name="doc-type"]');
-const clearFormBtn = document.getElementById('clear-form');
-const universityInput = document.getElementById('university');
-const departmentInput = document.getElementById('department');
-const levelSelect = document.getElementById('level');
-const termSelect = document.getElementById('term');
-const courseCodeInput = document.getElementById('course-code');
-const courseTitleInput = document.getElementById('course-title');
-const docNumberInput = document.getElementById('doc-number');
-const docTitleInput = document.getElementById('doc-title');
-const commentInput = document.getElementById('comment');
-const studentNameInput = document.getElementById('student-name');
-const studentIdInput = document.getElementById('student-id');
-const experimentDateInput = document.getElementById('experiment-date');
-const submissionDateInput = document.getElementById('submission-date');
+// Form DOM Elements (guarded for Node import)
+const docTypeRadios = isBrowser ? document.querySelectorAll('input[name="doc-type"]') : [];
+const clearFormBtn = isBrowser ? document.getElementById('clear-form') : null;
+const universityInput = isBrowser ? document.getElementById('university') : null;
+const departmentInput = isBrowser ? document.getElementById('department') : null;
+const levelSelect = isBrowser ? document.getElementById('level') : null;
+const termSelect = isBrowser ? document.getElementById('term') : null;
+const courseCodeInput = isBrowser ? document.getElementById('course-code') : null;
+const courseTitleInput = isBrowser ? document.getElementById('course-title') : null;
+const docNumberInput = isBrowser ? document.getElementById('doc-number') : null;
+const docTitleInput = isBrowser ? document.getElementById('doc-title') : null;
+const commentInput = isBrowser ? document.getElementById('comment') : null;
+const studentNameInput = isBrowser ? document.getElementById('student-name') : null;
+const studentIdInput = isBrowser ? document.getElementById('student-id') : null;
+const experimentDateInput = isBrowser ? document.getElementById('experiment-date') : null;
+const submissionDateInput = isBrowser ? document.getElementById('submission-date') : null;
 
 // Multi-Teacher Form Elements
-const teachersFormContainer = document.getElementById('teachers-form-container');
-const addTeacherBtn = document.getElementById('add-teacher');
+const teachersFormContainer = isBrowser ? document.getElementById('teachers-form-container') : null;
+const addTeacherBtn = isBrowser ? document.getElementById('add-teacher') : null;
 
 // Logo and Storage Status Elements
-const logoUploadInput = document.getElementById('logo-upload');
-const removeLogoBtn = document.getElementById('remove-logo');
-const logoErrorEl = document.getElementById('logo-error');
-const storageStatusEl = document.getElementById('storage-status');
+const logoUploadInput = isBrowser ? document.getElementById('logo-upload') : null;
+const removeLogoBtn = isBrowser ? document.getElementById('remove-logo') : null;
+const logoErrorEl = isBrowser ? document.getElementById('logo-error') : null;
+const storageStatusEl = isBrowser ? document.getElementById('storage-status') : null;
+const cascadeHintEl = isBrowser ? document.getElementById('cascade-hint') : null;
 
 // Form Layout Helper Elements
-const experimentDateGroup = document.getElementById('experiment-date-group');
-const docNumberLabel = document.getElementById('doc-number-label');
-const docTitleLabel = document.getElementById('doc-title-label');
+const experimentDateGroup = isBrowser ? document.getElementById('experiment-date-group') : null;
+const docNumberLabel = isBrowser ? document.getElementById('doc-number-label') : null;
+const docTitleLabel = isBrowser ? document.getElementById('doc-title-label') : null;
 
 // Datalist Elements
-const universitiesDatalist = document.getElementById('universities-list');
-const departmentsDatalist = document.getElementById('departments-list');
-const courseCodesDatalist = document.getElementById('course-codes-list');
-const courseTitlesDatalist = document.getElementById('course-titles-list');
+const universitiesDatalist = isBrowser ? document.getElementById('universities-list') : null;
+const departmentsDatalist = isBrowser ? document.getElementById('departments-list') : null;
+const courseCodesDatalist = isBrowser ? document.getElementById('course-codes-list') : null;
+const courseTitlesDatalist = isBrowser ? document.getElementById('course-titles-list') : null;
 
 // Preview DOM Elements
-const coverPreviewWrapper = document.getElementById('cover-preview');
+const coverPreviewWrapper = isBrowser ? document.getElementById('cover-preview') : null;
 const a4CoverEl = coverPreviewWrapper ? coverPreviewWrapper.querySelector('.a4-cover') : null;
-const previewViewport = document.getElementById('preview-viewport');
-const previewDocNumberLabel = document.getElementById('preview-doc-number-label');
-const previewDocTitleLabel = document.getElementById('preview-doc-title-label');
+const previewViewport = isBrowser ? document.getElementById('preview-viewport') : null;
+const previewDocNumberLabel = isBrowser ? document.getElementById('preview-doc-number-label') : null;
+const previewDocTitleLabel = isBrowser ? document.getElementById('preview-doc-title-label') : null;
 const logoBoxEl = coverPreviewWrapper ? coverPreviewWrapper.querySelector('.logo-box') : null;
 
 // Preview Card & Teacher Elements
@@ -96,13 +106,172 @@ const signatureLineEl = coverPreviewWrapper
 /**
  * Format YYYY-MM-DD input date to DD/MM/YYYY for cover preview
  */
-function formatDate(isoDate) {
+export function formatDate(isoDate) {
   if (!isoDate || typeof isoDate !== 'string') return '';
   const parts = isoDate.split('-');
   if (parts.length !== 3) return isoDate;
   const [yyyy, mm, dd] = parts;
   if (!yyyy || !mm || !dd) return isoDate;
   return `${dd}/${mm}/${yyyy}`;
+}
+
+/**
+ * Filter course catalogue by department code/name, level, and term
+ */
+export function filterCourses(courses, departments, { departmentInput: deptIn, level, term }) {
+  const deptInputVal = (deptIn || '').trim().toLowerCase();
+  let matchedDeptCode = null;
+
+  if (deptInputVal && Array.isArray(departments)) {
+    const matchedDept = departments.find(
+      (d) => d.name.trim().toLowerCase() === deptInputVal || d.code.trim().toLowerCase() === deptInputVal
+    );
+    if (matchedDept) {
+      matchedDeptCode = matchedDept.code;
+    }
+  }
+
+  const levelVal = level !== null && level !== undefined && level !== '' ? parseInt(level, 10) : null;
+  const termVal = term ? String(term).trim() : null;
+
+  let filtered = Array.isArray(courses) ? courses : [];
+
+  if (matchedDeptCode) {
+    filtered = filtered.filter((c) => c.dept === matchedDeptCode);
+  } else if (deptInputVal) {
+    filtered = [];
+  }
+
+  if (levelVal !== null && !isNaN(levelVal)) {
+    filtered = filtered.filter((c) => c.level === levelVal);
+  }
+
+  if (termVal) {
+    filtered = filtered.filter((c) => c.term === termVal);
+  }
+
+  return filtered;
+}
+
+/**
+ * Lookup course by code (case-insensitive)
+ */
+export function findCourseByCode(courses, code) {
+  if (!code || !Array.isArray(courses)) return null;
+  const target = code.trim().toLowerCase();
+  return courses.find((c) => c.code.trim().toLowerCase() === target) || null;
+}
+
+/**
+ * Lookup course by title (case-insensitive)
+ */
+export function findCourseByTitle(courses, title) {
+  if (!title || !Array.isArray(courses)) return null;
+  const target = title.trim().toLowerCase();
+  return courses.find((c) => c.title.trim().toLowerCase() === target) || null;
+}
+
+/**
+ * Check if the cascade hint should be displayed:
+ * Visible ONLY when department is recognized in the catalogue AND the filtered course list is empty.
+ */
+export function isCascadeHintVisible({ departmentInput: deptIn, departments, filteredCourses }) {
+  if (!deptIn || !Array.isArray(departments)) return false;
+  const deptVal = deptIn.trim().toLowerCase();
+  if (!deptVal) return false;
+  const matchedDept = departments.find(
+    (d) => d.name.trim().toLowerCase() === deptVal || d.code.trim().toLowerCase() === deptVal
+  );
+  if (!matchedDept) return false;
+  return (!filteredCourses || filteredCourses.length === 0);
+}
+
+/**
+ * Check if a teacher entry has a non-empty name
+ */
+export function isTeacherNonEmpty(teacher) {
+  return Boolean(teacher && typeof teacher.name === 'string' && teacher.name.trim() !== '');
+}
+
+/**
+ * Migrate legacy drafts to the Phase 7 schema:
+ * - v1 scalar { teacherName, teacherDesignation } -> [{ name, designation }]
+ * - v2 draft with teacher role fields -> role is dropped silently
+ */
+export function migrateDraft(draft) {
+  if (!draft || typeof draft !== 'object') return null;
+  let teachersList = [];
+  if (Array.isArray(draft.teachers) && draft.teachers.length > 0) {
+    teachersList = draft.teachers.map((t) => ({
+      name: (t && t.name) ? String(t.name) : '',
+      designation: (t && t.designation) ? String(t.designation) : ''
+    }));
+  } else if (
+    draft.teacherName ||
+    draft['teacher-name'] ||
+    draft.teacherDesignation ||
+    draft['teacher-designation']
+  ) {
+    teachersList = [
+      {
+        name: String(draft.teacherName || draft['teacher-name'] || ''),
+        designation: String(draft.teacherDesignation || draft['teacher-designation'] || '')
+      }
+    ];
+  } else {
+    teachersList = [{ name: '', designation: '' }];
+  }
+  return {
+    ...draft,
+    draftVersion: 2,
+    teachers: teachersList
+  };
+}
+
+/**
+ * Compare two draft objects for value equality (name + designation only, no role)
+ */
+export function areDraftsEqual(a, b) {
+  if (!a || !b) return false;
+  const fields = [
+    'docType', 'university', 'department', 'level', 'term',
+    'courseCode', 'courseTitle', 'docNumber', 'docTitle',
+    'comment', 'studentName', 'studentId', 'experimentDate', 'submissionDate'
+  ];
+  for (const f of fields) {
+    if ((a[f] || '') !== (b[f] || '')) return false;
+  }
+  const tA = Array.isArray(a.teachers) ? a.teachers : [];
+  const tB = Array.isArray(b.teachers) ? b.teachers : [];
+  if (tA.length !== tB.length) return false;
+  for (let i = 0; i < tA.length; i++) {
+    if (
+      (tA[i].name || '') !== (tB[i].name || '') ||
+      (tA[i].designation || '') !== (tB[i].designation || '')
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Helper to determine default values application:
+ * Applied ONLY when no draft exists; drafts (including explicit blanks) take precedence.
+ */
+export function applyDefaultsIfNoDraft(existingDraft, defaultValues) {
+  if (existingDraft && typeof existingDraft === 'object' && Object.keys(existingDraft).length > 0) {
+    return { applied: false, values: existingDraft };
+  }
+  return {
+    applied: true,
+    values: {
+      university: (defaultValues && defaultValues.university) || '',
+      department: (defaultValues && defaultValues.department) || '',
+      level: (defaultValues && defaultValues.level) || '',
+      term: (defaultValues && defaultValues.term) || ''
+    }
+  };
 }
 
 /**
@@ -122,23 +291,24 @@ function updatePreviewField(fieldName, text) {
  * Live sync all static form fields to preview
  */
 function syncAllToPreview() {
-  updatePreviewField('university-name', universityInput.value);
-  updatePreviewField('department-name', departmentInput.value);
-  updatePreviewField('level', levelSelect.value);
-  updatePreviewField('term', termSelect.value);
-  updatePreviewField('course-code', courseCodeInput.value);
-  updatePreviewField('course-title', courseTitleInput.value);
-  updatePreviewField('doc-number', docNumberInput.value);
-  updatePreviewField('report-no', docNumberInput.value);
-  updatePreviewField('doc-title', docTitleInput.value);
-  updatePreviewField('report-title', docTitleInput.value);
-  updatePreviewField('comment-box', commentInput.value);
-  updatePreviewField('student-name', studentNameInput.value);
-  updatePreviewField('student-id', studentIdInput.value);
+  if (!isBrowser) return;
+  updatePreviewField('university-name', universityInput ? universityInput.value : '');
+  updatePreviewField('department-name', departmentInput ? departmentInput.value : '');
+  updatePreviewField('level', levelSelect ? levelSelect.value : '');
+  updatePreviewField('term', termSelect ? termSelect.value : '');
+  updatePreviewField('course-code', courseCodeInput ? courseCodeInput.value : '');
+  updatePreviewField('course-title', courseTitleInput ? courseTitleInput.value : '');
+  updatePreviewField('doc-number', docNumberInput ? docNumberInput.value : '');
+  updatePreviewField('report-no', docNumberInput ? docNumberInput.value : '');
+  updatePreviewField('doc-title', docTitleInput ? docTitleInput.value : '');
+  updatePreviewField('report-title', docTitleInput ? docTitleInput.value : '');
+  updatePreviewField('comment-box', commentInput ? commentInput.value : '');
+  updatePreviewField('student-name', studentNameInput ? studentNameInput.value : '');
+  updatePreviewField('student-id', studentIdInput ? studentIdInput.value : '');
 
   const isLab = getSelectedDocType() === 'lab-report';
-  updatePreviewField('experiment-date', isLab ? formatDate(experimentDateInput.value) : '');
-  updatePreviewField('submission-date', formatDate(submissionDateInput.value));
+  updatePreviewField('experiment-date', (isLab && experimentDateInput) ? formatDate(experimentDateInput.value) : '');
+  updatePreviewField('submission-date', submissionDateInput ? formatDate(submissionDateInput.value) : '');
 
   renderTeacherPreview();
 }
@@ -147,108 +317,103 @@ function syncAllToPreview() {
  * Get current selected document type ('lab-report' | 'assignment')
  */
 function getSelectedDocType() {
+  if (!isBrowser) return 'lab-report';
   const selected = document.querySelector('input[name="doc-type"]:checked');
   return selected ? selected.value : 'lab-report';
 }
 
 /**
- * Handle document type switching (data-cover-type, labels, experiment-date)
+ * Handle document type radio changes
  */
 function handleDocTypeChange(shouldSave = false) {
+  if (!isBrowser) return;
   const docType = getSelectedDocType();
+  const isLab = docType === 'lab-report';
+
   if (a4CoverEl) {
     a4CoverEl.setAttribute('data-cover-type', docType);
   }
 
-  if (docType === 'lab-report') {
-    docNumberLabel.textContent = 'Report no.:';
-    docTitleLabel.textContent = 'Report Title:';
-    if (previewDocNumberLabel) previewDocNumberLabel.textContent = 'Report no.';
-    if (previewDocTitleLabel) previewDocTitleLabel.textContent = 'Report Title';
-    experimentDateGroup.classList.remove('is-hidden');
-    updatePreviewField('cover-title', 'LAB REPORT');
-    updatePreviewField('experiment-date', formatDate(experimentDateInput.value));
-  } else {
-    docNumberLabel.textContent = 'Assignment no.:';
-    docTitleLabel.textContent = 'Assignment Title:';
-    if (previewDocNumberLabel) previewDocNumberLabel.textContent = 'Assignment no.';
-    if (previewDocTitleLabel) previewDocTitleLabel.textContent = 'Assignment Title';
-    experimentDateGroup.classList.add('is-hidden');
-    experimentDateInput.value = '';
-    updatePreviewField('cover-title', 'Assignment');
-    updatePreviewField('experiment-date', '');
+  if (experimentDateGroup) {
+    experimentDateGroup.style.display = isLab ? 'flex' : 'none';
   }
 
-  renderTeacherPreview();
+  const expDateValue = isLab && experimentDateInput ? formatDate(experimentDateInput.value) : '';
+  updatePreviewField('experiment-date', expDateValue);
+
+  if (docNumberLabel) docNumberLabel.textContent = isLab ? 'Report no.' : 'Assignment no.';
+  if (docTitleLabel) docTitleLabel.textContent = isLab ? 'Report Title' : 'Assignment Title';
+  if (previewDocNumberLabel) previewDocNumberLabel.textContent = isLab ? 'Report no.' : 'Assignment no.';
+  if (previewDocTitleLabel) previewDocTitleLabel.textContent = isLab ? 'Report Title' : 'Assignment Title';
+
+  const titleBanner = coverPreviewWrapper ? coverPreviewWrapper.querySelector('[data-field="cover-title"]') : null;
+  if (titleBanner) {
+    titleBanner.textContent = isLab ? 'LAB REPORT' : 'ASSIGNMENT';
+  }
+
+  syncCardHeightsAndSignature();
+
   if (shouldSave) {
     queueDraftSave();
   }
 }
 
 /**
- * Progressive filtering cascade: Department + Level + Term -> Course Code / Title datalists
+ * Cascading dropdown logic: update course suggestions based on department, level, term
  */
 function updateCourseLists() {
-  const deptInputVal = departmentInput.value.trim().toLowerCase();
-  let matchedDeptCode = null;
+  if (!isBrowser || !departmentInput) return;
+  const deptInputVal = departmentInput.value.trim();
+  const levelVal = levelSelect ? levelSelect.value : null;
+  const termVal = termSelect ? termSelect.value : null;
 
-  if (deptInputVal) {
-    const matchedDept = dropdownData.departments.find(
-      (d) => d.name.trim().toLowerCase() === deptInputVal || d.code.trim().toLowerCase() === deptInputVal
-    );
-    if (matchedDept) {
-      matchedDeptCode = matchedDept.code;
-    }
-  }
-
-  const levelVal = levelSelect.value ? parseInt(levelSelect.value, 10) : null;
-  const termVal = termSelect.value ? termSelect.value.trim() : null;
-
-  let filtered = dropdownData.courses || [];
-
-  if (matchedDeptCode) {
-    filtered = filtered.filter((c) => c.dept === matchedDeptCode);
-  } else if (deptInputVal) {
-    filtered = [];
-  }
-
-  if (levelVal !== null && !isNaN(levelVal)) {
-    filtered = filtered.filter((c) => c.level === levelVal);
-  }
-
-  if (termVal) {
-    filtered = filtered.filter((c) => c.term === termVal);
-  }
-
-  currentFilteredCourses = filtered;
-
-  const uniqueCodes = Array.from(new Set(filtered.map((c) => c.code))).sort();
-  courseCodesDatalist.textContent = '';
-  uniqueCodes.forEach((code) => {
-    const opt = document.createElement('option');
-    opt.value = code;
-    courseCodesDatalist.appendChild(opt);
+  currentFilteredCourses = filterCourses(dropdownData.courses, dropdownData.departments, {
+    departmentInput: deptInputVal,
+    level: levelVal,
+    term: termVal
   });
 
-  const uniqueTitles = Array.from(new Set(filtered.map((c) => c.title))).sort();
-  courseTitlesDatalist.textContent = '';
-  uniqueTitles.forEach((title) => {
-    const opt = document.createElement('option');
-    opt.value = title;
-    courseTitlesDatalist.appendChild(opt);
-  });
+  if (courseCodesDatalist) {
+    const uniqueCodes = Array.from(new Set(currentFilteredCourses.map((c) => c.code))).sort();
+    courseCodesDatalist.textContent = '';
+    uniqueCodes.forEach((code) => {
+      const opt = document.createElement('option');
+      opt.value = code;
+      courseCodesDatalist.appendChild(opt);
+    });
+  }
+
+  if (courseTitlesDatalist) {
+    const uniqueTitles = Array.from(new Set(currentFilteredCourses.map((c) => c.title))).sort();
+    courseTitlesDatalist.textContent = '';
+    uniqueTitles.forEach((title) => {
+      const opt = document.createElement('option');
+      opt.value = title;
+      courseTitlesDatalist.appendChild(opt);
+    });
+  }
+
+  // Cascade hint: visible ONLY when department is recognized and filtered courses list is empty
+  const hintEl = cascadeHintEl || document.getElementById('cascade-hint');
+  if (hintEl) {
+    const isVisible = isCascadeHintVisible({
+      departmentInput: deptInputVal,
+      departments: dropdownData.departments,
+      filteredCourses: currentFilteredCourses
+    });
+    hintEl.style.display = isVisible ? 'block' : 'none';
+  }
 }
 
 /**
  * Bidirectional auto-fill for Course Code <-> Course Title
  */
 function handleCourseCodeInput() {
-  const codeVal = courseCodeInput.value.trim().toLowerCase();
+  if (!courseCodeInput || !courseTitleInput) return;
+  const codeVal = courseCodeInput.value.trim();
   if (!codeVal) return;
 
-  const matched = currentFilteredCourses.find(
-    (c) => c.code.trim().toLowerCase() === codeVal
-  );
+  const matched = findCourseByCode(currentFilteredCourses, codeVal);
   if (matched) {
     courseTitleInput.value = matched.title;
     updatePreviewField('course-title', matched.title);
@@ -256,12 +421,11 @@ function handleCourseCodeInput() {
 }
 
 function handleCourseTitleInput() {
-  const titleVal = courseTitleInput.value.trim().toLowerCase();
+  if (!courseCodeInput || !courseTitleInput) return;
+  const titleVal = courseTitleInput.value.trim();
   if (!titleVal) return;
 
-  const matched = currentFilteredCourses.find(
-    (c) => c.title.trim().toLowerCase() === titleVal
-  );
+  const matched = findCourseByTitle(currentFilteredCourses, titleVal);
   if (matched) {
     courseCodeInput.value = matched.code;
     updatePreviewField('course-code', matched.code);
@@ -269,7 +433,7 @@ function handleCourseTitleInput() {
 }
 
 /**
- * Multi-Teacher Form Renderer (Phase 4)
+ * Multi-Teacher Form Renderer (Phase 7: Role removed)
  */
 function renderTeacherForm() {
   if (!teachersFormContainer) return;
@@ -280,24 +444,11 @@ function renderTeacherForm() {
     row.className = 'teacher-row';
     row.dataset.index = String(index);
 
-    // Role
-    const roleLabel = document.createElement('label');
-    roleLabel.textContent = 'Role';
-    const roleInput = document.createElement('input');
-    roleInput.setAttribute('list', 'teacher-roles-list');
-    roleInput.className = 't-role';
-    roleInput.dataset.index = String(index);
-    roleInput.dataset.prop = 'role';
-    roleInput.value = teacher.role || '';
-    roleInput.autocomplete = 'off';
-    roleInput.placeholder = 'e.g. Course Teacher';
-    roleLabel.appendChild(roleInput);
-    row.appendChild(roleLabel);
-
     // Name
     const nameLabel = document.createElement('label');
     nameLabel.textContent = 'Name';
     const nameInput = document.createElement('input');
+    nameInput.type = 'text';
     nameInput.className = 't-name';
     nameInput.dataset.index = String(index);
     nameInput.dataset.prop = 'name';
@@ -310,6 +461,7 @@ function renderTeacherForm() {
     const desigLabel = document.createElement('label');
     desigLabel.textContent = 'Designation';
     const desigInput = document.createElement('input');
+    desigInput.type = 'text';
     desigInput.setAttribute('list', 'teacher-designations-list');
     desigInput.className = 't-designation';
     desigInput.dataset.index = String(index);
@@ -337,38 +489,41 @@ function renderTeacherForm() {
 }
 
 /**
- * Multi-Teacher Live Preview Renderer (Phase 4)
+ * Multi-Teacher Live Preview Renderer (Phase 7: Role removed)
  * Uses textContent exclusively — no innerHTML for user values.
+ * Line 1 always shows: Teacher Name: <name>
+ * Line 2 (if present): Designation: <designation>
  */
 function renderTeacherPreview() {
-  if (!teachersPreviewContainer) return;
-  teachersPreviewContainer.textContent = '';
+  const container = teachersPreviewContainer || (coverPreviewWrapper ? coverPreviewWrapper.querySelector('[data-field="teachers-list"]') : null);
+  if (!container) return;
+  container.textContent = '';
 
-  const activeTeachers = teachers.filter((t) => t.name.trim() !== '');
+  const activeTeachers = teachers.filter(isTeacherNonEmpty);
 
   activeTeachers.forEach((teacher) => {
     const entry = document.createElement('div');
     entry.className = 'teacher-entry';
 
-    // Line 1: Role / Teacher Name + Name
+    // Line 1: Teacher Name + Name
     const line1 = document.createElement('div');
     line1.className = 'teacher-line teacher-line-name';
 
     const strong1 = document.createElement('strong');
     strong1.className = 'card-field-label';
-    strong1.textContent = teacher.role.trim() ? `${teacher.role.trim()}:` : 'Teacher Name:';
+    strong1.textContent = 'Teacher Name:';
     line1.appendChild(strong1);
     line1.appendChild(document.createTextNode(' '));
 
     const nameSpan = document.createElement('span');
     nameSpan.className = 'card-field-value';
-    nameSpan.textContent = teacher.name;
+    nameSpan.textContent = teacher.name.trim();
     line1.appendChild(nameSpan);
 
     entry.appendChild(line1);
 
     // Line 2 (Optional): Designation
-    if (teacher.designation.trim()) {
+    if (teacher.designation && teacher.designation.trim()) {
       const line2 = document.createElement('div');
       line2.className = 'teacher-line teacher-line-desig';
 
@@ -380,13 +535,13 @@ function renderTeacherPreview() {
 
       const desigSpan = document.createElement('span');
       desigSpan.className = 'card-field-value';
-      desigSpan.textContent = teacher.designation;
+      desigSpan.textContent = teacher.designation.trim();
       line2.appendChild(desigSpan);
 
       entry.appendChild(line2);
     }
 
-    teachersPreviewContainer.appendChild(entry);
+    container.appendChild(entry);
   });
 
   // Synchronize dynamic card heights and signature placement
@@ -394,7 +549,7 @@ function renderTeacherPreview() {
 }
 
 /**
- * Card Heights and Shared Signature Line Synchronization (Phase 4)
+ * Card Heights and Shared Signature Line Synchronization
  * In single-teacher default case, preserves Phase 2 geometry exactly.
  * In multi-teacher case, expands both cards downward in unison with pinned signature line.
  */
@@ -412,50 +567,64 @@ function syncCardHeightsAndSignature() {
   const bottomPaddingPx = 8 * mmToPx;
 
   const neededHeightPx = teacherTopPx + teacherHeightPx + signatureHeightPx + bottomPaddingPx;
-  const activeCount = teachers.filter((t) => t.name.trim() !== '').length;
+  const activeCount = teachers.filter(isTeacherNonEmpty).length;
 
   if (neededHeightPx > minHeightPx && activeCount > 1) {
     const targetHeight = `${Math.ceil(neededHeightPx)}px`;
     cardSubmittedTo.style.height = targetHeight;
     cardSubmittedBy.style.height = targetHeight;
-    if (signatureLineEl) {
-      signatureLineEl.style.top = 'auto';
-      signatureLineEl.style.bottom = `${3 * mmToPx}px`;
-    }
   } else {
-    // Revert to CSS defaults (exact Phase 2 min-height & signature coordinates)
     cardSubmittedTo.style.height = '';
     cardSubmittedBy.style.height = '';
-    if (signatureLineEl) {
-      signatureLineEl.style.top = '';
-      signatureLineEl.style.bottom = '';
-    }
   }
 }
 
 /**
- * Logo display rendering in preview logo box
+ * Render user-uploaded logo in preview
  */
-function renderLogoInPreview(blob) {
-  if (!logoBoxEl) return;
-  logoBoxEl.textContent = '';
-  if (blob) {
-    const img = document.createElement('img');
-    img.className = 'uploaded-logo';
-    img.alt = 'University Logo';
-    img.src = URL.createObjectURL(blob);
-    img.style.width = '100%';
-    img.style.height = '100%';
-    img.style.objectFit = 'contain';
-    img.style.objectPosition = 'center';
-    img.style.display = 'block';
-    logoBoxEl.appendChild(img);
-  } else {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(DEFAULT_LOGO_SVG, 'image/svg+xml');
-    const svgEl = doc.documentElement;
-    logoBoxEl.appendChild(document.importNode(svgEl, true));
-  }
+function renderUserLogoInPreview(blob) {
+  const box = logoBoxEl || (coverPreviewWrapper ? coverPreviewWrapper.querySelector('.logo-box') : null);
+  if (!box) return;
+  box.textContent = '';
+  const img = document.createElement('img');
+  img.className = 'logo-img';
+  img.alt = 'Uploaded institution logo';
+  img.src = URL.createObjectURL(blob);
+  box.appendChild(img);
+  currentLogoState = 'user';
+}
+
+/**
+ * Render default institution logo in preview
+ */
+function renderDefaultLogoInPreview() {
+  const box = logoBoxEl || (coverPreviewWrapper ? coverPreviewWrapper.querySelector('.logo-box') : null);
+  if (!box) return;
+  box.textContent = '';
+  const img = document.createElement('img');
+  img.className = 'logo-img';
+  img.alt = 'Default institution logo';
+  img.src = 'assets/default-logo.png';
+  img.onerror = () => {
+    currentLogoState = 'none';
+    renderSvgPlaceholder();
+  };
+  box.appendChild(img);
+  currentLogoState = 'default';
+}
+
+/**
+ * Render defensive SVG placeholder when neither user nor default logo loads
+ */
+function renderSvgPlaceholder() {
+  const box = logoBoxEl || (coverPreviewWrapper ? coverPreviewWrapper.querySelector('.logo-box') : null);
+  if (!box) return;
+  box.textContent = '';
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(DEFAULT_LOGO_SVG, 'image/svg+xml');
+  const svgEl = doc.documentElement;
+  box.appendChild(document.importNode(svgEl, true));
+  currentLogoState = 'none';
 }
 
 /**
@@ -465,77 +634,78 @@ async function handleLogoUpload(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
 
-  logoErrorEl.textContent = '';
+  if (logoErrorEl) logoErrorEl.textContent = '';
 
   if (!file.type.startsWith('image/')) {
-    logoErrorEl.textContent = 'Invalid file type. Please upload an image (PNG, JPG, SVG, WebP).';
-    logoUploadInput.value = '';
+    if (logoErrorEl) logoErrorEl.textContent = 'Invalid file type. Please upload an image (PNG, JPG, SVG, WebP).';
+    if (logoUploadInput) logoUploadInput.value = '';
     return;
   }
 
   const maxSizeBytes = 2 * 1024 * 1024;
   if (file.size > maxSizeBytes) {
-    logoErrorEl.textContent = `File is too large (${(file.size / (1024 * 1024)).toFixed(2)} MB). Maximum allowed size is 2 MB.`;
-    logoUploadInput.value = '';
+    if (logoErrorEl) logoErrorEl.textContent = `File is too large (${(file.size / (1024 * 1024)).toFixed(2)} MB). Maximum allowed size is 2 MB.`;
+    if (logoUploadInput) logoUploadInput.value = '';
     return;
   }
 
   try {
     const res = await saveLogo(file);
-    renderLogoInPreview(file);
+    renderUserLogoInPreview(file);
     if (res && res.success === false) {
       if (res.reason === 'quota') {
         setStorageStatus('Storage full — clear the form or remove the logo to save more.', 'warning');
       } else {
         setStorageStatus('Logo will not persist in this browser.', 'warning');
       }
+    } else if (res && res.fallback) {
+      setStorageStatus('Logo saved (fallback storage).', 'saved');
     } else {
       setStorageStatus('Logo saved.', 'saved');
     }
   } catch (err) {
     console.error('Failed to save logo:', err);
-    logoErrorEl.textContent = 'Failed to save logo to local storage.';
+    if (logoErrorEl) logoErrorEl.textContent = 'Failed to save logo to local storage.';
     setStorageStatus('Logo not saved: local storage error.', 'error');
   }
 }
 
 /**
- * Handle Logo Removal
+ * Handle Logo Reset ("Reset logo" reverts to default logo)
  */
-async function handleRemoveLogo() {
+async function handleResetLogo() {
   try {
     await deleteLogo();
-    logoUploadInput.value = '';
-    logoErrorEl.textContent = '';
-    renderLogoInPreview(null);
-    setStorageStatus('Logo removed.', 'saved');
+    if (logoUploadInput) logoUploadInput.value = '';
+    if (logoErrorEl) logoErrorEl.textContent = '';
+    renderDefaultLogoInPreview();
+    setStorageStatus('Logo reset to default.', 'saved');
   } catch (err) {
-    console.error('Failed to remove logo:', err);
-    logoErrorEl.textContent = 'Failed to remove logo.';
+    console.error('Failed to reset logo:', err);
+    if (logoErrorEl) logoErrorEl.textContent = 'Failed to reset logo.';
   }
 }
 
 /**
- * Build snapshot of current in-memory draft state
+ * Build snapshot of current in-memory draft state (name + designation only)
  */
 function getCurrentFormDraft() {
   return {
     docType: getSelectedDocType(),
-    university: universityInput.value,
-    department: departmentInput.value,
-    level: levelSelect.value,
-    term: termSelect.value,
-    courseCode: courseCodeInput.value,
-    courseTitle: courseTitleInput.value,
-    docNumber: docNumberInput.value,
-    docTitle: docTitleInput.value,
-    comment: commentInput.value,
-    studentName: studentNameInput.value,
-    studentId: studentIdInput.value,
-    experimentDate: experimentDateInput.value,
-    submissionDate: submissionDateInput.value,
+    university: universityInput ? universityInput.value : '',
+    department: departmentInput ? departmentInput.value : '',
+    level: levelSelect ? levelSelect.value : '',
+    term: termSelect ? termSelect.value : '',
+    courseCode: courseCodeInput ? courseCodeInput.value : '',
+    courseTitle: courseTitleInput ? courseTitleInput.value : '',
+    docNumber: docNumberInput ? docNumberInput.value : '',
+    docTitle: docTitleInput ? docTitleInput.value : '',
+    comment: commentInput ? commentInput.value : '',
+    studentName: studentNameInput ? studentNameInput.value : '',
+    studentId: studentIdInput ? studentIdInput.value : '',
+    experimentDate: experimentDateInput ? experimentDateInput.value : '',
+    submissionDate: submissionDateInput ? submissionDateInput.value : '',
     teachers: teachers.map((t) => ({
-      role: t.role || '',
       name: t.name || '',
       designation: t.designation || ''
     }))
@@ -543,37 +713,10 @@ function getCurrentFormDraft() {
 }
 
 /**
- * Compare two draft objects for value equality
- */
-function areDraftsEqual(a, b) {
-  if (!a || !b) return false;
-  const fields = [
-    'docType', 'university', 'department', 'level', 'term',
-    'courseCode', 'courseTitle', 'docNumber', 'docTitle',
-    'comment', 'studentName', 'studentId', 'experimentDate', 'submissionDate'
-  ];
-  for (const f of fields) {
-    if ((a[f] || '') !== (b[f] || '')) return false;
-  }
-  const tA = Array.isArray(a.teachers) ? a.teachers : [];
-  const tB = Array.isArray(b.teachers) ? b.teachers : [];
-  if (tA.length !== tB.length) return false;
-  for (let i = 0; i < tA.length; i++) {
-    if (
-      (tA[i].role || '') !== (tB[i].role || '') ||
-      (tA[i].name || '') !== (tB[i].name || '') ||
-      (tA[i].designation || '') !== (tB[i].designation || '')
-    ) {
-      return false;
-    }
-  }
-  return true;
-}
-
-/**
  * Apply draft data payload to form inputs and teachers array
  */
-function applyDraftToForm(draft) {
+function applyDraftToForm(rawDraft) {
+  const draft = migrateDraft(rawDraft);
   if (!draft) return;
 
   if (draft.docType) {
@@ -581,47 +724,25 @@ function applyDraftToForm(draft) {
     if (targetRadio) targetRadio.checked = true;
   }
 
-  if (draft.university !== undefined) universityInput.value = draft.university;
-  if (draft.department !== undefined) departmentInput.value = draft.department;
-  if (draft.level !== undefined) levelSelect.value = draft.level;
-  if (draft.term !== undefined) termSelect.value = draft.term;
-  if (draft.courseCode !== undefined) courseCodeInput.value = draft.courseCode;
-  if (draft.courseTitle !== undefined) courseTitleInput.value = draft.courseTitle;
-  if (draft.docNumber !== undefined) docNumberInput.value = draft.docNumber;
-  if (draft.docTitle !== undefined) docTitleInput.value = draft.docTitle;
-  if (draft.comment !== undefined) commentInput.value = draft.comment;
-  if (draft.studentName !== undefined) studentNameInput.value = draft.studentName;
-  if (draft.studentId !== undefined) studentIdInput.value = draft.studentId;
-  if (draft.experimentDate !== undefined) experimentDateInput.value = draft.experimentDate;
-  if (draft.submissionDate !== undefined) submissionDateInput.value = draft.submissionDate;
+  if (draft.university !== undefined && universityInput) universityInput.value = draft.university;
+  if (draft.department !== undefined && departmentInput) departmentInput.value = draft.department;
+  if (draft.level !== undefined && levelSelect) levelSelect.value = draft.level;
+  if (draft.term !== undefined && termSelect) termSelect.value = draft.term;
+  if (draft.courseCode !== undefined && courseCodeInput) courseCodeInput.value = draft.courseCode;
+  if (draft.courseTitle !== undefined && courseTitleInput) courseTitleInput.value = draft.courseTitle;
+  if (draft.docNumber !== undefined && docNumberInput) docNumberInput.value = draft.docNumber;
+  if (draft.docTitle !== undefined && docTitleInput) docTitleInput.value = draft.docTitle;
+  if (draft.comment !== undefined && commentInput) commentInput.value = draft.comment;
+  if (draft.studentName !== undefined && studentNameInput) studentNameInput.value = draft.studentName;
+  if (draft.studentId !== undefined && studentIdInput) studentIdInput.value = draft.studentId;
+  if (draft.experimentDate !== undefined && experimentDateInput) experimentDateInput.value = draft.experimentDate;
+  if (draft.submissionDate !== undefined && submissionDateInput) submissionDateInput.value = draft.submissionDate;
 
-  // Multi-Teacher Deserialization & Backward Migration
-  if (Array.isArray(draft.teachers) && draft.teachers.length > 0) {
-    teachers = draft.teachers.map((t) => ({
-      role: t.role || '',
-      name: t.name || '',
-      designation: t.designation || ''
-    }));
-  } else if (
-    draft.teacherName ||
-    draft['teacher-name'] ||
-    draft.teacherDesignation ||
-    draft['teacher-designation']
-  ) {
-    teachers = [
-      {
-        role: '',
-        name: draft.teacherName || draft['teacher-name'] || '',
-        designation: draft.teacherDesignation || draft['teacher-designation'] || ''
-      }
-    ];
-  } else {
-    teachers = [{ role: '', name: '', designation: '' }];
-  }
+  teachers = draft.teachers;
 }
 
 /**
- * Debounced Save Draft to localStorage (Phase 5: versioned v2 with error handling)
+ * Debounced Save Draft to localStorage (v2 without teacher role)
  */
 function queueDraftSave() {
   if (isApplyingRemoteChange) return;
@@ -631,23 +752,22 @@ function queueDraftSave() {
     const draft = {
       draftVersion: 2,
       docType: getSelectedDocType(),
-      university: universityInput.value,
-      department: departmentInput.value,
-      level: levelSelect.value,
-      term: termSelect.value,
-      courseCode: courseCodeInput.value,
-      courseTitle: courseTitleInput.value,
-      docNumber: docNumberInput.value,
-      docTitle: docTitleInput.value,
-      comment: commentInput.value,
-      studentName: studentNameInput.value,
-      studentId: studentIdInput.value,
-      experimentDate: experimentDateInput.value,
-      submissionDate: submissionDateInput.value,
+      university: universityInput ? universityInput.value : '',
+      department: departmentInput ? departmentInput.value : '',
+      level: levelSelect ? levelSelect.value : '',
+      term: termSelect ? termSelect.value : '',
+      courseCode: courseCodeInput ? courseCodeInput.value : '',
+      courseTitle: courseTitleInput ? courseTitleInput.value : '',
+      docNumber: docNumberInput ? docNumberInput.value : '',
+      docTitle: docTitleInput ? docTitleInput.value : '',
+      comment: commentInput ? commentInput.value : '',
+      studentName: studentNameInput ? studentNameInput.value : '',
+      studentId: studentIdInput ? studentIdInput.value : '',
+      experimentDate: experimentDateInput ? experimentDateInput.value : '',
+      submissionDate: submissionDateInput ? submissionDateInput.value : '',
       teachers: teachers.map((t) => ({
-        role: t.role,
-        name: t.name,
-        designation: t.designation
+        name: t.name || '',
+        designation: t.designation || ''
       }))
     };
 
@@ -665,7 +785,7 @@ function queueDraftSave() {
 }
 
 /**
- * Restore Draft from localStorage (Phase 5: robust error handling & v1 migration)
+ * Restore Draft from localStorage
  */
 function restoreDraft() {
   const res = loadDraft();
@@ -690,7 +810,7 @@ function restoreDraft() {
   const draft = res.data;
   applyDraftToForm(draft);
 
-  // If legacy v1 draft without version, save upgraded v2 draft
+  // If legacy v1 draft without version or legacy draft with role, save clean v2 draft
   if (!draft.draftVersion || draft.draftVersion < 2) {
     saveDraft({
       ...draft,
@@ -703,7 +823,9 @@ function restoreDraft() {
 }
 
 /**
- * Handle Start Over / Clear Form action with confirmation
+ * Handle Start Over / Clear Form action with confirmation:
+ * Resets fields to default values (BAUST / CSE / Level 2 / Term II),
+ * other fields blank, 1 empty teacher entry, default logo.
  */
 async function handleClearForm() {
   const confirmed = window.confirm(
@@ -713,28 +835,27 @@ async function handleClearForm() {
 
   if (saveTimeout) clearTimeout(saveTimeout);
 
-  teachers = [{ role: '', name: '', designation: '' }];
+  teachers = [{ name: '', designation: '' }];
 
-  universityInput.value = '';
-  departmentInput.value = '';
-  levelSelect.value = '';
-  termSelect.value = '';
-  courseCodeInput.value = '';
-  courseTitleInput.value = '';
-  docNumberInput.value = '';
-  docTitleInput.value = '';
-  commentInput.value = '';
-  studentNameInput.value = '';
-  studentIdInput.value = '';
-  experimentDateInput.value = '';
-  submissionDateInput.value = '';
+  // Reset default fields to DEFAULT_FORM_VALUES
+  if (universityInput) universityInput.value = DEFAULT_FORM_VALUES.university;
+  if (departmentInput) departmentInput.value = DEFAULT_FORM_VALUES.department;
+  if (levelSelect) levelSelect.value = DEFAULT_FORM_VALUES.level;
+  if (termSelect) termSelect.value = DEFAULT_FORM_VALUES.term;
 
-  try {
-    logoUploadInput.value = '';
-  } catch {
-    // ignore
-  }
-  logoErrorEl.textContent = '';
+  // Reset other fields to empty
+  if (courseCodeInput) courseCodeInput.value = '';
+  if (courseTitleInput) courseTitleInput.value = '';
+  if (docNumberInput) docNumberInput.value = '';
+  if (docTitleInput) docTitleInput.value = '';
+  if (commentInput) commentInput.value = '';
+  if (studentNameInput) studentNameInput.value = '';
+  if (studentIdInput) studentIdInput.value = '';
+  if (experimentDateInput) experimentDateInput.value = '';
+  if (submissionDateInput) submissionDateInput.value = '';
+
+  if (logoUploadInput) logoUploadInput.value = '';
+  if (logoErrorEl) logoErrorEl.textContent = '';
 
   const labRadio = document.getElementById('doc-type-lab');
   if (labRadio) labRadio.checked = true;
@@ -742,18 +863,15 @@ async function handleClearForm() {
   clearDraft();
   await deleteLogo();
 
+  renderDefaultLogoInPreview();
   handleDocTypeChange();
   updateCourseLists();
   renderTeacherForm();
   renderTeacherPreview();
   syncAllToPreview();
 
-  if (logoBoxEl) {
-    logoBoxEl.innerHTML = DEFAULT_LOGO_SVG;
-  }
-
-  setStorageStatus('Cleared.', 'saved');
-  universityInput.focus();
+  setStorageStatus('Reset to defaults.', 'saved');
+  if (universityInput) universityInput.focus();
 }
 
 /**
@@ -828,40 +946,50 @@ function scalePreview() {
 /**
  * Initialize Application
  */
-async function init() {
+export async function init() {
+  if (!isBrowser) return;
+
   // 1. Fetch dropdown data
   try {
     const res = await fetch('data/dropdowns.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     dropdownData = await res.json();
 
-    // Populate universities
-    universitiesDatalist.textContent = '';
-    (dropdownData.universities || []).forEach((u) => {
-      const opt = document.createElement('option');
-      opt.value = u.name;
-      universitiesDatalist.appendChild(opt);
-    });
+    if (universitiesDatalist) {
+      universitiesDatalist.textContent = '';
+      (dropdownData.universities || []).forEach((u) => {
+        const opt = document.createElement('option');
+        opt.value = u.name;
+        universitiesDatalist.appendChild(opt);
+      });
+    }
 
-    // Populate departments
-    departmentsDatalist.textContent = '';
-    (dropdownData.departments || []).forEach((d) => {
-      const opt = document.createElement('option');
-      opt.value = d.name;
-      departmentsDatalist.appendChild(opt);
-    });
+    if (departmentsDatalist) {
+      departmentsDatalist.textContent = '';
+      (dropdownData.departments || []).forEach((d) => {
+        const opt = document.createElement('option');
+        opt.value = d.name;
+        departmentsDatalist.appendChild(opt);
+      });
+    }
   } catch (err) {
     console.error('Failed to load dropdowns.json:', err);
     setStorageStatus('Notice: Catalog suggestions unavailable. Free typing enabled.', 'warning');
   }
 
-  // 2. Restore Draft (including teachers)
+  // 2. Restore Draft (including teachers) or apply initial defaults
   const hasDraft = restoreDraft();
+  if (!hasDraft) {
+    if (universityInput) universityInput.value = DEFAULT_FORM_VALUES.university;
+    if (departmentInput) departmentInput.value = DEFAULT_FORM_VALUES.department;
+    if (levelSelect) levelSelect.value = DEFAULT_FORM_VALUES.level;
+    if (termSelect) termSelect.value = DEFAULT_FORM_VALUES.term;
+  }
 
   // 3. Setup Doc Type
   handleDocTypeChange();
 
-  // 4. Update Course Lists cascade
+  // 4. Update Course Lists cascade & hint
   updateCourseLists();
 
   // 5. Render Teacher Form and Preview
@@ -871,16 +999,19 @@ async function init() {
   // 6. Sync inputs to Preview
   syncAllToPreview();
 
-  // 7. Restore Logo from Storage
+  // 7. Restore Logo from Storage or render default logo
   let logoRestored = false;
   try {
     const logoBlob = await loadLogo();
     if (logoBlob) {
-      renderLogoInPreview(logoBlob);
+      renderUserLogoInPreview(logoBlob);
       logoRestored = true;
+    } else {
+      renderDefaultLogoInPreview();
     }
   } catch (err) {
     console.warn('Could not load logo:', err);
+    renderDefaultLogoInPreview();
   }
 
   // 8. Initial storage feedback
@@ -896,7 +1027,13 @@ async function init() {
   scalePreview();
   window.addEventListener('resize', scalePreview);
 
-  // 10. Event Listeners
+  // 10. Form submit event listener (prevents default submission)
+  const coverForm = document.getElementById('cover-form');
+  if (coverForm) {
+    coverForm.addEventListener('submit', (e) => e.preventDefault());
+  }
+
+  // 11. Event Listeners
   docTypeRadios.forEach((radio) => {
     radio.addEventListener('change', () => {
       handleDocTypeChange(true);
@@ -905,87 +1042,112 @@ async function init() {
   });
 
   // Cascade triggers
-  departmentInput.addEventListener('input', () => {
-    updatePreviewField('department-name', departmentInput.value);
-    updateCourseLists();
-    queueDraftSave();
-  });
+  if (departmentInput) {
+    departmentInput.addEventListener('input', () => {
+      updatePreviewField('department-name', departmentInput.value);
+      updateCourseLists();
+      queueDraftSave();
+    });
+  }
 
-  levelSelect.addEventListener('change', () => {
-    updatePreviewField('level', levelSelect.value);
-    updateCourseLists();
-    queueDraftSave();
-  });
+  if (levelSelect) {
+    levelSelect.addEventListener('change', () => {
+      updatePreviewField('level', levelSelect.value);
+      updateCourseLists();
+      queueDraftSave();
+    });
+  }
 
-  termSelect.addEventListener('change', () => {
-    updatePreviewField('term', termSelect.value);
-    updateCourseLists();
-    queueDraftSave();
-  });
+  if (termSelect) {
+    termSelect.addEventListener('change', () => {
+      updatePreviewField('term', termSelect.value);
+      updateCourseLists();
+      queueDraftSave();
+    });
+  }
 
   // Course Code & Title
-  courseCodeInput.addEventListener('input', () => {
-    updatePreviewField('course-code', courseCodeInput.value);
-    handleCourseCodeInput();
-    queueDraftSave();
-  });
+  if (courseCodeInput) {
+    courseCodeInput.addEventListener('input', () => {
+      updatePreviewField('course-code', courseCodeInput.value);
+      handleCourseCodeInput();
+      queueDraftSave();
+    });
+  }
 
-  courseTitleInput.addEventListener('input', () => {
-    updatePreviewField('course-title', courseTitleInput.value);
-    handleCourseTitleInput();
-    queueDraftSave();
-  });
+  if (courseTitleInput) {
+    courseTitleInput.addEventListener('input', () => {
+      updatePreviewField('course-title', courseTitleInput.value);
+      handleCourseTitleInput();
+      queueDraftSave();
+    });
+  }
 
   // Field live bindings
-  universityInput.addEventListener('input', () => {
-    updatePreviewField('university-name', universityInput.value);
-    queueDraftSave();
-  });
+  if (universityInput) {
+    universityInput.addEventListener('input', () => {
+      updatePreviewField('university-name', universityInput.value);
+      queueDraftSave();
+    });
+  }
 
-  docNumberInput.addEventListener('input', () => {
-    updatePreviewField('doc-number', docNumberInput.value);
-    updatePreviewField('report-no', docNumberInput.value);
-    queueDraftSave();
-  });
+  if (docNumberInput) {
+    docNumberInput.addEventListener('input', () => {
+      updatePreviewField('doc-number', docNumberInput.value);
+      updatePreviewField('report-no', docNumberInput.value);
+      queueDraftSave();
+    });
+  }
 
-  docTitleInput.addEventListener('input', () => {
-    updatePreviewField('doc-title', docTitleInput.value);
-    updatePreviewField('report-title', docTitleInput.value);
-    queueDraftSave();
-  });
+  if (docTitleInput) {
+    docTitleInput.addEventListener('input', () => {
+      updatePreviewField('doc-title', docTitleInput.value);
+      updatePreviewField('report-title', docTitleInput.value);
+      queueDraftSave();
+    });
+  }
 
-  commentInput.addEventListener('input', () => {
-    updatePreviewField('comment-box', commentInput.value);
-    queueDraftSave();
-  });
+  if (commentInput) {
+    commentInput.addEventListener('input', () => {
+      updatePreviewField('comment-box', commentInput.value);
+      queueDraftSave();
+    });
+  }
 
-  studentNameInput.addEventListener('input', () => {
-    updatePreviewField('student-name', studentNameInput.value);
-    queueDraftSave();
-  });
+  if (studentNameInput) {
+    studentNameInput.addEventListener('input', () => {
+      updatePreviewField('student-name', studentNameInput.value);
+      queueDraftSave();
+    });
+  }
 
-  studentIdInput.addEventListener('input', () => {
-    updatePreviewField('student-id', studentIdInput.value);
-    queueDraftSave();
-  });
+  if (studentIdInput) {
+    studentIdInput.addEventListener('input', () => {
+      updatePreviewField('student-id', studentIdInput.value);
+      queueDraftSave();
+    });
+  }
 
-  experimentDateInput.addEventListener('input', () => {
-    updatePreviewField('experiment-date', formatDate(experimentDateInput.value));
-    queueDraftSave();
-  });
+  if (experimentDateInput) {
+    experimentDateInput.addEventListener('input', () => {
+      updatePreviewField('experiment-date', formatDate(experimentDateInput.value));
+      queueDraftSave();
+    });
+  }
 
-  submissionDateInput.addEventListener('input', () => {
-    updatePreviewField('submission-date', formatDate(submissionDateInput.value));
-    queueDraftSave();
-  });
+  if (submissionDateInput) {
+    submissionDateInput.addEventListener('input', () => {
+      updatePreviewField('submission-date', formatDate(submissionDateInput.value));
+      queueDraftSave();
+    });
+  }
 
   // Multi-Teacher Form Interaction Listeners
   if (teachersFormContainer) {
-    // Input delegation
+    // Input delegation: .t-name and .t-designation only
     teachersFormContainer.addEventListener('input', (event) => {
       const target = event.target;
       if (
-        !target.classList.contains('t-role') &&
         !target.classList.contains('t-name') &&
         !target.classList.contains('t-designation')
       ) {
@@ -1018,7 +1180,7 @@ async function init() {
   // Add teacher button
   if (addTeacherBtn) {
     addTeacherBtn.addEventListener('click', () => {
-      teachers.push({ role: '', name: '', designation: '' });
+      teachers.push({ name: '', designation: '' });
       renderTeacherForm();
       renderTeacherPreview();
       const newNameInput = teachersFormContainer.querySelector(
@@ -1029,9 +1191,13 @@ async function init() {
     });
   }
 
-  // Logo upload & remove
-  logoUploadInput.addEventListener('change', handleLogoUpload);
-  removeLogoBtn.addEventListener('click', handleRemoveLogo);
+  // Logo upload & reset
+  if (logoUploadInput) {
+    logoUploadInput.addEventListener('change', handleLogoUpload);
+  }
+  if (removeLogoBtn) {
+    removeLogoBtn.addEventListener('click', handleResetLogo);
+  }
 
   // Clear Form ("Start over") button
   if (clearFormBtn) {
@@ -1054,4 +1220,10 @@ async function init() {
   window.addEventListener('storage', onStorageChange);
 }
 
-document.addEventListener('DOMContentLoaded', init);
+if (isBrowser) {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+}
