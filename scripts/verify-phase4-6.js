@@ -79,20 +79,20 @@ class CDPClient {
 try {
   console.log('=== PART 1: HTTP ENDPOINTS VERIFICATION (SECTION F.2) ===');
 
-  // Test 1: GET / -> 200 text/html (contains "Quick Cover")
+  // Test 1: GET / -> 200 text/html (contains "Cover Craft")
   const resRoot = await fetchHttp('/');
   console.log(`GET / -> ${resRoot.statusCode} (content-type: ${resRoot.contentType})`);
-  const rootHasTitle = resRoot.body.includes('Quick Cover');
-  console.log(`  - Contains "Quick Cover": ${rootHasTitle}`);
+  const rootHasTitle = resRoot.body.includes('Cover Craft');
+  console.log(`  - Contains "Cover Craft": ${rootHasTitle}`);
   if (resRoot.statusCode !== 200 || !rootHasTitle) {
     throw new Error('GET / assertion failed');
   }
 
-  // Test 2: GET /create.html -> 200 text/html (contains "Quick Cover")
+  // Test 2: GET /create.html -> 200 text/html (contains "Cover Craft")
   const resCreate = await fetchHttp('/create.html');
   console.log(`GET /create.html -> ${resCreate.statusCode} (content-type: ${resCreate.contentType})`);
-  const createHasTitle = resCreate.body.includes('Quick Cover');
-  console.log(`  - Contains "Quick Cover": ${createHasTitle}`);
+  const createHasTitle = resCreate.body.includes('Cover Craft');
+  console.log(`  - Contains "Cover Craft": ${createHasTitle}`);
   if (resCreate.statusCode !== 200 || !createHasTitle) {
     throw new Error('GET /create.html assertion failed');
   }

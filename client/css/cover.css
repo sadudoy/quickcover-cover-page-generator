@@ -77,9 +77,18 @@ html, body {
     box-shadow: none !important;
     margin: 0 !important;
     width: 210mm !important;
-    height: 297mm !important;
-    page-break-after: avoid;
-    page-break-inside: avoid;
+    height: 296.5mm !important;
+    max-height: 296.5mm !important;
+    overflow: hidden !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .university-header {
+    font-size: 13.5pt !important;
+    line-height: 1.2 !important;
+  }
+  .department-header {
+    top: 38mm !important;
   }
 }
 
@@ -92,9 +101,9 @@ html, body {
   left: 0;
   width: 210mm;
   text-align: center;
-  font-size: 15.96pt;
+  font-size: 13.5pt;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.2;
   margin: 0;
   padding: 0 14mm;
 }
@@ -135,9 +144,14 @@ html, body {
   left: 0;
   width: 210mm;
   text-align: center;
-  font-size: 18pt;
+  font-size: 18pt !important;
   font-weight: 700;
   margin: 0;
+}
+
+.a4-cover .title-banner,
+.a4-cover .document-title {
+  font-size: 18pt !important;
 }
 
 .title-underline {
@@ -158,22 +172,30 @@ html, body {
 .metadata-row {
   position: absolute;
   left: 0;
-  display: flex;
+  width: 163.74mm;
+  display: grid;
+  grid-template-columns: 45mm auto 1fr;
   align-items: baseline;
   white-space: nowrap;
 }
 
 .metadata-label {
   font-weight: 700;
+  width: 45mm;
+  min-width: 45mm;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .metadata-colon {
   font-weight: 700;
+  margin-right: 8px;
 }
 
 .metadata-value {
   font-weight: 700;
-  margin-left: 8px;
+  margin-left: 0;
+  min-width: 0;
 }
 
 /* Comment Box */
@@ -196,6 +218,7 @@ html, body {
   padding: 0;
   font-size: 12pt;
   font-weight: 700;
+  min-height: 66.13mm;
 }
 
 .card-title-wrap {
@@ -247,17 +270,46 @@ html, body {
   letter-spacing: 0;
 }
 
+/* Teachers List in Submitted To Card */
+.teachers-preview {
+  position: absolute;
+  top: 11.39mm;
+  left: 2.73mm;
+  right: 2.73mm;
+}
+
+.teacher-entry {
+  display: block;
+  margin-bottom: 2mm;
+  position: relative;
+}
+
+.teacher-line {
+  display: block;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+.teacher-line .card-field-label {
+  font-weight: 700;
+}
+
+.teacher-line .card-field-value {
+  font-weight: 700;
+  margin-left: 6px;
+}
+
 /* ==========================================================================
    VARIANT: Lab Report ([data-cover-type="lab-report"])
    ========================================================================== */
 
-/* Lab Report: Header Positions (Reflects corrected reference) */
+/* Lab Report: Header Positions */
 [data-cover-type="lab-report"] .university-header {
   top: 25.30mm;
 }
 
 [data-cover-type="lab-report"] .department-header {
-  top: 42.63mm;
+  top: 38mm;
 }
 
 [data-cover-type="lab-report"] .logo-box {
@@ -302,7 +354,7 @@ html, body {
   left: 25.59mm;
   top: 213.22mm;
   width: 79.33mm;
-  height: 66.13mm;
+  min-height: 66.13mm;
 }
 
 [data-cover-type="lab-report"] .card-submitted-by .card-title-wrap {
@@ -314,7 +366,7 @@ html, body {
   left: 105.75mm;
   top: 213.22mm;
   width: 82.44mm;
-  height: 66.13mm;
+  min-height: 66.13mm;
 }
 
 [data-cover-type="lab-report"] .card-submitted-to .card-title-wrap {
@@ -345,6 +397,7 @@ html, body {
 
 /* ==========================================================================
    VARIANT: Assignment ([data-cover-type="assignment"])
+   Matches Lab Report layout, spacing, and grid exactly.
    ========================================================================== */
 
 /* Assignment: Header Positions */
@@ -353,7 +406,7 @@ html, body {
 }
 
 [data-cover-type="assignment"] .department-header {
-  top: 42.63mm;
+  top: 38mm;
 }
 
 [data-cover-type="assignment"] .logo-box {
@@ -361,32 +414,33 @@ html, body {
 }
 
 [data-cover-type="assignment"] .title-banner {
-  top: 94.05mm;
-  text-transform: none;
+  top: 98.80mm;
+  text-transform: capitalize;
 }
 
 [data-cover-type="assignment"] .title-underline {
-  top: 100.39mm;
-  left: 90.06mm;
-  width: 29.98mm;
-  height: 0.59mm;
+  top: 105.13mm;
+  left: 84.98mm;
+  width: 40.10mm;
+  height: 0.60mm;
 }
 
-/* Assignment: Metadata Positions with Aligned Colon Gutter at x = 61.95mm */
-/* Left margin = 27.02mm, so colon offset from metadata-section = 61.95 - 27.02 = 34.93mm */
+/* Assignment: Metadata Positions */
 [data-cover-type="assignment"] .metadata-section {
-  left: 27.02mm;
+  left: 25.20mm;
 }
 
-[data-cover-type="assignment"] .meta-row-1 { top: 115.63mm; }
-[data-cover-type="assignment"] .meta-row-2 { top: 125.36mm; }
-[data-cover-type="assignment"] .meta-row-3 { top: 135.10mm; }
-[data-cover-type="assignment"] .meta-row-4 { top: 144.84mm; }
-[data-cover-type="assignment"] .meta-row-5 { top: 154.54mm; }
+[data-cover-type="assignment"] .meta-row-1 { top: 120.37mm; }
+[data-cover-type="assignment"] .meta-row-2 { top: 130.10mm; }
+[data-cover-type="assignment"] .meta-row-3 { top: 139.84mm; }
+[data-cover-type="assignment"] .meta-row-4 { top: 149.58mm; }
+[data-cover-type="assignment"] .meta-row-5 { top: 159.32mm; }
 
 [data-cover-type="assignment"] .metadata-label {
   display: inline-block;
-  width: 34.93mm;
+  width: 45mm;
+  min-width: 45mm;
+  white-space: nowrap;
 }
 
 [data-cover-type="assignment"] .metadata-colon {
@@ -395,40 +449,40 @@ html, body {
 
 /* Assignment: Comment Box */
 [data-cover-type="assignment"] .comment-box {
-  top: 168.98mm;
-  height: 22.39mm;
+  top: 168.89mm;
+  height: 37.48mm;
 }
 
-/* Assignment: Bottom Cards (Top: 203.31mm, Height: 58.64mm) */
+/* Assignment: Bottom Cards (Top: 213.22mm, Height: 66.13mm) */
 [data-cover-type="assignment"] .card-submitted-by {
-  left: 24.94mm;
-  top: 203.31mm;
-  width: 81.17mm;
-  height: 58.64mm;
+  left: 25.59mm;
+  top: 213.22mm;
+  width: 79.33mm;
+  min-height: 66.13mm;
 }
 
 [data-cover-type="assignment"] .card-submitted-by .card-title-wrap {
-  left: 4.70mm;
-  top: 0.73mm;
+  left: 2.74mm;
+  top: 1.64mm;
 }
 
 [data-cover-type="assignment"] .card-submitted-to {
-  left: 106.62mm;
-  top: 203.31mm;
-  width: 82.57mm;
-  height: 58.64mm;
+  left: 105.75mm;
+  top: 213.22mm;
+  width: 82.44mm;
+  min-height: 66.13mm;
 }
 
 [data-cover-type="assignment"] .card-submitted-to .card-title-wrap {
-  left: 4.19mm;
-  top: 0.73mm;
+  left: 2.73mm;
+  top: 1.64mm;
 }
 
 /* Assignment: Field Row Offsets within "Submitted By" */
-[data-cover-type="assignment"] .sub-by-row-name     { top: 11.31mm; }
-[data-cover-type="assignment"] .sub-by-row-id       { top: 21.89mm; }
-[data-cover-type="assignment"] .sub-by-row-level    { top: 32.43mm; }
-[data-cover-type="assignment"] .sub-by-row-sub-date { top: 43.02mm; }
+[data-cover-type="assignment"] .sub-by-row-name     { top: 11.37mm; }
+[data-cover-type="assignment"] .sub-by-row-id       { top: 21.11mm; }
+[data-cover-type="assignment"] .sub-by-row-level    { top: 30.85mm; }
+[data-cover-type="assignment"] .sub-by-row-sub-date { top: 40.58mm; }
 
 [data-cover-type="assignment"] .sub-by-row-exp-date {
   display: none !important; /* No Experiment Date in Assignment Cover */
@@ -440,10 +494,28 @@ html, body {
 }
 
 [data-cover-type="assignment"] .term-sub-col {
-  margin-left: 10mm;
+  margin-left: 12.5mm;
 }
 
 /* Assignment: Field Row Offsets within "Submitted To" */
-[data-cover-type="assignment"] .sub-to-row-teacher { top: 9.19mm; }
-[data-cover-type="assignment"] .sub-to-row-desig   { top: 18.93mm; }
-[data-cover-type="assignment"] .sub-to-row-sign    { left: 2.8mm; top: 49.87mm; }
+[data-cover-type="assignment"] .sub-to-row-teacher { top: 11.39mm; }
+[data-cover-type="assignment"] .sub-to-row-desig   { top: 21.13mm; }
+[data-cover-type="assignment"] .sub-to-row-sign    { left: 2.73mm; top: 60.08mm; }
+
+/* ==========================================================================
+   Dynamic Text Wrapping & Normal Font Weight (Phase 7O)
+   ========================================================================== */
+
+.a4-cover .teacher-entry, 
+.a4-cover .metadata-value, 
+.a4-cover .card {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.a4-cover .user-data {
+  font-weight: 400;
+}
+

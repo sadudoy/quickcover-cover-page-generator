@@ -45,10 +45,10 @@ console.log('has margin: 0:', /margin:\s*0/i.test(printCss));
 console.log('has @media print:', /@media\s+print/i.test(printCss));
 console.log('has transform: none:', /transform:\s*none\s*!important/i.test(printCss));
 
-// e. Quick Cover branding
+// e. Cover Craft branding
 const indexHtml = fs.readFileSync('client/index.html', 'utf8');
-console.log('index.html has Quick Cover:', indexHtml.includes('Quick Cover'));
-console.log('create.html has Quick Cover:', createHtml.includes('Quick Cover'));
+console.log('index.html has Cover Craft:', indexHtml.includes('Cover Craft'));
+console.log('create.html has Cover Craft:', createHtml.includes('Cover Craft'));
 const oldBrands = ['CoverCraft', 'Cover Craft', 'Cover Page Generator'];
 oldBrands.forEach(b => {
   if (indexHtml.includes(b)) console.log('WARNING: index.html has old brand:', b);

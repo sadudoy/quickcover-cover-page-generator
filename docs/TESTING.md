@@ -1,4 +1,4 @@
-# Quick Cover — Testing Guide
+# Cover Craft — Testing Guide
 
 ## 1. Quick Start
 

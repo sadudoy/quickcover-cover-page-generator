@@ -54,8 +54,8 @@ console.log('\nC.2.d storage.js checks:', c2dChecks);
 // C.2.e brand name checks
 const indexHtml = fs.readFileSync('client/index.html', 'utf8');
 const c2eChecks = {
-  indexHasQuickCover: indexHtml.includes('Quick Cover'),
-  createHasQuickCover: createHtml.includes('Quick Cover'),
+  indexHasQuickCover: indexHtml.includes('Cover Craft'),
+  createHasQuickCover: createHtml.includes('Cover Craft'),
   indexNoOldBrands: !indexHtml.includes('Cover Page Generator') && !indexHtml.includes('CoverCraft'),
   createNoOldBrands: !createHtml.includes('Cover Page Generator') && !createHtml.includes('CoverCraft')
 };

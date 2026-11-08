@@ -3,252 +3,291 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quick Cover — Assignment & Lab Report Covers</title>
-  <meta name="description" content="Generate print-ready assignment and lab report cover pages matching departmental layout standards with Quick Cover.">
+  <title>Cover Craft — Beautiful Cover Pages for Your Assignments &amp; Lab Reports</title>
+  <meta name="description" content="Create clean, university-standard cover pages for assignments and lab reports in minutes. Free, private, and instant A4 PDF export.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
   <link rel="stylesheet" href="css/site.css">
   <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- Shared Site Header -->
+  <!-- 1. Header (Navigation) -->
   <header class="site-header">
     <div class="container site-header-inner">
-      <a class="brand" href="index.html" aria-label="Quick Cover home">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M6 3h9l5 5v13H6z"/>
-            <path d="M15 3v6h5M9 13h8M9 17h8"/>
-          </svg>
-        </span>
-        <span class="brand-text">Quick <span>Cover</span></span>
+      <a class="brand" href="index.html" aria-label="Cover Craft home">
+        <img src="assets/logo.png" alt="Cover Craft Logo" class="brand-logo">
+        <span class="brand-text">Cover <span>Craft</span></span>
       </a>
-      <nav class="site-nav" aria-label="Primary">
-        <a href="#features">Features</a>
-        <a href="#how">How it works</a>
-        <a href="#cta">FAQ</a>
-        <a class="btn btn-primary btn-sm" href="create.html">Open the tool</a>
+      <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <nav class="site-nav" id="main-nav" aria-label="Main Navigation">
+        <a href="index.html" class="nav-item active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </a>
+        <a href="create.html" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <span>Create</span>
+        </a>
+        <a href="#features" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Features</span>
+        </a>
+        <a href="#how-it-works" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>How It Works</span>
+        </a>
+        <a href="#about" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span>About</span>
+        </a>
       </nav>
+      <!-- Reference has NO CTA button on the right -->
     </div>
   </header>
 
   <main id="main">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="container hero-layout">
-        <div class="hero-content">
-          <p class="caption hero-eyebrow">Cover pages for university assignments and lab reports</p>
-          <h1 class="display hero-title">A cover page that matches your department's format. On the first try.</h1>
-          <p class="lead hero-lead">Fill in your details, choose your course, and print a cover page that follows your department's exact layout — for both assignment and lab report covers. No design skills, no templates to fiddle with.</p>
+    <!-- Preserved semantic overview for accessibility & screen readers -->
+    <div class="sr-only">
+      <p>Good work deserves a proper cover page.</p>
+      <p>Features: Two academic formats. Course details, made easier. See it as you build it. Make it yours. Ready for A4. Your work stays with you.</p>
+      <p>Steps: Choose your format. Add your information. Print or save.</p>
+      <p>Start with a better first impression.</p>
+    </div>
+
+    <!-- 2. HERO SECTION (Two Columns + Organic Soft Blobs) -->
+    <section class="hero-section" id="home">
+      <!-- Soft, light-blue organic blob shapes in background -->
+      <div class="hero-blob hero-blob-1" aria-hidden="true"></div>
+      <div class="hero-blob hero-blob-2" aria-hidden="true"></div>
+
+      <div class="container hero-container">
+        <!-- Left Column (Text) -->
+        <div class="hero-text-col">
+          <div class="hero-pill-badge">
+            <span class="pill-dot" aria-hidden="true"></span>
+            <span>Your Ultimate Cover Page <span class="badge-kw">Generator</span></span>
+          </div>
+
+          <h1 class="hero-title">Cover <span class="text-blue">Craft</span></h1>
+
+          <h2 class="hero-subtitle">Beautiful Cover Pages for Your Assignments &amp; Lab Reports</h2>
+
+          <p class="hero-tagline">Professional. Clean. Customizable.</p>
+
           <div class="hero-actions">
-            <a class="btn btn-primary" href="create.html">Create a cover page →</a>
-            <a class="btn btn-ghost" href="#how">See how it works</a>
+            <a href="create.html" class="btn btn-primary btn-lg hero-cta-btn">
+              <span>Create Your Cover Now</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
           </div>
         </div>
 
-        <div class="hero-visual">
-          <div class="hero-art" aria-hidden="true">
-            <div class="blob"></div>
-            <div class="hero-card card-back">
-              <div class="card-bar bar-univ-1"></div>
-              <div class="card-bar bar-univ-2"></div>
-              <div class="card-seal"></div>
-              <div class="card-rule"></div>
-              <div class="card-bar bar-title"></div>
-              <div class="card-lines"><i></i><i></i><i></i><i></i></div>
-              <div class="card-bottom-boxes">
-                <div class="card-box"></div>
-                <div class="card-box"></div>
-              </div>
-            </div>
-            <div class="hero-card card-front">
-              <div class="card-bar bar-univ-1"></div>
-              <div class="card-bar bar-univ-2"></div>
-              <div class="card-seal"></div>
-              <div class="card-rule"></div>
-              <div class="card-bar bar-title"></div>
-              <div class="card-lines"><i></i><i></i><i></i></div>
-              <div class="card-bottom-boxes">
-                <div class="card-box"></div>
-                <div class="card-box"></div>
-              </div>
-            </div>
-          </div>
+        <!-- Right Column (Visual) -->
+        <div class="hero-visual-col">
+          <a href="create.html" class="hero-img-card" aria-label="Open Cover Craft workspace">
+            <img src="assets/image.png" alt="Cover Craft Preview and Editor Interface" class="hero-img" width="550" height="380">
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- 3. FEATURES SECTION ("Why Choose Cover Craft?") -->
     <section class="features-section" id="features">
       <div class="container">
-        <div class="section-header">
-          <h2 class="h2">Built around the reference layout — not around a template engine.</h2>
-          <p class="lead">Every field, rule and card mirrors the printed reference used by the department.</p>
+        <div class="section-header-center">
+          <h2 class="section-title">Why Choose Cover Craft?</h2>
+          <p class="section-subtitle">Everything you need to produce university-standard cover pages in seconds.</p>
         </div>
 
-        <div class="features-grid">
-          <!-- 01 -->
-          <div class="card feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
-                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                   stroke-linejoin="round" aria-hidden="true">
-                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>
-                <path d="M14 3v5h5"/>
-                <path d="M8 13h8M8 17h6"/>
+        <div class="features-grid-4">
+          <!-- Card 1: Fast & Easy -->
+          <article class="feature-card">
+            <div class="feature-icon-box" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
               </svg>
             </div>
-            <p class="caption">01</p>
-            <h3 class="h3">Two layouts, matched to the reference.</h3>
-            <p>Assignment and Lab Report covers follow the exact field order, fonts and rule positions of the department's printed reference.</p>
-          </div>
+            <h3 class="feature-title">Fast &amp; Easy</h3>
+            <p class="feature-desc">Fill in basic course and student info to generate ready-to-print covers in under two minutes.</p>
+          </article>
 
-          <!-- 02 -->
-          <div class="card feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
-                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                   stroke-linejoin="round" aria-hidden="true">
-                <path d="M4 4h12a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2z"/>
-                <path d="M8 8h8M8 12h8M8 16h5"/>
+          <!-- Card 2: Fully Customizable -->
+          <article class="feature-card">
+            <div class="feature-icon-box" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="13.5" cy="6.5" r=".5" fill="#2563eb"/>
+                <circle cx="17.5" cy="10.5" r=".5" fill="#2563eb"/>
+                <circle cx="8.5" cy="7.5" r=".5" fill="#2563eb"/>
+                <circle cx="6.5" cy="12.5" r=".5" fill="#2563eb"/>
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
               </svg>
             </div>
-            <p class="caption">02</p>
-            <h3 class="h3">Course catalogue built in.</h3>
-            <p>Pick your department, level and term, and the correct course code and title appear automatically. Full catalogues for EEE, IPE and BBA; more departments as their data is added.</p>
-          </div>
+            <h3 class="feature-title">Fully Customizable</h3>
+            <p class="feature-desc">Switch between assignment &amp; lab report layouts, add multiple teachers, and upload institutional logos.</p>
+          </article>
 
-          <!-- 03 -->
-          <div class="card feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
-                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                   stroke-linejoin="round" aria-hidden="true">
-                <circle cx="9" cy="8" r="3"/>
-                <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
-                <path d="M16 8a3 3 0 0 1 0 6"/>
-                <path d="M21 20a6 6 0 0 0-3-5.2"/>
+          <!-- Card 3: High Quality PDF -->
+          <article class="feature-card">
+            <div class="feature-icon-box" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
               </svg>
             </div>
-            <p class="caption">03</p>
-            <h3 class="h3">Multiple teachers.</h3>
-            <p>List the course teacher, lab instructor or anyone else who signs. Each entry is laid out correctly in the Submitted To card.</p>
-          </div>
+            <h3 class="feature-title">High Quality PDF</h3>
+            <p class="feature-desc">Print directly to exact 1-page A4 format with vector-crisp typography and zero margins cutoff.</p>
+          </article>
 
-          <!-- 04 -->
-          <div class="card feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
-                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                   stroke-linejoin="round" aria-hidden="true">
-                <rect x="5" y="3" width="14" height="18" rx="2"/>
-                <path d="M9 8h6M9 12h6M9 16h4"/>
+          <!-- Card 4: Responsive Design -->
+          <article class="feature-card">
+            <div class="feature-icon-box" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
               </svg>
             </div>
-            <p class="caption">04</p>
-            <h3 class="h3">A4 print-ready.</h3>
-            <p>Print or save-as-PDF produces the cover page as a single A4 sheet — not a page inside a document.</p>
-          </div>
-
-          <!-- 05 -->
-          <div class="card feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
-                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                   stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 3l8 3v6c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V6z"/>
-                <path d="M9 12l2 2 4-4"/>
-              </svg>
-            </div>
-            <p class="caption">05</p>
-            <h3 class="h3">Your data stays on this device.</h3>
-            <p>No account, no sign-up. Drafts and the uploaded logo live in this browser only.</p>
-          </div>
-
-          <!-- 06 -->
-          <div class="card feature-card">
-            <div class="feature-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
-                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                   stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 12a9 9 0 1 0 3-6.7"/>
-                <path d="M3 4v5h5"/>
-                <path d="M12 8v4l3 2"/>
-              </svg>
-            </div>
-            <p class="caption">06</p>
-            <h3 class="h3">Pick up where you left off.</h3>
-            <p>The form and logo restore automatically the next time you open the tool.</p>
-          </div>
+            <h3 class="feature-title">Responsive Design</h3>
+            <p class="feature-desc">Seamless experience across desktops, tablets, and mobile phones with automatic local storage.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section class="how-section" id="how">
+    <!-- 4. HOW IT WORKS SECTION -->
+    <section class="how-section" id="how-it-works">
       <div class="container">
-        <div class="section-header">
-          <h2 class="h2">Three steps, start to finish.</h2>
-          <p class="lead">The preview updates as you type, so what you see is what prints.</p>
+        <div class="section-header-center">
+          <h2 class="section-title">How It Works</h2>
+          <p class="section-subtitle">Three straightforward steps from blank page to submission-ready document.</p>
         </div>
 
-        <div class="steps-grid">
-          <div class="step-card">
-            <p class="caption step-number">01</p>
-            <h3 class="h3">Choose the document type.</h3>
-            <p>Assignment or Lab Report.</p>
+        <div class="how-steps-flow">
+          <!-- Step 1 -->
+          <div class="how-step-card">
+            <div class="step-num-circle">1</div>
+            <h3 class="step-card-title">Fill the Form</h3>
+            <p class="step-card-desc">Enter your university, course title, code, student ID, and instructor credentials.</p>
           </div>
 
-          <div class="step-card">
-            <p class="caption step-number">02</p>
-            <h3 class="h3">Fill in the form.</h3>
-            <p>Course, student details, teacher list. The A4 preview updates live.</p>
+          <!-- Arrow 1 -> 2 -->
+          <div class="how-arrow-connector" aria-hidden="true">
+            <svg width="60" height="28" viewBox="0 0 60 28" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 14c16-12 34-12 50 0"/>
+              <polyline points="46 8 55 14 46 20"/>
+            </svg>
           </div>
 
-          <div class="step-card">
-            <p class="caption step-number">03</p>
-            <h3 class="h3">Print or save as PDF.</h3>
-            <p>Browser print produces a ready-to-submit A4 cover page.</p>
+          <!-- Step 2 -->
+          <div class="how-step-card">
+            <div class="step-num-circle">2</div>
+            <h3 class="step-card-title">Preview Instantly</h3>
+            <p class="step-card-desc">Watch the A4 page update in real time or expand to fullscreen to verify every detail.</p>
+          </div>
+
+          <!-- Arrow 2 -> 3 -->
+          <div class="how-arrow-connector" aria-hidden="true">
+            <svg width="60" height="28" viewBox="0 0 60 28" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 14c16-12 34-12 50 0"/>
+              <polyline points="46 8 55 14 46 20"/>
+            </svg>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="how-step-card">
+            <div class="step-num-circle">3</div>
+            <h3 class="step-card-title">Download PDF</h3>
+            <p class="step-card-desc">Click Generate PDF to export or print an exact academic cover page ready for submission.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Closing CTA Section -->
-    <section class="closing-cta-section" id="cta">
-      <div class="container closing-cta-inner">
-        <h2 class="h2">Ready when you are.</h2>
-        <p class="lead">Open the tool and print a cover page in a few minutes.</p>
-        <a class="btn btn-primary btn-lg" href="create.html">Create a cover page →</a>
+    <!-- 5. ABOUT SECTION -->
+    <section class="about-section" id="about">
+      <div class="container about-container">
+        <!-- Left: Mockup Graphic -->
+        <div class="about-graphic-col">
+          <div class="about-card-frame">
+            <img src="assets/hero.png" alt="Cover Craft Mockup Interface" class="about-card-img" width="520" height="340">
+          </div>
+        </div>
+
+        <!-- Right: Text Content -->
+        <div class="about-text-col">
+          <span class="about-eyebrow">ABOUT COVER CRAFT</span>
+          <h2 class="about-title">About Cover Craft</h2>
+          <p class="about-tagline"><span class="text-blue">Create. Download. Done.</span></p>
+
+          <p class="about-paragraph">
+            Cover Craft was created to eliminate the hours students waste reformatting Word templates, fixing broken tables, and realigning department headers before each deadline.
+          </p>
+          <p class="about-paragraph">
+            With built-in departmental course codes, multiple instructor support, institutional logo persistence, and strict single-page A4 printing standards, Cover Craft ensures your coursework makes an exceptional first impression.
+          </p>
+
+          <div class="about-action">
+            <a href="create.html" class="btn btn-primary btn-md">
+              <span>Open Workspace</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- Shared Site Footer -->
+  <!-- 6. FOOTER (Solid Blue #2563eb) -->
   <footer class="site-footer">
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <a class="brand" href="index.html" aria-label="Quick Cover home">
-            <span class="brand-mark" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M6 3h9l5 5v13H6z"/>
-                <path d="M15 3v6h5M9 13h8M9 17h8"/>
-              </svg>
-            </span>
-            <span class="brand-text">Quick <span>Cover</span></span>
-          </a>
-          <p class="small">Cover pages for university assignments and lab reports.</p>
-        </div>
-        <nav class="footer-nav" aria-label="Footer">
+    <div class="container footer-content-grid">
+      <!-- Left: Logo + Cover Craft -->
+      <div class="footer-col-left">
+        <a class="brand brand-light" href="index.html" aria-label="Cover Craft home">
+          <img src="assets/logo.png" alt="Cover Craft Logo" class="brand-logo footer-logo-invert">
+          <span class="brand-text text-white">Cover <span class="text-light-blue">Craft</span></span>
+        </a>
+        <p class="footer-tagline-text">Professional cover pages for university coursework.</p>
+      </div>
+
+      <!-- Center: Nav links in white -->
+      <div class="footer-col-center">
+        <nav class="footer-nav-links" aria-label="Footer Navigation">
+          <a href="index.html">Home</a>
+          <a href="create.html">Create</a>
           <a href="#features">Features</a>
-          <a href="#how">How it works</a>
-          <a href="#cta">FAQ</a>
-          <a href="create.html">Open the tool</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#about">About</a>
         </nav>
       </div>
-      <p class="caption footer-fineprint">All processing happens in your browser. No account required. Drafts and logos are stored locally on this device.</p>
-      <p class="caption">© <span id="year">2026</span> Quick Cover</p>
+
+      <!-- Right: Social icons in white -->
+      <div class="footer-col-right">
+        <div class="footer-social-icons">
+          <a href="https://github.com/sadudoy" target="_blank" rel="noopener" aria-label="GitHub Profile">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/sadudoy" target="_blank" rel="noopener" aria-label="LinkedIn Profile">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="mailto:sadudoy29@gmail.com" aria-label="Email Developer">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Copyright and Fineprint -->
+    <div class="container footer-bottom-centered">
+      <p class="footer-fineprint-text">All processing happens in your browser. No account required. Drafts and logos are stored locally on this device.</p>
+      <p class="footer-copyright-text">© 2026 Cover Craft. All rights reserved.</p>
     </div>
   </footer>
 

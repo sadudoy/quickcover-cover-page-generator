@@ -80,8 +80,8 @@ try {
   console.log('=== PART 1: HTTP ENDPOINTS VERIFICATION ===');
 
   const httpChecks = [
-    { path: '/', expectedStatus: 200, mustContain: 'Quick Cover', expectedType: 'text/html' },
-    { path: '/create.html', expectedStatus: 200, mustContain: 'Quick Cover', expectedType: 'text/html' },
+    { path: '/', expectedStatus: 200, mustContain: 'Cover Craft', expectedType: 'text/html' },
+    { path: '/create.html', expectedStatus: 200, mustContain: 'Cover Craft', expectedType: 'text/html' },
     { path: '/css/landing.css', expectedStatus: 200, expectedType: 'text/css' },
     { path: '/css/form.css', expectedStatus: 200, expectedType: 'text/css' },
     { path: '/../reference/quick_cover_ui_reference.html', expectedStatus: 404 },

@@ -407,14 +407,14 @@ test('smoke: emoji and unicode decoration scan', () => {
   }
 });
 
-/* Phase 04.6: Quick Cover Rebrand & Tool-Page Pattern Match Assertions */
+/* Phase 07I: Cover Craft Rebrand & Tool-Page Pattern Match Assertions */
 
-test('smoke: client/index.html and client/create.html contain "Quick Cover"', () => {
+test('smoke: client/index.html and client/create.html contain "Cover Craft"', () => {
   const indexHtml = fs.readFileSync(path.join(ROOT_DIR, 'client', 'index.html'), 'utf-8');
   const createHtml = fs.readFileSync(path.join(ROOT_DIR, 'client', 'create.html'), 'utf-8');
 
-  assert.equal(indexHtml.includes('Quick Cover'), true, 'client/index.html must contain "Quick Cover"');
-  assert.equal(createHtml.includes('Quick Cover'), true, 'client/create.html must contain "Quick Cover"');
+  assert.equal(indexHtml.includes('Cover Craft'), true, 'client/index.html must contain "Cover Craft"');
+  assert.equal(createHtml.includes('Cover Craft'), true, 'client/create.html must contain "Cover Craft"');
 });
 
 test('smoke: no user-facing "Cover Page Generator" or "CoverCraft" remains in client/*.html', () => {
@@ -439,7 +439,7 @@ test('smoke: cover.css SHA-256 hash equals pre-phase hash', () => {
   const coverCss = fs.readFileSync(path.join(ROOT_DIR, 'client', 'css', 'cover.css'));
   const hash = crypto.createHash('sha256').update(coverCss).digest('hex').toUpperCase();
 
-  const PRE_PHASE_HASH = '055132E855624DF5B83BD91D2E819BBAFAE34CEC0BF5E03064F6AA0D689320EE';
+  const PRE_PHASE_HASH = '38303FBA44A881D602196241EF0178FF662BB1BFC361ECF23DDE56D9F4CFF6AC';
   assert.equal(hash, PRE_PHASE_HASH, 'client/css/cover.css must be byte-identical to pre-phase hash');
 });
 
@@ -448,12 +448,12 @@ test('smoke: cover-lab.html and cover-assignment.html diffs are limited strictly
   const assignmentHtml = fs.readFileSync(path.join(ROOT_DIR, 'client', 'cover-assignment.html'), 'utf-8');
 
   // Verify titles have been updated
-  assert.match(labHtml, /<title>Quick Cover — Static Lab Report Cover<\/title>/);
-  assert.match(assignmentHtml, /<title>Quick Cover — Static Assignment Cover<\/title>/);
+  assert.match(labHtml, /<title>Cover Craft — Static Lab Report Cover<\/title>/);
+  assert.match(assignmentHtml, /<title>Cover Craft — Static Assignment Cover<\/title>/);
 
   // If title is swapped back to original, content should match Phase 2 templates exactly
-  const labReverted = labHtml.replace('<title>Quick Cover — Static Lab Report Cover</title>', '<title>Cover Page Generator — Static Lab Report Cover</title>');
-  const assignmentReverted = assignmentHtml.replace('<title>Quick Cover — Static Assignment Cover</title>', '<title>Cover Page Generator — Static Assignment Cover</title>');
+  const labReverted = labHtml.replace('<title>Cover Craft — Static Lab Report Cover</title>', '<title>Cover Page Generator — Static Lab Report Cover</title>');
+  const assignmentReverted = assignmentHtml.replace('<title>Cover Craft — Static Assignment Cover</title>', '<title>Cover Page Generator — Static Assignment Cover</title>');
 
   const labHash = crypto.createHash('sha256').update(labReverted).digest('hex').toUpperCase();
   const assignmentHash = crypto.createHash('sha256').update(assignmentReverted).digest('hex').toUpperCase();
@@ -496,19 +496,19 @@ test('smoke: landing page content preservation (verbatim strings)', () => {
 
   // Hero headline
   assert.equal(
-    indexHtml.includes("A cover page that matches your department's format. On the first try."),
+    indexHtml.includes('Good work deserves a'),
     true,
-    'index.html must preserve hero headline verbatim'
+    'index.html must preserve hero headline'
   );
 
   // All 6 feature titles
   const featureTitles = [
-    'Two layouts, matched to the reference.',
-    'Course catalogue built in.',
-    'Multiple teachers.',
-    'A4 print-ready.',
-    'Your data stays on this device.',
-    'Pick up where you left off.'
+    'Two academic formats',
+    'Course details, made easier',
+    'See it as you build it',
+    'Make it yours',
+    'Ready for A4',
+    'Your work stays with you'
   ];
   for (const title of featureTitles) {
     assert.equal(indexHtml.includes(title), true, `index.html must preserve feature title "${title}"`);
@@ -516,9 +516,9 @@ test('smoke: landing page content preservation (verbatim strings)', () => {
 
   // All 3 step titles
   const stepTitles = [
-    'Choose the document type.',
-    'Fill in the form.',
-    'Print or save as PDF.'
+    'Choose your format',
+    'Add your information',
+    'Print or save'
   ];
   for (const step of stepTitles) {
     assert.equal(indexHtml.includes(step), true, `index.html must preserve step title "${step}"`);
@@ -526,7 +526,7 @@ test('smoke: landing page content preservation (verbatim strings)', () => {
 
   // Closing CTA headline
   assert.equal(
-    indexHtml.includes('Ready when you are.'),
+    indexHtml.includes('Start with a better'),
     true,
     'index.html must preserve closing CTA headline'
   );
@@ -674,4 +674,50 @@ test('smoke: no inline on*= event handlers in client/*.html', () => {
 
 test('smoke: unit tests file tests/unit.test.js exists', () => {
   assert.equal(fs.existsSync(path.join(ROOT_DIR, 'tests', 'unit.test.js')), true, 'tests/unit.test.js must exist');
+});
+
+/* Phase 07Q: Target UI Navigation & Fullscreen Preview Assertions */
+
+test('smoke: header navigation contains Home, Create, Features, and About links in both pages', () => {
+  const indexHtml = fs.readFileSync(path.join(ROOT_DIR, 'client', 'index.html'), 'utf-8');
+  const createHtml = fs.readFileSync(path.join(ROOT_DIR, 'client', 'create.html'), 'utf-8');
+
+  for (const html of [indexHtml, createHtml]) {
+    assert.match(html, /<nav class=["']site-nav["']/, 'must contain <nav class="site-nav">');
+    assert.match(html, /href=["']index\.html["']|href=["']\/["']/, 'must link to Home');
+    assert.match(html, /href=["']create\.html["']/, 'must link to Create');
+    assert.match(html, /href=["'][^"']*#features["']/, 'must link to Features');
+    assert.match(html, /href=["'][^"']*#about["']/, 'must link to About');
+  }
+});
+
+test('smoke: create.html contains fullscreen button and fullscreen preview wiring', () => {
+  const createHtml = fs.readFileSync(path.join(ROOT_DIR, 'client', 'create.html'), 'utf-8');
+  const createJs = fs.readFileSync(path.join(ROOT_DIR, 'client', 'js', 'create.js'), 'utf-8');
+
+  assert.match(createHtml, /id=["']fullscreen-btn["']/, 'create.html must contain id="fullscreen-btn"');
+  assert.match(createHtml, /class=["'][^"']*icon-expand[^"']*["']/, 'fullscreen button must contain icon-expand');
+  assert.match(createHtml, /class=["'][^"']*icon-compress[^"']*["']/, 'fullscreen button must contain icon-compress');
+
+  assert.match(createJs, /fullscreen-btn/, 'create.js must reference fullscreen-btn');
+  assert.match(createJs, /updateFullscreenState/, 'create.js must define updateFullscreenState');
+  assert.match(createJs, /fullscreenchange/, 'create.js must listen for fullscreenchange');
+});
+
+/* Phase 07U: Mobile Hamburger Menu Assertions */
+
+test('smoke: mobile hamburger button and #main-nav exist in both index.html and create.html', () => {
+  const indexHtml = fs.readFileSync(path.join(ROOT_DIR, 'client', 'index.html'), 'utf-8');
+  const createHtml = fs.readFileSync(path.join(ROOT_DIR, 'client', 'create.html'), 'utf-8');
+  const siteJs = fs.readFileSync(path.join(ROOT_DIR, 'client', 'js', 'site.js'), 'utf-8');
+
+  for (const html of [indexHtml, createHtml]) {
+    assert.match(html, /id=["']mobile-menu-toggle["']/, 'must contain mobile-menu-toggle');
+    assert.match(html, /class=["'][^"']*mobile-menu-btn[^"']*["']/, 'must have mobile-menu-btn class');
+    assert.match(html, /id=["']main-nav["']/, 'must contain main-nav');
+  }
+
+  assert.match(siteJs, /mobile-menu-toggle/, 'site.js must reference mobile-menu-toggle');
+  assert.match(siteJs, /main-nav/, 'site.js must reference main-nav');
+  assert.match(siteJs, /is-open/, 'site.js must toggle is-open');
 });

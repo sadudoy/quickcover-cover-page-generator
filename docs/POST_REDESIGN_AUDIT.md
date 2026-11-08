@@ -10,7 +10,7 @@
 
 ## 1. Executive Summary
 
-This audit evaluates the application state following the user's manual UI redesign. The user's manual design is **authoritative** and represents the intended look, branding, and user experience of Quick Cover.
+This audit evaluates the application state following the user's manual UI redesign. The user's manual design is **authoritative** and represents the intended look, branding, and user experience of Cover Craft.
 
 The overall health of the application is **EXCELLENT**. All 22 core functional capabilities (F01–F22) pass verification with zero functional regressions. The underlying A4 cover page engine remains strictly compliant with the Phase 2 specification: `client/css/cover.css` is byte-identical to the frozen baseline (`055132E8...`), and the print export generates pixel-accurate, single-sheet vector PDFs with complete fidelity.
 

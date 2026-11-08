@@ -1,12 +1,12 @@
-# Quick Cover — Handover & Maintenance Guide
+# Cover Craft — Handover & Maintenance Guide
 
-Welcome to **Quick Cover**! This document is the definitive guide for maintaining, updating, and deploying the Quick Cover application.
+Welcome to **Cover Craft**! This document is the definitive guide for maintaining, updating, and deploying the Cover Craft application.
 
 ---
 
 ## 1. Architecture Overview
 
-Quick Cover is a 100% client-side, zero-dependency web application:
+Cover Craft is a 100% client-side, zero-dependency web application:
 - **No Node.js runtime required in production**: The entire app runs directly inside the end-user's web browser.
 - **Zero build step**: No Webpack, Vite, Rollup, or Babel needed. All code is authored in standard vanilla HTML5, CSS3, and native ES modules.
 - **Deployable anywhere**: Because all production code lives in `client/`, deploying consists of serving that single directory via any static HTTP web server or host.
@@ -99,7 +99,7 @@ To change any default:
 ## 4. How Print Export Works & The `cover.css` Freeze Contract
 
 ### 4.1 Print Mechanism
-- Quick Cover uses native browser vector printing via `window.print()`.
+- Cover Craft uses native browser vector printing via `window.print()`.
 - When the user clicks **"Print / Save as PDF"**:
   1. `window.print()` triggers the browser's native print engine.
   2. [`client/css/print.css`](file:///d:/CSE/Projects/cover-page-generator/client/css/print.css) activates under `@media print`.

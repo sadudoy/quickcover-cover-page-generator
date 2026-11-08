@@ -1,6 +1,6 @@
-# Quick Cover
+# Cover Craft
 
-**Quick Cover** is a zero-dependency, client-side web application designed to generate standardized, print-ready university assignment and lab-report cover pages matching institutional templates with pixel-accurate precision.
+**Cover Craft** is a zero-dependency, client-side web application designed to generate standardized, print-ready university assignment and lab-report cover pages matching institutional templates with pixel-accurate precision.
 
 Built entirely with **vanilla HTML5, CSS3, and JavaScript ES modules** — no frameworks, no bundlers, no build steps, and no external dependencies.
 
@@ -59,7 +59,7 @@ node scripts/test-defaults.js       # Pre-filled defaults & cascade hint test
 
 ## Production Deployment
 
-Because Quick Cover is a 100% static client-side application, it requires **zero build steps** and can be deployed directly to any static web host.
+Because Cover Craft is a 100% static client-side application, it requires **zero build steps** and can be deployed directly to any static web host.
 
 - **Netlify**: Drag-and-drop the `client/` directory into the Netlify dashboard, or configure publish directory as `client`.
 - **Vercel**: Deploy the repository and set the root directory or output directory to `client`.
@@ -82,4 +82,4 @@ For detailed deployment and maintenance instructions, see the [Handover Guide](d
 
 ## License
 
-MIT © 2026 Quick Cover.
+MIT © 2026 Cover Craft.

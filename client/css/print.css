@@ -1,4 +1,4 @@
-/* Quick Cover — Print Stylesheet (Exact A4 Portrait Output)
+/* Cover Craft — Print Stylesheet (Exact A4 Portrait Output)
    Linked only with media="print". Zero impact on screen preview. */
 
 @page {
@@ -7,13 +7,22 @@
 }
 
 @media print {
+  html, body, #cover-preview, .a4-cover {
+    height: 296.5mm !important;
+    max-height: 296.5mm !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
   html, body {
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
     color: #000000 !important;
     width: 210mm !important;
-    height: 297mm !important;
   }
 
   /* Hide entire page chrome: header, footer, form, buttons, toolbars, notes */
@@ -23,6 +32,7 @@
   .form-panel,
   .preview-toolbar,
   .editor-note,
+  .mobile-menu-btn,
   #storage-status,
   #clear-form,
   #print-cover {
@@ -58,6 +68,8 @@
     max-width: none !important;
     margin: 0 !important;
     padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
   }
 
   /* Unscale preview viewport and remove screen decorations */
@@ -65,16 +77,16 @@
   #preview-viewport {
     display: block !important;
     width: 210mm !important;
-    height: 297mm !important;
+    height: 296.5mm !important;
     max-width: none !important;
-    max-height: 297mm !important;
+    max-height: 296.5mm !important;
     padding: 0 !important;
     margin: 0 !important;
     border: none !important;
     border-radius: 0 !important;
     box-shadow: none !important;
     background: #ffffff !important;
-    overflow: visible !important;
+    overflow: hidden !important;
   }
 
   #cover-preview {
@@ -82,31 +94,46 @@
     transform: none !important;
     transform-origin: top left !important;
     width: 210mm !important;
-    height: 297mm !important;
+    height: 296.5mm !important;
+    max-height: 296.5mm !important;
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
     box-shadow: none !important;
     background: #ffffff !important;
+    overflow: hidden !important;
   }
 
   /* Exact A4 Cover Sheet Geometry */
   .a4-cover {
     display: block !important;
     width: 210mm !important;
-    height: 297mm !important;
+    height: 296.5mm !important;
+    max-height: 296.5mm !important;
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     background: #ffffff !important;
+    overflow: hidden !important;
     page-break-after: avoid !important;
     page-break-inside: avoid !important;
   }
 
+  /* University & Department Header Print Alignment */
+  .university-header {
+    font-size: 13.5pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .department-header {
+    top: 38mm !important;
+  }
+
   /* Ensure exact color reproduction */
   * {
+    box-sizing: border-box !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }

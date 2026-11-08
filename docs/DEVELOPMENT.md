@@ -1,4 +1,4 @@
-# Quick Cover — Development Guide
+# Cover Craft — Development Guide
 
 ## 1. Prerequisites
 - **Node.js**: v18.0.0 or later (v25.x tested).
@@ -8,7 +8,7 @@
 ---
 
 ## 2. No Build Step Contract
-> **Important**: Quick Cover has **NO BUILD STEP**.
+> **Important**: Cover Craft has **NO BUILD STEP**.
 > There is no Webpack, Vite, Rollup, Babel, PostCSS, or Tailwind compiler.
 > Files in `client/` are standard HTML, CSS, and ES modules that run directly and immediately in the browser runtime.
 
@@ -27,7 +27,7 @@ npm run dev
 ---
 
 ## 4. Running Tests
-Quick Cover uses Node's native test runner (`node:test`) and strict assertions (`node:assert/strict`):
+Cover Craft uses Node's native test runner (`node:test`) and strict assertions (`node:assert/strict`):
 ```bash
 npm test
 ```

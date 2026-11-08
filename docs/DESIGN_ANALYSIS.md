@@ -1,4 +1,4 @@
-# Quick Cover — Dual Reference Design Analysis
+# Cover Craft — Dual Reference Design Analysis
 
 > **Update 2026-11-04**: Lab-report reference re-inspected after user correction (`lab-report-demo.pdf`, 94,520 bytes). Material changes confirmed: University header wrapped across 2 lines; Department header, Logo, Title banner, Metadata rows, Comment box, and Bottom cards shifted vertically downward by $\approx 7.58\text{ mm}$. Card and box heights remain unchanged. §1, §2, §5, and §6 updated accordingly.
 

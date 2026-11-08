@@ -57,6 +57,25 @@ test('unit: filterCourses filters by department name case-insensitively', () => 
   assert.equal(res.length, 4);
 });
 
+test('unit: filterCourses filters by partial department name (fuzzy matching)', () => {
+  // Partial string "Electrical" should match EEE
+  const resElec = filterCourses(mockCourses, mockDepartments, {
+    departmentInput: 'Electrical',
+    level: null,
+    term: null
+  });
+  assert.equal(resElec.length, 4);
+  assert.ok(resElec.every((c) => c.dept === 'EEE'));
+
+  // Partial string "Computer" should match CSE (0 courses in mock)
+  const resComp = filterCourses(mockCourses, mockDepartments, {
+    departmentInput: 'Computer',
+    level: '2',
+    term: 'II'
+  });
+  assert.deepEqual(resComp, []);
+});
+
 test('unit: filterCourses filters by dept + level', () => {
   const res = filterCourses(mockCourses, mockDepartments, { departmentInput: 'EEE', level: '2', term: null });
   assert.equal(res.length, 3);
@@ -213,7 +232,7 @@ test('unit: First-visit with no draft applies default values.', () => {
   const result = applyDefaultsIfNoDraft(null, DEFAULT_FORM_VALUES);
   assert.equal(result.applied, true);
   assert.equal(result.values.university, 'Bangladesh Army University of Science and Technology (BAUST), Saidpur');
-  assert.equal(result.values.department, 'Department of Computer Science and Engineering (CSE)');
+  assert.equal(result.values.department, '');
   assert.equal(result.values.level, '2');
   assert.equal(result.values.term, 'II');
 });
@@ -249,7 +268,7 @@ test('unit: Start over resets to defaults, not blank.', () => {
   // Verifying DEFAULT_FORM_VALUES constant shape & values
   assert.equal(typeof DEFAULT_FORM_VALUES, 'object');
   assert.equal(DEFAULT_FORM_VALUES.university, 'Bangladesh Army University of Science and Technology (BAUST), Saidpur');
-  assert.equal(DEFAULT_FORM_VALUES.department, 'Department of Computer Science and Engineering (CSE)');
+  assert.equal(DEFAULT_FORM_VALUES.department, '');
   assert.equal(DEFAULT_FORM_VALUES.level, '2');
   assert.equal(DEFAULT_FORM_VALUES.term, 'II');
 });

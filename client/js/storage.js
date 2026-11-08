@@ -1,5 +1,5 @@
 /**
- * Quick Cover Storage Module
+ * Cover Craft Storage Module
  * - IndexedDB for University Logo Blob persistence
  * - localStorage for Draft Form data persistence
  * - Automatic localStorage fallback for Logo if IndexedDB is unavailable

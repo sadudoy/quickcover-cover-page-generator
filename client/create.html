@@ -3,188 +3,253 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quick Cover — Create</title>
+  <title>Cover Craft — Create</title>
+  <meta name="description" content="Build and preview your academic cover page.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
   <link rel="stylesheet" href="css/site.css">
   <link rel="stylesheet" href="css/cover.css">
   <link rel="stylesheet" href="css/form.css">
   <link rel="stylesheet" href="css/print.css" media="print">
 </head>
-<body>
+<body class="page-create">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <noscript>
     <div style="background:#fee2e2; color:#991b1b; padding:16px; text-align:center; font-weight:bold;">
-      Notice: Quick Cover requires JavaScript for interactive form controls and live preview.
+      Notice: Cover Craft requires JavaScript for interactive form controls and live preview.
     </div>
   </noscript>
 
-  <!-- Shared Header (Tool Page) -->
+  <!-- Cover Craft workspace header -->
   <header class="site-header">
     <div class="container site-header-inner">
-      <a class="brand" href="index.html" aria-label="Quick Cover home">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M6 3h9l5 5v13H6z"/>
-            <path d="M15 3v6h5M9 13h8M9 17h8"/>
-          </svg>
-        </span>
-        <span class="brand-text">Quick <span>Cover</span></span>
+      <a class="brand" href="index.html" aria-label="Cover Craft home">
+        <img src="assets/logo.png" alt="Cover Craft Logo" class="brand-logo">
+        <span class="brand-text">Cover <span>Craft</span></span>
       </a>
-      <nav class="site-nav" aria-label="Primary">
-        <a href="index.html" class="btn btn-secondary btn-sm">← Back to home</a>
-        <button type="button" id="print-cover" class="btn btn-primary btn-sm">Print / Save as PDF</button>
+      <button id="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <nav class="site-nav" id="main-nav" aria-label="Main Navigation">
+        <a href="index.html" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
+        </a>
+        <a href="create.html" class="nav-item active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <span>Create</span>
+        </a>
+        <a href="index.html#features" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Features</span>
+        </a>
+        <a href="index.html#about" class="nav-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span>About</span>
+        </a>
       </nav>
     </div>
   </header>
 
-  <main id="main" class="editor-main">
+  <main id="main" class="editor-main cc-editor-main">
     <div class="workspace">
       <!-- Left Column: Form Panel -->
-      <section class="panel form-panel" aria-label="Cover page details">
-        <div class="form-header">
-          <h1 class="panel-title">Document Details</h1>
-          <button type="button" id="clear-form" class="btn btn-secondary btn-sm">Reset</button>
+      <section class="panel form-panel" aria-label="Enter Your Details">
+        <div class="form-card-header">
+          <div class="form-card-title-group">
+            <div class="panel-icon-circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+              </svg>
+            </div>
+            <div>
+              <h1 class="panel-title">Enter Your Details</h1>
+              <p class="panel-subtitle">Fill in the information to generate your cover page.</p>
+            </div>
+          </div>
+          <button type="button" id="clear-form" class="reset-link" aria-label="Reset all form fields">Reset</button>
         </div>
 
         <form id="cover-form" autocomplete="off">
-          <div class="field">
-            <label class="field-label">Document Type</label>
-            <div class="segmented">
-              <label class="segmented-btn">
-                <input type="radio" name="doc-type" id="doc-type-lab" value="lab-report" checked>
-                <span>Lab Report</span>
-              </label>
-              <label class="segmented-btn">
-                <input type="radio" name="doc-type" id="doc-type-assignment" value="assignment">
-                <span>Assignment</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="university">University / Institution</label>
-            <input class="input" list="universities-list" id="university" placeholder="e.g. BAUST, Saidpur">
-            <datalist id="universities-list"></datalist>
-          </div>
-
-          <div class="field">
-            <label for="department">Department</label>
-            <input class="input" list="departments-list" id="department" placeholder="e.g. Computer Science and Engineering">
-            <datalist id="departments-list"></datalist>
-          </div>
-
-          <div class="two-col">
+          <div class="form-fields-scroll">
             <div class="field">
-              <label for="level">Level</label>
-              <select class="input" id="level">
-                <option value="">—</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="term">Term</label>
-              <select class="input" id="term">
-                <option value="">—</option>
-                <option value="I">I</option>
-                <option value="II">II</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="course-code">Course Code</label>
-            <input class="input" list="course-codes-list" id="course-code" autocomplete="off" placeholder="Type course code">
-            <datalist id="course-codes-list"></datalist>
-            <p class="cascade-hint caption" id="cascade-hint" style="display: none;">
-              No preset courses for this department, level and term. Type the course code directly, or change the department.
-            </p>
-          </div>
-
-          <div class="field">
-            <label for="course-title">Course Title</label>
-            <input class="input" list="course-titles-list" id="course-title" autocomplete="off" placeholder="Course Title">
-            <datalist id="course-titles-list"></datalist>
-          </div>
-
-          <div class="field">
-            <label for="doc-number" id="doc-number-label">Report no.:</label>
-            <input class="input" id="doc-number" placeholder="e.g. 01">
-          </div>
-
-          <div class="field">
-            <label for="doc-title" id="doc-title-label">Report Title:</label>
-            <input class="input" id="doc-title" placeholder="Title of the assignment or report">
-          </div>
-
-          <div class="field">
-            <label for="comment">Comment</label>
-            <textarea class="input textarea" id="comment" placeholder="Optional comments..."></textarea>
-          </div>
-
-          <div class="two-col">
-            <div class="field">
-              <label for="student-name">Student Name</label>
-              <input class="input" id="student-name" placeholder="Full Name">
-            </div>
-            <div class="field">
-              <label for="student-id">Student ID</label>
-              <input class="input" id="student-id" placeholder="e.g. 210101001">
-            </div>
-          </div>
-
-          <div class="field" id="experiment-date-group">
-            <label for="experiment-date">Experiment Date</label>
-            <input class="input" type="date" id="experiment-date">
-          </div>
-
-          <div class="field">
-            <label for="submission-date">Submission Date</label>
-            <input class="input" type="date" id="submission-date">
-          </div>
-
-          <fieldset id="teachers-fieldset" class="field fieldset-group">
-            <legend class="field-label">Submitted To (Teachers)</legend>
-            <div id="teachers-form-container">
-              <!-- Dynamically populated by create.js -->
-            </div>
-            <button type="button" id="add-teacher" class="btn btn-secondary btn-sm">+ Add Teacher</button>
-          </fieldset>
-
-          <datalist id="teacher-designations-list">
-            <option value="Lecturer">
-            <option value="Assistant Professor">
-            <option value="Associate Professor">
-            <option value="Professor">
-            <option value="Adjunct Faculty">
-          </datalist>
-
-          <div class="field">
-            <label for="logo-upload">University Logo</label>
-            <div class="logo-upload-controls">
-              <input class="file-input" type="file" id="logo-upload" accept="image/*">
-              <div class="logo-btn-row">
-                <button type="button" id="remove-logo" class="btn btn-ghost btn-sm text-danger" aria-label="Reset to default logo">Reset logo</button>
+              <label class="field-label">Document Type <span class="req">*</span></label>
+              <div class="segmented">
+                <label class="segmented-btn">
+                  <input type="radio" name="doc-type" id="doc-type-lab" value="lab-report" checked>
+                  <span>Lab Report</span>
+                </label>
+                <label class="segmented-btn">
+                  <input type="radio" name="doc-type" id="doc-type-assignment" value="assignment">
+                  <span>Assignment</span>
+                </label>
               </div>
-              <span id="logo-error" class="error-text" role="alert"></span>
+            </div>
+
+            <div class="field">
+              <label for="university">University <span class="req">*</span></label>
+              <input class="input" type="text" id="university" list="universities-list" placeholder="Enter university name" autocomplete="off">
+              <datalist id="universities-list"></datalist>
+            </div>
+
+            <div class="field">
+              <label for="department">Department <span class="req">*</span></label>
+              <input class="input" type="text" id="department" list="departments-list" placeholder="Select or type department" autocomplete="off">
+              <datalist id="departments-list"></datalist>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="level">Level <span class="req">*</span></label>
+                <select class="select" id="level">
+                  <option value="">Select Level</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="term">Term <span class="req">*</span></label>
+                <select class="select" id="term">
+                  <option value="">Select Term</option>
+                  <option value="I">I</option>
+                  <option value="II">II</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="course-code">Course Code <span class="req">*</span></label>
+              <input class="input" type="text" id="course-code" list="course-codes-list" placeholder="e.g., CSE 3100" autocomplete="off">
+              <datalist id="course-codes-list"></datalist>
+              <span class="cascade-hint caption" id="course-code-hint">Select department, level, and term to see suggested course codes.</span>
+            </div>
+
+            <div class="field">
+              <label for="course-title">Course Title <span class="req">*</span></label>
+              <input class="input" type="text" id="course-title" list="course-titles-list" placeholder="e.g., Web Programming Lab" autocomplete="off">
+              <datalist id="course-titles-list"></datalist>
+            </div>
+
+            <div class="field">
+              <label for="doc-number" id="doc-number-label">Report no. <span class="req">*</span></label>
+              <input class="input" type="text" id="doc-number" placeholder="01" autocomplete="off">
+            </div>
+
+            <div class="field">
+              <label for="doc-title" id="doc-title-label">Report Title <span class="req">*</span></label>
+              <input class="input" type="text" id="doc-title" placeholder="e.g., Static Template Implementation" autocomplete="off">
+            </div>
+
+            <div class="field">
+              <label for="comment">Comment</label>
+              <textarea class="textarea" id="comment" rows="2" placeholder="Optional comments..."></textarea>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="student-name">Student Name <span class="req">*</span></label>
+                <input class="input" type="text" id="student-name" placeholder="Full name" autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="student-id">Student ID <span class="req">*</span></label>
+                <input class="input" type="text" id="student-id" placeholder="e.g., 210101001" autocomplete="off">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field" id="exp-date-field">
+                <label for="experiment-date">Experiment Date <span class="req">*</span></label>
+                <input class="input" type="date" id="experiment-date">
+              </div>
+              <div class="field">
+                <label for="submission-date">Submission Date <span class="req">*</span></label>
+                <input class="input" type="date" id="submission-date">
+              </div>
+            </div>
+
+            <fieldset id="teachers-fieldset" class="field fieldset-group">
+              <legend class="field-label">Submitted to · Teachers <span class="req">*</span></legend>
+              <div id="teachers-form-container">
+                <!-- Dynamically populated by create.js -->
+              </div>
+              <button type="button" id="add-teacher" class="btn btn-secondary btn-sm btn-add-teacher">+ Add Another Teacher</button>
+            </fieldset>
+
+            <datalist id="teacher-designations-list">
+              <option value="Professor">
+              <option value="Associate Professor">
+              <option value="Assistant Professor">
+              <option value="Lecturer">
+              <option value="Head of the Department">
+              <option value="Adjunct Faculty">
+            </datalist>
+
+            <div class="field">
+              <label for="logo-upload">Institution logo</label>
+              <div class="logo-upload-controls">
+                <input class="file-input" type="file" id="logo-upload" accept="image/*" style="display: none;">
+                <div class="logo-btn-row">
+                  <label for="logo-upload" id="upload-logo-btn" class="btn btn-secondary btn-sm" style="cursor: pointer;">Choose Logo Image</label>
+                  <button type="button" id="remove-logo" class="btn btn-ghost btn-sm">Reset Logo</button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="form-footer">
-            <p id="storage-status" class="storage-status" role="status" aria-live="polite"></p>
-            <p class="hint">Changes are saved automatically to local storage and update the preview live.</p>
+          <div class="form-bottom-action">
+            <button type="button" id="print-cover" class="btn btn-primary btn-generate">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 6 2 18 2 18 9"/>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                <rect x="6" y="14" width="12" height="8"/>
+              </svg>
+              <span>Generate PDF / Print</span>
+            </button>
+            <div class="form-status-row">
+              <p id="storage-status" class="storage-status" role="status" aria-live="polite"></p>
+              <p class="hint">Your draft is saved automatically in this browser.</p>
+            </div>
           </div>
         </form>
       </section>
 
       <!-- Right Column: Live A4 Preview -->
-      <section class="panel preview-panel" aria-label="A4 cover preview">
-        <div class="preview-toolbar">
-          <span class="preview-toolbar-badge">LIVE PREVIEW</span>
-          <span class="print-hint caption">In the print dialog, choose &lsquo;Save as PDF&rsquo; as the destination to download.</span>
-          <span class="preview-toolbar-spec">A4 · PORTRAIT</span>
+      <section class="panel preview-panel" aria-label="Live Preview">
+        <div class="preview-card-header">
+          <div class="preview-card-title-group">
+            <div class="panel-icon-circle panel-icon-preview">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="panel-title">Live Preview</h2>
+              <span class="preview-spec-badge">A4 Portrait</span>
+            </div>
+          </div>
+          <button type="button" id="fullscreen-btn" class="btn btn-ghost btn-sm fullscreen-btn" aria-label="Toggle Fullscreen Preview" title="Toggle Fullscreen">
+            <svg class="icon-expand" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 3 21 3 21 9"/>
+              <polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/>
+              <line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+            <svg class="icon-compress" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;">
+              <polyline points="4 14 10 14 10 20"/>
+              <polyline points="20 10 14 10 14 4"/>
+              <line x1="14" y1="10" x2="21" y2="3"/>
+              <line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+            <span class="fs-label">Fullscreen</span>
+          </button>
         </div>
 
         <div class="paper-wrap">
@@ -201,30 +266,30 @@
                 </div>
 
                 <!-- Title Banner & Measured Underline Bar -->
-                <h3 class="title-banner" data-field="cover-title">LAB REPORT</h3>
-                <div class="title-underline"></div>
+                <h3 class="title-banner" data-field="cover-title">Lab Report</h3>
+                <!-- <div class="title-underline"></div> -->
 
                 <!-- Metadata Section -->
                 <section class="metadata-section">
                   <div class="metadata-row meta-row-1">
                     <span class="metadata-label">Course Code</span>
                     <span class="metadata-colon">:</span>
-                    <span class="metadata-value" data-field="course-code"></span>
+                    <span class="metadata-value user-data" data-field="course-code"></span>
                   </div>
                   <div class="metadata-row meta-row-2">
                     <span class="metadata-label">Course Title</span>
                     <span class="metadata-colon">:</span>
-                    <span class="metadata-value" data-field="course-title"></span>
+                    <span class="metadata-value user-data" data-field="course-title"></span>
                   </div>
                   <div class="metadata-row meta-row-3">
                     <span class="metadata-label" id="preview-doc-number-label">Report no.</span>
                     <span class="metadata-colon">:</span>
-                    <span class="metadata-value" data-field="doc-number" data-field-alt="report-no"></span>
+                    <span class="metadata-value user-data" data-field="doc-number"></span>
                   </div>
                   <div class="metadata-row meta-row-4">
                     <span class="metadata-label" id="preview-doc-title-label">Report Title</span>
                     <span class="metadata-colon">:</span>
-                    <span class="metadata-value" data-field="doc-title" data-field-alt="report-title"></span>
+                    <span class="metadata-value user-data" data-field="doc-title"></span>
                   </div>
                   <div class="metadata-row meta-row-5">
                     <span class="metadata-label">Comment</span>
@@ -232,8 +297,8 @@
                   </div>
                 </section>
 
-                <!-- Teacher Comment / Evaluation Area -->
-                <div class="comment-box" data-field="comment-box" aria-label="Teacher Comment Area"></div>
+                <!-- Comment Stroke Box -->
+                <div class="comment-box" data-field="comment-box"></div>
 
                 <!-- Left Card: Submitted By -->
                 <section class="card card-submitted-by" aria-labelledby="heading-submitted-by">
@@ -244,33 +309,31 @@
 
                   <div class="card-field-row sub-by-row-name">
                     <span class="card-field-label">Name:</span>
-                    <span class="card-field-value" data-field="student-name"></span>
+                    <span class="card-field-value user-data" data-field="student-name"></span>
                   </div>
-
                   <div class="card-field-row sub-by-row-id">
                     <span class="card-field-label">ID:</span>
-                    <span class="card-field-value" data-field="student-id"></span>
+                    <span class="card-field-value user-data" data-field="student-id"></span>
                   </div>
-
-                  <div class="card-field-row sub-by-row-level level-term-inline">
-                    <span class="level-sub-col">
-                      <span class="card-field-label">Level:</span>
-                      <span class="card-field-value" data-field="level"></span>
-                    </span>
-                    <span class="term-sub-col">
-                      <span class="card-field-label">Term:</span>
-                      <span class="card-field-value" data-field="term"></span>
-                    </span>
+                  <div class="card-field-row sub-by-row-level">
+                    <div class="level-term-inline">
+                      <div class="level-sub-col">
+                        <span class="card-field-label">Level:</span>
+                        <span class="card-field-value user-data" data-field="level"></span>
+                      </div>
+                      <div class="term-sub-col">
+                        <span class="card-field-label">Term:</span>
+                        <span class="card-field-value user-data" data-field="term"></span>
+                      </div>
+                    </div>
                   </div>
-
-                  <div class="card-field-row sub-by-row-exp-date">
+                  <div class="card-field-row sub-by-row-exp-date" id="preview-exp-date-row">
                     <span class="card-field-label">Experiment Date:</span>
-                    <span class="card-field-value" data-field="experiment-date"></span>
+                    <span class="card-field-value user-data" data-field="experiment-date"></span>
                   </div>
-
-                  <div class="card-field-row sub-by-row-sub-date">
+                  <div class="card-field-row sub-by-row-sub-date" id="preview-sub-date-row">
                     <span class="card-field-label">Submission Date:</span>
-                    <span class="card-field-value" data-field="submission-date"></span>
+                    <span class="card-field-value user-data" data-field="submission-date"></span>
                   </div>
                 </section>
 
@@ -297,40 +360,35 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <a class="brand" href="index.html">
-            <span class="brand-mark">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M6 3h9l5 5v13H6z"/><path d="M15 3v6h5M9 13h8M9 17h8"/>
-              </svg>
-            </span>
-            <span class="brand-text">QuickCover</span>
-          </a>
-          <p class="small">Cover pages for university assignments and lab reports.</p>
-        </div>
-        
-        <div class="footer-developer">
-          <h4 class="footer-heading">Developer</h4>
-          <p class="dev-name">Sad Ibna Forid</p>
-          <div class="dev-links">
-            <a href="https://github.com/sadudoy" target="_blank" rel="noopener">GitHub</a>
-            <a href="https://linkedin.com/in/sadudoy" target="_blank" rel="noopener">LinkedIn</a>
-            <a href="https://wa.me/8801776942272" target="_blank" rel="noopener">WhatsApp</a>
-            <a href="mailto:sadudoy29@gmail.com">Email</a>
-          </div>
-        </div>
+    <div class="container footer-grid">
+      <div class="footer-col footer-col-brand">
+        <a class="brand" href="index.html" aria-label="Cover Craft home">
+          <img src="assets/logo.png" alt="Cover Craft Logo" class="brand-logo footer-logo">
+          <span class="brand-text">Cover <span>Craft</span></span>
+        </a>
+        <p class="footer-desc">Thoughtful covers for serious coursework.</p>
+      </div>
 
-        <nav class="footer-nav" aria-label="Footer">
-          <h4 class="footer-heading">Navigation</h4>
-          <a href="index.html">← Back to home</a>
-        </nav>
+      <div class="footer-col footer-col-links">
+        <h4 class="footer-heading">Developer</h4>
+        <ul class="footer-link-list">
+          <li><a href="https://github.com/sadudoy" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://linkedin.com/in/sadudoy" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://wa.me/8801776942272" target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="mailto:sadudoy29@gmail.com">Email</a></li>
+        </ul>
       </div>
-      <div class="footer-bottom">
-        <p class="caption footer-fineprint">All processing happens locally. No account required. Drafts and logos are stored locally on this device.</p>
-        <p class="caption">© <span id="year">2026</span> Quick Cover</p>
+
+      <div class="footer-col footer-col-nav">
+        <h4 class="footer-heading">Navigation</h4>
+        <ul class="footer-link-list">
+          <li><a href="index.html">Back to home</a></li>
+        </ul>
       </div>
+    </div>
+    <div class="container footer-bottom">
+      <p class="caption footer-fineprint">All processing happens locally. No account required. Drafts and logos are stored locally on this device.</p>
+      <p class="caption">© <span id="year">2026</span> Cover Craft</p>
     </div>
   </footer>
 

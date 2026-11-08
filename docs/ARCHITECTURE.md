@@ -1,4 +1,4 @@
-# Quick Cover — Architectural Documentation
+# Cover Craft — Architectural Documentation
 
 ## 1. Architectural Philosophy & Strategy
 **Cover Page Generator** is designed as a zero-dependency, entirely client-side web application. It eliminates operational complexity by performing all state management, real-time rendering, and document exports directly within the client's browser runtime.

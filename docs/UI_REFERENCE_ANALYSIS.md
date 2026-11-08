@@ -1,4 +1,4 @@
-# Quick Cover — UI Reference Analysis
+# Cover Craft — UI Reference Analysis
 
 **Reference Document**: [`reference/quick_cover_ui_reference.html`](file:///d:/CSE/Projects/cover-page-generator/reference/quick_cover_ui_reference.html)  
 **File Size**: 18,424 bytes  
@@ -90,7 +90,7 @@ The reference defines an accent-driven palette anchored by a vibrant royal blue 
 ### 2.2 Tool-Page Structural Layout
 - **Header (`.editor-top`)**:
   - Height: `68px`, background `#ffffff`, border-bottom `1px solid var(--line)`.
-  - Left: `.brand` (`.brand-mark` + `Quick Cover`).
+  - Left: `.brand` (`.brand-mark` + `Cover Craft`).
   - Right: `.editor-actions` with two buttons: secondary small (`← Back to Home`) and primary small (`Download PDF`).
 - **Tool Workspace Split**:
   - Desktop layout: Two-column grid `display: grid; grid-template-columns: 420px minmax(0, 1fr); gap: 16px;`.
@@ -214,7 +214,7 @@ The user established a strict design discipline in Phase 4.5:
 
 ### Proposed Compliant Alternatives
 
-To maintain strict adherence to the Phase 4.5 design discipline while executing the visual pattern of Quick Cover:
+To maintain strict adherence to the Phase 4.5 design discipline while executing the visual pattern of Cover Craft:
 
 1. **Gradients (C-1)**:
    - *Alternative*: Replace `.hero` gradient with a solid neutral background `var(--color-bg)` (`#f8fafc`) or subtle solid tint (`#f4f6fa`).
@@ -241,7 +241,7 @@ To maintain strict adherence to the Phase 4.5 design discipline while executing 
 
 The following UI chrome strings appear in `reference/quick_cover_ui_reference.html`:
 
-- **Brand Name**: `Quick Cover` (with `.brand-mark` container).
+- **Brand Name**: `Cover Craft` (with `.brand-mark` container).
 - **Header Navigation**:
   - `Home`
   - `Features`
@@ -250,7 +250,7 @@ The following UI chrome strings appear in `reference/quick_cover_ui_reference.ht
   - `Generate Now →`
 - **Hero Chrome**:
   - Eyebrow: `A better first page for every submission`
-  - Title: `Quick Cover`
+  - Title: `Cover Craft`
   - Description: `Create clean, professional lab report and assignment cover pages in just a few moments.`
   - Benefit Pills: `Fast & easy`, `Live document preview`, `Print-ready PDF`
   - Hero CTA: `Start Generating →`
@@ -261,7 +261,7 @@ The following UI chrome strings appear in `reference/quick_cover_ui_reference.ht
   - Action Button: `Update Preview`
   - Editor Microcopy Note: `Your changes appear in the document preview as you type.`
 - **Footer Chrome**:
-  - Fineprint: `© 2026 Quick Cover. A simpler way to prepare submissions.`
+  - Fineprint: `© 2026 Cover Craft. A simpler way to prepare submissions.`
   - Footer Links: `Features`, `How it works`, `FAQ`
 
 *(Note: Per Section C.2 §6 and D.2.a, institutional feature field labels such as University Name, Department, Course Code, Level, Term, Teachers, etc., remain our exact application labels and are not replaced by reference prototype placeholders).*

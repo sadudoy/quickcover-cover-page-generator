@@ -1,4 +1,4 @@
-# Quick Cover — Project Status & Roadmap
+# Cover Craft — Project Status & Roadmap
 
 ## 1. Project Phase Matrix
 
@@ -8,7 +8,7 @@
 | **Phase 02** | **Static Cover Template & Exact CSS A4 Geometry** | **COMPLETE — VERIFIED** | `cover.css` frozen at SHA-256 hash `055132E8...9320EE`, static lab/assignment covers verified pixel-accurate. |
 | **Phase 03** | **Interactive Form, Live Preview & Persistence** | **COMPLETE — VERIFIED** | Live preview data binding, course cascade, IndexedDB logo persistence with fallback, localStorage draft. |
 | **Phase 04** | **Multiple Teachers: Dynamic List & Reference Alignment** | **COMPLETE — VERIFIED** | Dynamic add/remove teacher rows, shared pinned signature line, dual-page layout match from reference. |
-| **Phase 04.5/04.6** | **Quick Cover Rebrand & Design System Alignment** | **COMPLETE — VERIFIED** | Clean design system tokens, landing page at `/index.html`, neutral shadows, inline SVGs, zero AI clichés. |
+| **Phase 04.5/04.6** | **Cover Craft Rebrand & Design System Alignment** | **COMPLETE — VERIFIED** | Clean design system tokens, landing page at `/index.html`, neutral shadows, inline SVGs, zero AI clichés. |
 | **Phase 05** | **Persistence Polish: Reset, Feedback & Cross-Tab** | **COMPLETE — VERIFIED** | Safe form reset, storage status feedback, QuotaExceededError handling, cross-tab sync via storage events. |
 | **Phase 06** | **Export & Print Fidelity** | **COMPLETE — VERIFIED** | `@page` A4 portrait print stylesheet (`print.css`), zero chrome leaks, vector Times New Roman text in PDF. |
 | **Phase 07** | **Final Polish: Teacher Role Removal, Defaults, Logo, A11Y, Tests** | **COMPLETE — VERIFIED** | Teacher model simplified to `{ name, designation }`, default values pre-filled (BAUST/CSE/2/II), default logo bundled, responsive verified at 360/768/1280/1920px, WCAG AA contrast, unit test suite (node:test), 12-step golden path test. |

@@ -1,4 +1,4 @@
-# Quick Cover — Project Specification
+# Cover Craft — Project Specification
 
 ## 1. Purpose & Vision
 **Cover Page Generator** is a lightweight, zero-dependency, client-side web application designed to help university students generate beautifully formatted, standardized, and print-ready cover pages matching their department's institutional templates exactly.
