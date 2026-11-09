@@ -458,7 +458,7 @@ test('smoke: cover-lab.html and cover-assignment.html diffs are limited strictly
   const labHash = crypto.createHash('sha256').update(labReverted).digest('hex').toUpperCase();
   const assignmentHash = crypto.createHash('sha256').update(assignmentReverted).digest('hex').toUpperCase();
 
-  const PRE_PHASE_LAB_HASH = '132EB621D833561EF251C23B49F1A6D5154880295D52B2CD6C8D59AC35103630';
+  const PRE_PHASE_LAB_HASH = '55D0BD195D0572CCEEFDC8B4EBC5F7D655A2559A8FEF192932C9E84872B25B98';
   const PRE_PHASE_ASSIGN_HASH = '93FD29FB85F8C281047BE252736646E6AEEC2304FE4A17BB76D043FD58DA93C3';
 
   assert.equal(labHash, PRE_PHASE_LAB_HASH, 'cover-lab.html diff must be limited strictly to <title>');

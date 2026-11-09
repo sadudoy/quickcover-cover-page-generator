@@ -473,6 +473,13 @@ img, svg {
   text-transform: uppercase;
 }
 
+.footer-developer-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
 .footer-link-list {
   list-style: none;
   padding: 0;
@@ -656,3 +663,5 @@ img, svg {
   background: var(--color-success);
   vertical-align: middle;
 }
+
+

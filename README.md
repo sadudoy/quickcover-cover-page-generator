@@ -1,85 +1,104 @@
-# Cover Craft
+<div align="center">
+  <img src="client/assets/logo.png" alt="Cover Craft Logo" width="120" />
+  <h1>Cover Craft</h1>
+  <p><strong>A professional A4 cover page generator for university assignments and lab reports.</strong></p>
+  <p>
+    <a href="https://covercraftgo.web.app/"><strong>Live Demo</strong></a>
+  </p>
+  <br />
+  <img src="client/assets/hero.png" alt="Cover Craft Application Preview" width="850" />
+</div>
 
-**Cover Craft** is a zero-dependency, client-side web application designed to generate standardized, print-ready university assignment and lab-report cover pages matching institutional templates with pixel-accurate precision.
+---
 
-Built entirely with **vanilla HTML5, CSS3, and JavaScript ES modules** — no frameworks, no bundlers, no build steps, and no external dependencies.
+## Overview
+
+Cover Craft is a client-side web application engineered to generate standardized, print-ready university assignment and lab report cover pages with exact institutional precision. Operating entirely within the browser, it renders a real-time ISO A4 preview (210mm x 297mm) and exports pixel-perfect, single-page vector PDFs without page overflows or print chrome artifacts. The application features dynamic multi-teacher management, an intelligent cascading course catalogue, automatic draft persistence via LocalStorage, and a fully responsive interface tailored for both desktop workstations and mobile devices.
 
 ---
 
 ## Features
 
-- **Pixel-Accurate A4 Cover Layout**: Complies with institutional specifications (exact 210mm × 297mm single-page A4 format).
-- **Dual Document Types**: Seamlessly toggle between **Lab Report** (includes Experiment Date) and **Assignment** layouts.
-- **Dynamic Multi-Teacher Support**: Add, edit, or remove multiple teachers/instructors with automatic card height balancing and a shared, pinned signature line.
-- **Cascading Course Catalogue**: Intelligent auto-complete for course codes and course titles based on department, level, and term.
-- **Built-in Defaults**: Pre-configured defaults for Bangladesh Army University of Science and Technology (BAUST) and CSE.
-- **Logo Support**: Bundled institutional default logo with instant user logo upload and one-click reset.
-- **100% Local Processing & Persistence**: Automatic draft auto-save and logo caching using LocalStorage and IndexedDB. Zero data ever leaves the browser.
-- **Vector Print-to-PDF**: Exports directly through the browser print dialog as a single-page vector PDF with zero UI chrome leaks.
-- **Fully Responsive**: Adapts across mobile (360px), tablet (768px), desktop (1280px), and ultrawide (1920px).
+- **Exact A4 Print and PDF Fidelity**: Conforms strictly to ISO A4 physical dimensions (210mm x 297mm). Exports crisp vector PDFs through the browser print dialog with zero header/footer leaks and no trailing blank pages.
+- **Dual Document Layouts**: Switch seamlessly between **Lab Report** (includes Experiment Date) and **Assignment** document formats with appropriate metadata alignment.
+- **Dynamic Multi-Teacher Support**: Add, edit, or remove multiple instructors. The layout automatically balances card heights and maintains an anchored signature line.
+- **Cascading Course Catalogue**: Dynamically filters course codes and titles by selected department, level, and term, with bidirectional autofill between course codes and titles.
+- **Mobile-Optimized Input Controls**: Dynamically provides native picker dropdowns on mobile screens for effortless selection, with fallback to manual typing when required.
+- **Client-Side Draft Persistence**: Automatically debounces and saves drafts to LocalStorage, ensuring work is preserved across browser refreshes and tab sessions.
+- **Custom Institutional Branding**: Supports custom institution logo uploads with local persistence, alongside pre-configured institutional defaults.
+- **Zero External Dependencies**: Operates with zero build tooling, zero package managers at runtime, and no external framework overhead.
 
 ---
 
 ## Tech Stack
 
-- **Markup**: Semantic HTML5 (landmarks, accessible labels, live regions)
-- **Styling**: Modern CSS3 (CSS Custom Properties, Flexbox, CSS Grid, `@page`, `@media print`)
-- **Scripting**: Vanilla JavaScript ES Modules (`create.js`, `storage.js`, `site.js`)
-- **Testing**: Built-in Node.js test runner (`node:test`, `node:assert`) and Chromium DevTools Protocol (CDP) for end-to-end browser automation
+| Component | Technology | Details |
+| :--- | :--- | :--- |
+| **Markup** | HTML5 | Semantic structure, accessible landmarks, and ARIA live regions |
+| **Styling** | CSS3 | Native CSS custom properties, Flexbox, CSS Grid, `@page`, and print media queries |
+| **Logic** | JavaScript (ES Modules) | Standard modern ES modules without bundlers or transpilation |
+| **Persistence** | Web Storage & IndexedDB | LocalStorage for form drafts; IndexedDB for uploaded image blobs |
+| **Deployment** | Firebase Hosting | Global CDN distribution with HTTPS enforcement |
+
+> Cover Craft requires **zero build steps** and **zero runtime dependencies**. All rendering, state management, and export routines execute natively in any standard modern web browser.
 
 ---
 
-## Quick Start
+## Getting Started
 
-### 1. Run the Local Development Server
-Start the built-in local static server (zero external packages required):
-```bash
-npm run dev
-```
-- **Landing Page**: [http://localhost:5173/](http://localhost:5173/)
-- **Tool Page**: [http://localhost:5173/create.html](http://localhost:5173/create.html)
+### Prerequisites
 
-### 2. Run the Automated Tests
-Execute the unit and smoke test suite using Node's built-in test runner:
+- A modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, or Apple Safari).
+- [Node.js](https://nodejs.org/) (version 18 or higher) for the local static development server.
+
+### Local Development Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/sadudoy/QuickCover-cover-page-generator
+   cd cover-page-generator
+   ```
+
+2. **Install dependencies (optional):**
+   The project has no external runtime dependencies. To run the automated verification and testing suites, install the development dependencies:
+   ```bash
+   npm install
+   ```
+
+3. **Start the local development server:**
+   ```bash
+   npm run dev
+   ```
+
+4. **Access the application:**
+   Open your browser and navigate to:
+   - **Landing Page:** [http://localhost:5173/](http://localhost:5173/)
+   - **Workspace:** [http://localhost:5173/create.html](http://localhost:5173/create.html)
+
+### Testing
+
+Run the automated test suite using Node's native test runner:
+
 ```bash
 npm test
 ```
 
-### 3. Run End-to-End Verification Suites
-Run browser automation suites via Chromium DevTools Protocol:
-```bash
-node scripts/test-golden-path.js    # 12-step complete student workflow E2E test
-node scripts/test-phase6-print.js   # Precision A4 vector print fidelity test
-node scripts/test-phase4-interactions.js  # Dynamic multi-teacher test
-node scripts/test-phase5-interactions.js  # Persistence and cross-tab sync test
-node scripts/test-defaults.js       # Pre-filled defaults & cascade hint test
-```
+---
+## Author
+
+### Sad Ibna Forid
+
+
+- **GitHub:** [Visit my GitHub](https://github.com/sadudoy)
+- **LinkedIn:** [Connect with me](https://linkedin.com/in/sadudoy)
+- **Email:** [Send me an email](mailto:sadudoy29@gmail.com)
 
 ---
 
-## Production Deployment
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sadudoy)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/sadudoy)
+[![Email](https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:sadudoy29@gmail.com)
 
-Because Cover Craft is a 100% static client-side application, it requires **zero build steps** and can be deployed directly to any static web host.
-
-- **Netlify**: Drag-and-drop the `client/` directory into the Netlify dashboard, or configure publish directory as `client`.
-- **Vercel**: Deploy the repository and set the root directory or output directory to `client`.
-- **GitHub Pages**: Set GitHub Pages source to the branch and point to the `client/` directory (or publish via GitHub Actions).
-
-For detailed deployment and maintenance instructions, see the [Handover Guide](docs/HANDOVER.md).
-
----
-
-## Documentation Links
-
-- [`docs/HANDOVER.md`](docs/HANDOVER.md) — Comprehensive guide for updating course data, defaults, logo, and deploying.
-- [`docs/PROJECT_SPEC.md`](docs/PROJECT_SPEC.md) — Product specifications, data schema, and technical rules.
-- [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — Current implementation milestones and verified status.
-- [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) — Development workflow, storage contracts, and CSS freeze invariants.
-- [`docs/TESTING.md`](docs/TESTING.md) — Testing strategy and script inventory.
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Architectural overview and design principles.
-
----
-
-## License
-
-MIT © 2026 Cover Craft.
+<div align="center">
+  <p>© 2026 Cover Craft. All rights reserved.</p>
+</div>
