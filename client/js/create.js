@@ -1824,7 +1824,6 @@ export async function init() {
   if (exportPdfBtn) {
     exportPdfBtn.addEventListener("click", async () => {
       const a4Cover = document.querySelector(".a4-cover");
-      const preview = document.getElementById("cover-preview");
 
       if (typeof window.html2pdf !== "function") {
         if (typeof window.print === "function") {
@@ -1837,9 +1836,6 @@ export async function init() {
 
       if (!a4Cover) return;
 
-      const prevTransform = preview ? preview.style.transform : "";
-      const prevOrigin = preview ? preview.style.transformOrigin : "";
-
       const origText = exportPdfBtn.innerHTML;
       exportPdfBtn.disabled = true;
       exportPdfBtn.innerHTML = `
@@ -1847,30 +1843,49 @@ export async function init() {
         <span>Exporting...</span>
       `;
 
-      try {
-        if (preview) {
-          preview.style.transform = "scale(1)";
-          preview.style.transformOrigin = "top left";
-        }
+      // Isolate a clone in a fixed full-size stage to avoid mobile viewport clipping,
+      // scroll offset distortions, and parent overflow constraints.
+      const clone = a4Cover.cloneNode(true);
+      const stage = document.createElement("div");
+      stage.id = "pdf-export-stage";
+      stage.style.cssText =
+        "position: fixed; left: 0; top: 0; width: 210mm; height: 297mm; z-index: 999999; background: #ffffff; margin: 0; padding: 0; overflow: hidden; pointer-events: none;";
+      clone.style.margin = "0";
+      clone.style.boxShadow = "none";
+      clone.style.transform = "none";
+      stage.appendChild(clone);
+      document.body.appendChild(stage);
 
+      try {
         const opt = {
           margin: 0,
           filename: "CoverCraft.pdf",
           image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 2 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            scrollX: 0,
+            scrollY: 0,
+          },
           jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
         };
 
-        await window.html2pdf().from(a4Cover).set(opt).save();
+        const worker = window.html2pdf().from(clone).set(opt);
+        await worker
+          .toPdf()
+          .get("pdf")
+          .then((pdf) => {
+            while (pdf.internal.getNumberOfPages() > 1) {
+              pdf.deletePage(pdf.internal.getNumberOfPages());
+            }
+          })
+          .save();
+
         setStorageStatus("PDF exported successfully.", "saved");
       } catch (err) {
         setStorageStatus("PDF export failed. Try printing instead.", "warning");
       } finally {
-        if (preview) {
-          preview.style.transform = prevTransform;
-          preview.style.transformOrigin = prevOrigin;
-          scalePreview();
-        }
+        stage.remove();
         exportPdfBtn.disabled = false;
         exportPdfBtn.innerHTML = origText;
       }
