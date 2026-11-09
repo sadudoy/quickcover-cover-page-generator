@@ -624,129 +624,51 @@ function updateCourseLists() {
 }
 
 /**
- * Mobile Dynamic Dropdowns Registry & Handler (Phase 7W)
- * Pairs datalist inputs with a native <select> element on mobile viewports (<= 768px).
- * Opens native wheel/bottom-sheet pickers on mobile phones instead of the virtual keyboard.
+ * Dropdown Toggle Button Handler
+ * Enables opening datalist pickers explicitly via dropdown arrow buttons.
+ * The input remains visible and fully functional for manual typing.
  */
-let mobileDropdownRegistry = [];
-
 export function isMobileScreen() {
   if (typeof window === "undefined") return false;
   return window.innerWidth <= 768;
 }
 
-export function registerMobileDropdown(input, datalistId, fieldLabel) {
-  if (!input || !isBrowser) return;
+let dropdownToggleInitialized = false;
 
-  mobileDropdownRegistry = mobileDropdownRegistry.filter(
-    (item) => item.input && document.body && document.body.contains(item.input),
-  );
+export function setupDropdownToggleButtons() {
+  if (!isBrowser || dropdownToggleInitialized) return;
+  dropdownToggleInitialized = true;
 
-  const existing = mobileDropdownRegistry.find((item) => item.input === input);
-  if (!existing) {
-    mobileDropdownRegistry.push({ input, datalistId, fieldLabel });
-  }
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".dropdown-toggle-btn");
+    if (!btn) return;
 
-  updateSingleMobileDropdown(input, datalistId, fieldLabel);
-}
+    e.preventDefault();
+    const container = btn.closest(".input-with-dropdown");
+    const input = container
+      ? container.querySelector("input")
+      : btn.previousElementSibling;
+    if (!input) return;
 
-export function updateSingleMobileDropdown(input, datalistId, fieldLabel) {
-  if (!input || !isBrowser) return;
-
-  const datalist = document.getElementById(datalistId);
-  if (!datalist) return;
-
-  let select = input._mobileSelect;
-  if (!select) {
-    select = document.createElement("select");
-    select.className = "select mobile-select-dropdown";
-    select.setAttribute("aria-label", `Select ${fieldLabel}`);
-    input._mobileSelect = select;
-    select._targetInput = input;
-
-    if (input.parentNode) {
-      input.parentNode.insertBefore(select, input.nextSibling);
+    input.focus();
+    if (input.value !== "") {
+      input.dataset.previousValue = input.value;
+      input.value = "";
+      input.dataset.userInteracted = "false";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
     }
-
-    select.addEventListener("change", () => {
-      if (select.value === "__custom__") {
-        input.classList.add("mobile-custom-input");
-        input.classList.remove("mobile-input-hidden");
-        input.value = "";
-        input.focus();
-        input.dispatchEvent(new Event("input", { bubbles: true }));
-        input.dispatchEvent(new Event("change", { bubbles: true }));
-      } else {
-        input.classList.remove("mobile-custom-input");
-        input.classList.add("mobile-input-hidden");
-        input.value = select.value;
-        input.dispatchEvent(new Event("input", { bubbles: true }));
-        input.dispatchEvent(new Event("change", { bubbles: true }));
-      }
-    });
-
-    input.addEventListener("input", () => {
-      if (select.value !== "__custom__") {
-        const matchingOpt = Array.from(select.options).find(
-          (o) => o.value === input.value,
-        );
-        if (matchingOpt) {
-          select.value = input.value;
-        }
-      }
-    });
-  }
-
-  // Populate options from datalist
-  const optionValues = Array.from(datalist.querySelectorAll("option"))
-    .map((opt) => opt.value)
-    .filter(Boolean);
-
-  select.innerHTML = "";
-
-  const placeholderOpt = document.createElement("option");
-  placeholderOpt.value = "";
-  placeholderOpt.textContent = `Select ${fieldLabel}`;
-  select.appendChild(placeholderOpt);
-
-  optionValues.forEach((val) => {
-    const opt = document.createElement("option");
-    opt.value = val;
-    opt.textContent = val;
-    select.appendChild(opt);
-  });
-
-  const otherOpt = document.createElement("option");
-  otherOpt.value = "__custom__";
-  otherOpt.textContent = "Other (type manually)";
-  select.appendChild(otherOpt);
-
-  // Sync selection state with current input value
-  const curVal = input.value || "";
-  if (!curVal) {
-    select.value = "";
-    input.classList.remove("mobile-custom-input");
-    input.classList.add("mobile-input-hidden");
-  } else if (optionValues.includes(curVal)) {
-    select.value = curVal;
-    input.classList.remove("mobile-custom-input");
-    input.classList.add("mobile-input-hidden");
-  } else {
-    select.value = "__custom__";
-    input.classList.add("mobile-custom-input");
-    input.classList.remove("mobile-input-hidden");
-  }
-}
-
-export function refreshAllMobileDropdowns() {
-  if (!isBrowser) return;
-  mobileDropdownRegistry = mobileDropdownRegistry.filter(
-    (item) => item.input && document.body && document.body.contains(item.input),
-  );
-  mobileDropdownRegistry.forEach((item) => {
-    updateSingleMobileDropdown(item.input, item.datalistId, item.fieldLabel);
+    if (typeof input.showPicker === "function") {
+      try {
+        input.showPicker();
+      } catch {}
+    }
   });
 }
+
+// Backward-compatibility stubs for mobile dropdown registry
+export function registerMobileDropdown() {}
+export function updateSingleMobileDropdown() {}
+export function refreshAllMobileDropdowns() {}
 
 /**
  * Bidirectional auto-fill for Course Code <-> Course Title
@@ -1686,6 +1608,7 @@ export async function init() {
   // Datalist UX Enhancement (Phase 7G): Auto-select on focus and clear on click for full list visibility
   const datalistInputs = document.querySelectorAll("input[list]");
   datalistInputs.forEach((input) => setupDatalistUx(input));
+  setupDropdownToggleButtons();
 
   // Field live bindings
   if (universityInput) {
@@ -1892,6 +1815,64 @@ export async function init() {
           "Printing is not supported in this browser.",
           "warning",
         );
+      }
+    });
+  }
+
+  // Direct PDF Download button
+  const exportPdfBtn = document.getElementById("export-pdf");
+  if (exportPdfBtn) {
+    exportPdfBtn.addEventListener("click", async () => {
+      const a4Cover = document.querySelector(".a4-cover");
+      const preview = document.getElementById("cover-preview");
+
+      if (typeof window.html2pdf !== "function") {
+        if (typeof window.print === "function") {
+          window.print();
+        } else {
+          setStorageStatus("PDF export is unavailable.", "warning");
+        }
+        return;
+      }
+
+      if (!a4Cover) return;
+
+      const prevTransform = preview ? preview.style.transform : "";
+      const prevOrigin = preview ? preview.style.transformOrigin : "";
+
+      const origText = exportPdfBtn.innerHTML;
+      exportPdfBtn.disabled = true;
+      exportPdfBtn.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin-icon" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+        <span>Exporting...</span>
+      `;
+
+      try {
+        if (preview) {
+          preview.style.transform = "scale(1)";
+          preview.style.transformOrigin = "top left";
+        }
+
+        const opt = {
+          margin: 0,
+          filename: "CoverCraft.pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        };
+
+        await window.html2pdf().from(a4Cover).set(opt).save();
+        setStorageStatus("PDF exported successfully.", "saved");
+      } catch (err) {
+        setStorageStatus("PDF export failed. Try printing instead.", "warning");
+      } finally {
+        if (preview) {
+          preview.style.transform = prevTransform;
+          preview.style.transformOrigin = prevOrigin;
+          scalePreview();
+        }
+        exportPdfBtn.disabled = false;
+        exportPdfBtn.innerHTML = origText;
       }
     });
   }

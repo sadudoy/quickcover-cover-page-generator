@@ -596,16 +596,241 @@
     max-width: 100%;
   }
 
-  .footer-content-grid {
-    flex-direction: column;
+  .site-footer {
     text-align: center;
-    gap: 24px;
   }
 
-  .footer-col-left,
-  .footer-col-center,
-  .footer-col-right {
-    justify-content: center;
+  .footer-content-grid {
+    flex-direction: column;
     align-items: center;
+    text-align: center;
+    gap: 0;
   }
+
+  .footer-col-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .footer-col-center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+
+  .footer-nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 24px;
+    text-align: center;
+  }
+
+  .footer-col-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .footer-developer-name {
+    margin: 0;
+    text-align: center;
+  }
+
+  .footer-social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+}
+
+/* ==========================================================================
+   Dark Theme Landing Page Overrides
+   ========================================================================== */
+
+[data-theme="dark"] .site-header,
+[data-theme="dark"] header {
+  background: #1e293b !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+[data-theme="dark"] .hero-section {
+  background: #0f172a;
+  border-bottom-color: #334155;
+}
+
+[data-theme="dark"] .hero-blob-1,
+[data-theme="dark"] .hero-blob-2 {
+  opacity: 0.15;
+}
+
+[data-theme="dark"] .hero-pill-badge {
+  background: #1e293b;
+  border-color: #334155;
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .hero-title {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .hero-subtitle {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .hero-tagline,
+[data-theme="dark"] .hero-lead {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .hero-meta-item {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .hero-img-card {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .features-section {
+  background: #0f172a;
+}
+
+[data-theme="dark"] .section-title,
+[data-theme="dark"] .section-heading-dark {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .section-subtitle,
+[data-theme="dark"] .section-subheading-muted {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .feature-card,
+[data-theme="dark"] .features-card {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .feature-title,
+[data-theme="dark"] .features-card-title {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .feature-desc,
+[data-theme="dark"] .features-card-desc {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .feature-icon-box,
+[data-theme="dark"] .features-icon-circle {
+  background: #0f172a;
+  border-color: #334155;
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .how-section {
+  background: #0f172a;
+}
+
+[data-theme="dark"] .how-step-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .step-card-title,
+[data-theme="dark"] .how-step-title {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .step-card-desc,
+[data-theme="dark"] .how-step-desc {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .step-num-circle {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .how-step-badge {
+  background: #0f172a;
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .about-section {
+  background: #0f172a;
+}
+
+[data-theme="dark"] .about-eyebrow {
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .about-title {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .about-tagline {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .about-paragraph,
+[data-theme="dark"] .about-body-text {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .about-card-frame,
+[data-theme="dark"] .about-feature-box {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .about-feature-title {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .about-feature-desc {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .brand,
+[data-theme="dark"] .brand-text,
+[data-theme="dark"] .brand-text span,
+[data-theme="dark"] .brand-accent {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .theme-toggle-btn,
+[data-theme="dark"] #theme-toggle {
+  background: transparent !important;
+  color: #cbd5e1 !important;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .theme-toggle-btn svg,
+[data-theme="dark"] #theme-toggle svg {
+  stroke: currentColor !important;
+  fill: none !important;
+  color: inherit !important;
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover,
+[data-theme="dark"] #theme-toggle:hover {
+  background: #334155 !important;
+  border-color: #475569;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover svg,
+[data-theme="dark"] #theme-toggle:hover svg {
+  color: #ffffff !important;
+  stroke: currentColor !important;
 }

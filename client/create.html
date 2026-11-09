@@ -10,6 +10,15 @@
   <link rel="stylesheet" href="css/cover.css">
   <link rel="stylesheet" href="css/form.css">
   <link rel="stylesheet" href="css/print.css" media="print">
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('cc_theme') === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="page-create">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -51,7 +60,16 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           <span>About</span>
         </a>
+        <button type="button" class="theme-toggle-btn mobile-theme-toggle" aria-label="Toggle dark mode">
+          <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <span class="theme-toggle-label">Dark Mode</span>
+        </button>
       </nav>
+      <button type="button" id="theme-toggle" class="theme-toggle-btn desktop-theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
     </div>
   </header>
 
@@ -93,13 +111,23 @@
 
             <div class="field">
               <label for="university">University <span class="req">*</span></label>
-              <input class="input" type="text" id="university" list="universities-list" placeholder="Enter university name" autocomplete="off">
+              <div class="input-with-dropdown">
+                <input class="input" type="text" id="university" list="universities-list" placeholder="Enter university name" autocomplete="off">
+                <button type="button" class="dropdown-toggle-btn" aria-label="Open dropdown">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+              </div>
               <datalist id="universities-list"></datalist>
             </div>
 
             <div class="field">
               <label for="department">Department <span class="req">*</span></label>
-              <input class="input" type="text" id="department" list="departments-list" placeholder="Select or type department" autocomplete="off">
+              <div class="input-with-dropdown">
+                <input class="input" type="text" id="department" list="departments-list" placeholder="Select or type department" autocomplete="off">
+                <button type="button" class="dropdown-toggle-btn" aria-label="Open dropdown">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+              </div>
               <datalist id="departments-list"></datalist>
             </div>
 
@@ -126,14 +154,24 @@
 
             <div class="field">
               <label for="course-code">Course Code <span class="req">*</span></label>
-              <input class="input" type="text" id="course-code" list="course-codes-list" placeholder="e.g., CSE 3100" autocomplete="off">
+              <div class="input-with-dropdown">
+                <input class="input" type="text" id="course-code" list="course-codes-list" placeholder="e.g., CSE 3100" autocomplete="off">
+                <button type="button" class="dropdown-toggle-btn" aria-label="Open dropdown">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+              </div>
               <datalist id="course-codes-list"></datalist>
               <span class="cascade-hint caption" id="course-code-hint">Select department, level, and term to see suggested course codes.</span>
             </div>
 
             <div class="field">
               <label for="course-title">Course Title <span class="req">*</span></label>
-              <input class="input" type="text" id="course-title" list="course-titles-list" placeholder="e.g., Web Programming Lab" autocomplete="off">
+              <div class="input-with-dropdown">
+                <input class="input" type="text" id="course-title" list="course-titles-list" placeholder="e.g., Web Programming Lab" autocomplete="off">
+                <button type="button" class="dropdown-toggle-btn" aria-label="Open dropdown">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+              </div>
               <datalist id="course-titles-list"></datalist>
             </div>
 
@@ -204,14 +242,24 @@
           </div>
 
           <div class="form-bottom-action">
-            <button type="button" id="print-cover" class="btn btn-primary btn-generate">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="6 9 6 2 18 2 18 9"/>
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-                <rect x="6" y="14" width="12" height="8"/>
-              </svg>
-              <span>Generate PDF / Print</span>
-            </button>
+            <div class="action-buttons-group">
+              <button type="button" id="print-cover" class="btn btn-primary btn-generate">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 6 2 18 2 18 9"/>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                  <rect x="6" y="14" width="12" height="8"/>
+                </svg>
+                <span>Print</span>
+              </button>
+              <button type="button" id="export-pdf" class="btn btn-secondary btn-export-pdf">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>Export PDF</span>
+              </button>
+            </div>
             <div class="form-status-row">
               <p id="storage-status" class="storage-status" role="status" aria-live="polite"></p>
               <p class="hint">Your draft is saved automatically in this browser.</p>
@@ -393,6 +441,7 @@
     </div>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script type="module" src="js/site.js"></script>
   <script type="module" src="js/create.js"></script>
 </body>
