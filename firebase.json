@@ -1,10 +1,24 @@
 {
   "hosting": {
     "public": "client",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "redirects": [
+      {
+        "source": "/index.html",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/create.html",
+        "destination": "/create",
+        "type": 301
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/create",
+        "destination": "/create.html"
+      }
     ]
   }
 }
