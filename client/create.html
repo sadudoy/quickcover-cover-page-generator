@@ -8,6 +8,7 @@
   <link rel="icon" type="image/png" href="assets/logo.png">
   <link rel="stylesheet" href="css/site.css">
   <link rel="stylesheet" href="css/cover.css">
+  <link rel="stylesheet" href="css/cover-diu.css">
   <link rel="stylesheet" href="css/form.css">
   <link rel="stylesheet" href="css/print.css" media="print">
   <script>
@@ -95,6 +96,23 @@
 
         <form id="cover-form" autocomplete="off">
           <div class="form-fields-scroll">
+            <div class="template-selector-container">
+              <label class="field-label">Choose Cover Design</label>
+              <div class="template-cards" role="group" aria-label="Choose Cover Design">
+                <!-- BAUST Card -->
+                <button type="button" class="template-card active" data-template="baust" aria-pressed="true">
+                  <img src="assets/baust-preview.png" alt="BAUST Cover Preview" class="template-img">
+                  <span class="template-name">BAUST</span>
+                </button>
+
+                <!-- DIU Card -->
+                <button type="button" class="template-card" data-template="diu" aria-pressed="false">
+                  <img src="assets/diu-preview.png" alt="DIU Cover Preview" class="template-img">
+                  <span class="template-name">DIU</span>
+                </button>
+              </div>
+            </div>
+
             <div class="field">
               <label class="field-label">Document Type <span class="req">*</span></label>
               <div class="segmented">
@@ -109,7 +127,7 @@
               </div>
             </div>
 
-            <div class="field">
+            <div class="field baust-only">
               <label for="university">University <span class="req">*</span></label>
               <div class="input-with-dropdown">
                 <input class="input" type="text" id="university" list="universities-list" placeholder="Enter university name" autocomplete="off">
@@ -131,7 +149,7 @@
               <datalist id="departments-list"></datalist>
             </div>
 
-            <div class="field-row">
+            <div class="field-row baust-only">
               <div class="field">
                 <label for="level">Level <span class="req">*</span></label>
                 <select class="select" id="level">
@@ -152,6 +170,33 @@
               </div>
             </div>
 
+            <div class="field-row diu-only">
+              <div class="field">
+                <label for="diu-semester">Semester <span class="req">*</span></label>
+                <input class="input" type="text" id="diu-semester" list="diu-semesters-list" placeholder="e.g., Fall" autocomplete="off">
+                <datalist id="diu-semesters-list">
+                  <option value="Spring">
+                  <option value="Summer">
+                  <option value="Fall">
+                </datalist>
+              </div>
+              <div class="field">
+                <label for="diu-year">Year <span class="req">*</span></label>
+                <input class="input" type="text" id="diu-year" placeholder="e.g., 2026" autocomplete="off">
+              </div>
+            </div>
+
+            <div class="field-row diu-only">
+              <div class="field">
+                <label for="diu-level-term">Level-Term <span class="req">*</span></label>
+                <input class="input" type="text" id="diu-level-term" placeholder="e.g., L-2 T-1" autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="diu-section">Section <span class="req">*</span></label>
+                <input class="input" type="text" id="diu-section" placeholder="e.g., A" autocomplete="off">
+              </div>
+            </div>
+
             <div class="field">
               <label for="course-code">Course Code <span class="req">*</span></label>
               <div class="input-with-dropdown">
@@ -161,7 +206,7 @@
                 </button>
               </div>
               <datalist id="course-codes-list"></datalist>
-              <span class="cascade-hint caption" id="course-code-hint">Select department, level, and term to see suggested course codes.</span>
+              <span class="cascade-hint caption baust-only" id="course-code-hint">Select department, level, and term to see suggested course codes.</span>
             </div>
 
             <div class="field">
@@ -175,7 +220,7 @@
               <datalist id="course-titles-list"></datalist>
             </div>
 
-            <div class="field">
+            <div class="field baust-only">
               <label for="doc-number" id="doc-number-label">Report no. <span class="req">*</span></label>
               <input class="input" type="text" id="doc-number" placeholder="01" autocomplete="off">
             </div>
@@ -185,7 +230,7 @@
               <input class="input" type="text" id="doc-title" placeholder="e.g., Static Template Implementation" autocomplete="off">
             </div>
 
-            <div class="field">
+            <div class="field baust-only">
               <label for="comment">Comment</label>
               <textarea class="textarea" id="comment" rows="2" placeholder="Optional comments..."></textarea>
             </div>
@@ -202,7 +247,7 @@
             </div>
 
             <div class="field-row">
-              <div class="field" id="exp-date-field">
+              <div class="field baust-only" id="exp-date-field">
                 <label for="experiment-date">Experiment Date <span class="req">*</span></label>
                 <input class="input" type="date" id="experiment-date">
               </div>
@@ -303,102 +348,246 @@
         <div class="paper-wrap">
           <div class="preview-viewport" id="preview-viewport">
             <div id="cover-preview">
-              <article class="a4-cover" data-cover-type="lab-report">
-                <!-- Institutional Header -->
-                <h1 class="university-header" data-field="university-name"></h1>
-                <h2 class="department-header" data-field="department-name"></h2>
+              <article class="a4-cover" data-cover-type="lab-report" data-template="baust">
+                <div id="cover-baust">
+                  <!-- Institutional Header -->
+                  <h1 class="university-header" data-field="university-name"></h1>
+                  <h2 class="department-header" data-field="department-name"></h2>
 
-                <!-- Institutional Logo -->
-                <div class="logo-box" data-field="logo" aria-label="Institution Logo">
-                  <img class="logo-img" src="/assets/default-logo.png" alt="Institution logo">
-                </div>
-
-                <!-- Title Banner & Measured Underline Bar -->
-                <h3 class="title-banner" data-field="cover-title">Lab Report</h3>
-                <!-- <div class="title-underline"></div> -->
-
-                <!-- Metadata Section -->
-                <section class="metadata-section">
-                  <div class="metadata-row meta-row-1">
-                    <span class="metadata-label">Course Code</span>
-                    <span class="metadata-colon">:</span>
-                    <span class="metadata-value user-data" data-field="course-code"></span>
-                  </div>
-                  <div class="metadata-row meta-row-2">
-                    <span class="metadata-label">Course Title</span>
-                    <span class="metadata-colon">:</span>
-                    <span class="metadata-value user-data" data-field="course-title"></span>
-                  </div>
-                  <div class="metadata-row meta-row-3">
-                    <span class="metadata-label" id="preview-doc-number-label">Report no.</span>
-                    <span class="metadata-colon">:</span>
-                    <span class="metadata-value user-data" data-field="doc-number"></span>
-                  </div>
-                  <div class="metadata-row meta-row-4">
-                    <span class="metadata-label" id="preview-doc-title-label">Report Title</span>
-                    <span class="metadata-colon">:</span>
-                    <span class="metadata-value user-data" data-field="doc-title"></span>
-                  </div>
-                  <div class="metadata-row meta-row-5">
-                    <span class="metadata-label">Comment</span>
-                    <span class="metadata-colon">:</span>
-                  </div>
-                </section>
-
-                <!-- Comment Stroke Box -->
-                <div class="comment-box" data-field="comment-box"></div>
-
-                <!-- Left Card: Submitted By -->
-                <section class="card card-submitted-by" aria-labelledby="heading-submitted-by">
-                  <div class="card-title-wrap">
-                    <h4 id="heading-submitted-by" class="card-title">Submitted By:</h4>
-                    <span class="card-title-underline"></span>
+                  <!-- Institutional Logo -->
+                  <div class="logo-box" data-field="logo" aria-label="Institution Logo">
+                    <img class="logo-img" src="/assets/default-logo.png" alt="Institution logo">
                   </div>
 
-                  <div class="card-field-row sub-by-row-name">
-                    <span class="card-field-label">Name:</span>
-                    <span class="card-field-value user-data" data-field="student-name"></span>
-                  </div>
-                  <div class="card-field-row sub-by-row-id">
-                    <span class="card-field-label">ID:</span>
-                    <span class="card-field-value user-data" data-field="student-id"></span>
-                  </div>
-                  <div class="card-field-row sub-by-row-level">
-                    <div class="level-term-inline">
-                      <div class="level-sub-col">
-                        <span class="card-field-label">Level:</span>
-                        <span class="card-field-value user-data" data-field="level"></span>
-                      </div>
-                      <div class="term-sub-col">
-                        <span class="card-field-label">Term:</span>
-                        <span class="card-field-value user-data" data-field="term"></span>
+                  <!-- Title Banner & Measured Underline Bar -->
+                  <h3 class="title-banner" data-field="cover-title">Lab Report</h3>
+                  <!-- <div class="title-underline"></div> -->
+
+                  <!-- Metadata Section -->
+                  <section class="metadata-section">
+                    <div class="metadata-row meta-row-1">
+                      <span class="metadata-label">Course Code</span>
+                      <span class="metadata-colon">:</span>
+                      <span class="metadata-value user-data" data-field="course-code"></span>
+                    </div>
+                    <div class="metadata-row meta-row-2">
+                      <span class="metadata-label">Course Title</span>
+                      <span class="metadata-colon">:</span>
+                      <span class="metadata-value user-data" data-field="course-title"></span>
+                    </div>
+                    <div class="metadata-row meta-row-3">
+                      <span class="metadata-label" id="preview-doc-number-label">Report no.</span>
+                      <span class="metadata-colon">:</span>
+                      <span class="metadata-value user-data" data-field="doc-number"></span>
+                    </div>
+                    <div class="metadata-row meta-row-4">
+                      <span class="metadata-label" id="preview-doc-title-label">Report Title</span>
+                      <span class="metadata-colon">:</span>
+                      <span class="metadata-value user-data" data-field="doc-title"></span>
+                    </div>
+                    <div class="metadata-row meta-row-5">
+                      <span class="metadata-label">Comment</span>
+                      <span class="metadata-colon">:</span>
+                    </div>
+                  </section>
+
+                  <!-- Comment Stroke Box -->
+                  <div class="comment-box" data-field="comment-box"></div>
+
+                  <!-- Left Card: Submitted By -->
+                  <section class="card card-submitted-by" aria-labelledby="heading-submitted-by">
+                    <div class="card-title-wrap">
+                      <h4 id="heading-submitted-by" class="card-title">Submitted By:</h4>
+                      <span class="card-title-underline"></span>
+                    </div>
+
+                    <div class="card-field-row sub-by-row-name">
+                      <span class="card-field-label">Name:</span>
+                      <span class="card-field-value user-data" data-field="student-name"></span>
+                    </div>
+                    <div class="card-field-row sub-by-row-id">
+                      <span class="card-field-label">ID:</span>
+                      <span class="card-field-value user-data" data-field="student-id"></span>
+                    </div>
+                    <div class="card-field-row sub-by-row-level">
+                      <div class="level-term-inline">
+                        <div class="level-sub-col">
+                          <span class="card-field-label">Level:</span>
+                          <span class="card-field-value user-data" data-field="level"></span>
+                        </div>
+                        <div class="term-sub-col">
+                          <span class="card-field-label">Term:</span>
+                          <span class="card-field-value user-data" data-field="term"></span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="card-field-row sub-by-row-exp-date" id="preview-exp-date-row">
-                    <span class="card-field-label">Experiment Date:</span>
-                    <span class="card-field-value user-data" data-field="experiment-date"></span>
-                  </div>
-                  <div class="card-field-row sub-by-row-sub-date" id="preview-sub-date-row">
-                    <span class="card-field-label">Submission Date:</span>
-                    <span class="card-field-value user-data" data-field="submission-date"></span>
-                  </div>
-                </section>
+                    <div class="card-field-row sub-by-row-exp-date" id="preview-exp-date-row">
+                      <span class="card-field-label">Experiment Date:</span>
+                      <span class="card-field-value user-data" data-field="experiment-date"></span>
+                    </div>
+                    <div class="card-field-row sub-by-row-sub-date" id="preview-sub-date-row">
+                      <span class="card-field-label">Submission Date:</span>
+                      <span class="card-field-value user-data" data-field="submission-date"></span>
+                    </div>
+                  </section>
 
-                <!-- Right Card: Submitted To -->
-                <section class="card card-submitted-to" aria-labelledby="heading-submitted-to">
-                  <div class="card-title-wrap">
-                    <h4 id="heading-submitted-to" class="card-title">Submitted To:</h4>
-                    <span class="card-title-underline"></span>
+                  <!-- Right Card: Submitted To -->
+                  <section class="card card-submitted-to" aria-labelledby="heading-submitted-to">
+                    <div class="card-title-wrap">
+                      <h4 id="heading-submitted-to" class="card-title">Submitted To:</h4>
+                      <span class="card-title-underline"></span>
+                    </div>
+
+                    <div class="teachers-preview" data-field="teachers-list"></div>
+
+                    <div class="signature-row sub-to-row-sign">
+                      <span class="card-field-label">Signature &amp; Date:</span>
+                      <span class="signature-line">&nbsp;_________________</span>
+                    </div>
+                  </section>
+                </div>
+
+                <div id="cover-diu">
+                  <div class="diu-header">
+                    <h2 class="diu-department-header" data-field="department-name"></h2>
                   </div>
 
-                  <div class="teachers-preview" data-field="teachers-list"></div>
-
-                  <div class="signature-row sub-to-row-sign">
-                    <span class="card-field-label">Signature &amp; Date:</span>
-                    <span class="signature-line">&nbsp;_________________</span>
+                  <div class="diu-logo-box" data-field="diu-logo" aria-label="DIU Institution Logo">
+                    <img class="diu-logo-img diu-logo-default" src="assets/daffodil_logo.png" alt="Daffodil International University Logo">
                   </div>
-                </section>
+
+                  <h3 class="diu-title-banner">Assignment</h3>
+
+                  <div class="diu-tables-stack">
+                    <!-- Table 1: Course Info & Topic -->
+                    <table class="diu-table diu-info-table">
+                      <colgroup>
+                        <col class="diu-col-course-code">
+                        <col class="diu-col-course-title">
+                      </colgroup>
+                      <tbody>
+                        <tr>
+                          <td><span class="diu-field-label">Course Code:</span> <span class="user-data" data-field="course-code"></span></td>
+                          <td><span class="diu-field-label">Course Title:</span> <span class="user-data" data-field="course-title"></span></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">
+                            <div class="diu-topic-cell"><span class="diu-field-label">Title/Topic:</span> <span class="user-data" data-field="doc-title"></span></div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <!-- Table 2: Evaluation Rubric -->
+                    <table class="diu-table diu-rubric-table">
+                      <colgroup>
+                        <col class="diu-col-sl">
+                        <col class="diu-col-criteria">
+                        <col class="diu-col-tick">
+                        <col class="diu-col-tick">
+                        <col class="diu-col-tick">
+                        <col class="diu-col-tick">
+                        <col class="diu-col-tick">
+                        <col class="diu-col-mark">
+                        <col class="diu-col-remarks">
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th rowspan="2" class="diu-th-sl">SL</th>
+                          <th rowspan="2" class="diu-th-criteria">Evaluation criteria with marks</th>
+                          <th colspan="5" class="diu-th-tick-group">Put Tick (&#8730;) Mark</th>
+                          <th rowspan="2" class="diu-th-mark">Mark Obtained</th>
+                          <th rowspan="2" class="diu-th-remarks">Remarks</th>
+                        </tr>
+                        <tr>
+                          <th class="diu-tick-subhead"><span class="diu-vertical-label">Excellent</span></th>
+                          <th class="diu-tick-subhead"><span class="diu-vertical-label">Good</span></th>
+                          <th class="diu-tick-subhead"><span class="diu-vertical-label">Fair</span></th>
+                          <th class="diu-tick-subhead"><span class="diu-vertical-label">Poor</span></th>
+                          <th class="diu-tick-subhead"><span class="diu-vertical-label">Fail</span></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td colspan="9" class="diu-rubric-band">Assignment</td>
+                        </tr>
+                        <tr class="diu-rubric-row">
+                          <td>1</td>
+                          <td class="diu-criteria-name">Idea with Focus (1)</td>
+                          <td></td><td></td><td></td><td></td><td></td><td></td>
+                          <td rowspan="5"></td>
+                        </tr>
+                        <tr class="diu-rubric-row">
+                          <td>2</td>
+                          <td class="diu-criteria-name">Organization (1)</td>
+                          <td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr class="diu-rubric-row">
+                          <td>3</td>
+                          <td class="diu-criteria-name">Content (2)</td>
+                          <td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr class="diu-rubric-row">
+                          <td>4</td>
+                          <td class="diu-criteria-name">Time Management (1)</td>
+                          <td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr class="diu-rubric-row">
+                          <td></td>
+                          <td colspan="6" class="diu-total-label">Total</td>
+                          <td></td>
+                        </tr>
+                        <tr class="diu-rubric-footer-row">
+                          <td colspan="8" class="diu-date-cell">
+                            <span class="diu-field-label">Date of Submission:</span>
+                            <span class="diu-submission-date-line user-data" data-field="submission-date"></span>
+                          </td>
+                          <td class="diu-signature-cell">
+                            <div class="diu-signature-line"></div>
+                            <div class="diu-signature-label">Teacher Signature</div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <!-- Table 3: Academic Metadata Bar -->
+                    <table class="diu-table diu-meta-bar">
+                      <tbody>
+                        <tr>
+                          <td><span class="diu-field-label">Semester:</span> <span class="user-data" data-field="semester"></span></td>
+                          <td><span class="diu-field-label">Year:</span> <span class="user-data" data-field="year"></span></td>
+                          <td><span class="diu-field-label">Level-Term:</span> <span class="user-data" data-field="level-term"></span></td>
+                          <td><span class="diu-field-label">Section:</span> <span class="user-data" data-field="section"></span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <!-- Table 4: Submitted by / Submitted to -->
+                    <table class="diu-table diu-submission-table">
+                      <colgroup>
+                        <col class="diu-col-sub-by">
+                        <col class="diu-col-sub-to">
+                      </colgroup>
+                      <thead>
+                        <tr class="diu-sub-header">
+                          <th>Submitted by-</th>
+                          <th>Submitted to-</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="diu-sub-body">
+                          <td>
+                            <div class="diu-student-row"><span class="diu-field-label">Name:</span> <span class="user-data" data-field="student-name"></span></div>
+                            <div class="diu-student-row"><span class="diu-field-label">Student ID:</span> <span class="user-data" data-field="student-id"></span></div>
+                          </td>
+                          <td>
+                            <div class="diu-teachers-preview" data-field="teachers-list"></div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </article>
             </div>
           </div>

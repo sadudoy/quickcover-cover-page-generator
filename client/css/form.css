@@ -278,6 +278,133 @@ body.page-create .form-panel {
   box-shadow: var(--shadow-xs);
 }
 
+.segmented-btn input[type="radio"]:disabled + span {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Template-Specific Field Visibility (BAUST vs DIU) */
+.diu-only {
+  display: none !important;
+}
+
+#cover-form[data-active-template="diu"] .diu-only {
+  display: flex !important;
+}
+
+#cover-form[data-active-template="diu"] .baust-only {
+  display: none !important;
+}
+
+/* Visual Card Template Selector (Tokens + Tactile Paper Elevation + Mobile Swipe Safe) */
+.template-selector-container {
+  margin-bottom: var(--space-4);
+}
+
+.template-selector-container label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-800);
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.template-cards {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-1);
+  padding: var(--space-1) var(--space-1) var(--space-3) var(--space-1);
+  touch-action: pan-x pan-y;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.template-cards::-webkit-scrollbar {
+  display: none;
+}
+
+.template-card {
+  flex: 0 0 140px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-3);
+  background: var(--surface);
+  color: var(--ink-900);
+  border: 1px solid var(--ink-300);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  cursor: pointer;
+  font-family: inherit;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .template-card:hover {
+    border-color: var(--ink-400);
+    background: var(--surface-alt);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+  }
+}
+
+.template-card:active {
+  transform: scale(0.98);
+}
+
+.template-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.template-card.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), var(--shadow-md);
+  background: var(--accent-subtle);
+}
+
+.template-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1.414;
+  object-fit: contain;
+  background: #ffffff;
+  border: 1px solid var(--ink-200);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-xs);
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.template-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink-900);
+  letter-spacing: -0.01em;
+}
+
+.template-card.active .template-name {
+  color: var(--accent);
+}
+
 .cascade-hint {
   font-size: 13px;
   color: var(--ink-500);
@@ -686,6 +813,7 @@ body.page-create .site-footer {
   .preview-card-header,
   .form-card-header,
   .form-bottom-action,
+  .template-selector-container,
   .fullscreen-btn {
     display: none !important;
   }
@@ -1069,5 +1197,40 @@ body.page-create .site-footer {
 
 [data-theme="dark"] .btn-ghost:hover {
   background: #334155;
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .template-selector-container label {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .template-card {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f8fafc;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-theme="dark"] .template-card:hover {
+    background: #334155;
+    border-color: #475569;
+    color: #f8fafc;
+  }
+}
+
+[data-theme="dark"] .template-card.active {
+  background: #172554;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px #3b82f6, var(--shadow-md);
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .template-img {
+  background: #ffffff;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .template-name,
+[data-theme="dark"] .template-card.active .template-name {
   color: #f8fafc;
 }

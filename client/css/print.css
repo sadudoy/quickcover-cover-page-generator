@@ -31,11 +31,17 @@
   .site-footer,
   .form-panel,
   .preview-toolbar,
+  .preview-card-header,
   .editor-note,
   .mobile-menu-btn,
+  .template-selector-container,
+  .diu-only,
+  .baust-only,
+  #fullscreen-btn,
   #storage-status,
   #clear-form,
-  #print-cover {
+  #print-cover,
+  #export-pdf {
     display: none !important;
   }
 
@@ -129,6 +135,30 @@
 
   .department-header {
     top: 38mm !important;
+  }
+
+  /* Active Template Visibility & DIU Single-Page Print Rules */
+  .a4-cover[data-template="baust"] #cover-diu,
+  .a4-cover:not([data-template="diu"]) #cover-diu {
+    display: none !important;
+  }
+
+  .a4-cover[data-template="diu"] #cover-baust {
+    display: none !important;
+  }
+
+  .a4-cover[data-template="diu"] #cover-diu {
+    display: block !important;
+    width: 210mm !important;
+    height: 296.5mm !important;
+    max-height: 296.5mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   /* Ensure exact color reproduction */

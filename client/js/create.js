@@ -39,14 +39,26 @@ let isApplyingRemoteChange = false;
 let lastStatusMessage = "";
 let lastStatusTime = 0;
 let currentLogoState = "default"; // 'user' | 'default' | 'none'
+let lastBaustDocType = "lab-report";
+let activeTemplate = "baust";
 
 // Multi-Teacher State (Phase 7: role removed, { name, designation })
 let teachers = [{ name: "", designation: "" }];
 
 // Form DOM Elements (guarded for Node import)
+const coverFormEl = isBrowser ? document.getElementById("cover-form") : null;
+const templateCards = isBrowser
+  ? document.querySelectorAll(".template-card")
+  : [];
 const docTypeRadios = isBrowser
   ? document.querySelectorAll('input[name="doc-type"]')
   : [];
+const docTypeLabRadio = isBrowser
+  ? document.getElementById("doc-type-lab")
+  : null;
+const docTypeAssignRadio = isBrowser
+  ? document.getElementById("doc-type-assignment")
+  : null;
 const clearFormBtn = isBrowser ? document.getElementById("clear-form") : null;
 const universityInput = isBrowser
   ? document.getElementById("university")
@@ -56,6 +68,14 @@ const departmentInput = isBrowser
   : null;
 const levelSelect = isBrowser ? document.getElementById("level") : null;
 const termSelect = isBrowser ? document.getElementById("term") : null;
+const semesterInput = isBrowser
+  ? document.getElementById("diu-semester")
+  : null;
+const yearInput = isBrowser ? document.getElementById("diu-year") : null;
+const levelTermInput = isBrowser
+  ? document.getElementById("diu-level-term")
+  : null;
+const sectionInput = isBrowser ? document.getElementById("diu-section") : null;
 const courseCodeInput = isBrowser
   ? document.getElementById("course-code")
   : null;
@@ -100,7 +120,8 @@ const cascadeHintEl = isBrowser
 
 // Form Layout Helper Elements
 const experimentDateGroup = isBrowser
-  ? document.getElementById("experiment-date-group")
+  ? document.getElementById("experiment-date-group") ||
+    document.getElementById("exp-date-field")
   : null;
 const docNumberLabel = isBrowser
   ? document.getElementById("doc-number-label")
@@ -143,6 +164,9 @@ const previewDocTitleLabel = isBrowser
   : null;
 const logoBoxEl = coverPreviewWrapper
   ? coverPreviewWrapper.querySelector(".logo-box")
+  : null;
+const diuLogoBoxEl = coverPreviewWrapper
+  ? coverPreviewWrapper.querySelector(".diu-logo-box")
   : null;
 
 // Preview Card & Teacher Elements
@@ -365,12 +389,17 @@ export function migrateDraft(draft) {
  */
 export function areDraftsEqual(a, b) {
   if (!a || !b) return false;
+  if ((a.template || "baust") !== (b.template || "baust")) return false;
   const fields = [
     "docType",
     "university",
     "department",
     "level",
     "term",
+    "semester",
+    "year",
+    "levelTerm",
+    "section",
     "courseCode",
     "courseTitle",
     "docNumber",
@@ -455,6 +484,10 @@ function syncAllToPreview() {
   );
   updatePreviewField("level", levelSelect ? levelSelect.value : "");
   updatePreviewField("term", termSelect ? termSelect.value : "");
+  updatePreviewField("semester", semesterInput ? semesterInput.value : "");
+  updatePreviewField("year", yearInput ? yearInput.value : "");
+  updatePreviewField("level-term", levelTermInput ? levelTermInput.value : "");
+  updatePreviewField("section", sectionInput ? sectionInput.value : "");
   updatePreviewField(
     "course-code",
     courseCodeInput ? courseCodeInput.value : "",
@@ -488,6 +521,25 @@ function syncAllToPreview() {
 }
 
 /**
+ * Get current selected cover template ('baust' | 'diu')
+ */
+function getSelectedTemplate() {
+  if (!isBrowser) return "baust";
+  return activeTemplate === "diu" ? "diu" : "baust";
+}
+
+/**
+ * Sync visual template card active state
+ */
+function syncTemplateCards(normalized) {
+  templateCards.forEach((card) => {
+    const isMatch = card.dataset.template === normalized;
+    card.classList.toggle("active", isMatch);
+    card.setAttribute("aria-pressed", String(isMatch));
+  });
+}
+
+/**
  * Get current selected document type ('lab-report' | 'assignment')
  */
 function getSelectedDocType() {
@@ -497,19 +549,77 @@ function getSelectedDocType() {
 }
 
 /**
+ * Apply Cover Design template selection ('baust' | 'diu')
+ */
+function applyTemplateChange(
+  template,
+  { shouldSave = false, isRestore = false } = {},
+) {
+  if (!isBrowser) return;
+  const normalized = template === "diu" ? "diu" : "baust";
+  activeTemplate = normalized;
+
+  syncTemplateCards(normalized);
+  if (a4CoverEl) {
+    a4CoverEl.setAttribute("data-template", normalized);
+  }
+  if (coverFormEl) {
+    coverFormEl.setAttribute("data-active-template", normalized);
+  }
+
+  if (normalized === "diu") {
+    if (!isRestore && docTypeLabRadio && docTypeLabRadio.checked) {
+      lastBaustDocType = "lab-report";
+    } else if (!isRestore && docTypeAssignRadio && docTypeAssignRadio.checked) {
+      lastBaustDocType = "assignment";
+    }
+    if (docTypeLabRadio) docTypeLabRadio.disabled = true;
+    if (docTypeAssignRadio) docTypeAssignRadio.checked = true;
+    if (docTitleInput) docTitleInput.placeholder = "e.g., Assignment Topic";
+    handleDocTypeChange(false);
+  } else {
+    if (docTypeLabRadio) docTypeLabRadio.disabled = false;
+    if (!isRestore) {
+      const targetRadio =
+        lastBaustDocType === "assignment" ? docTypeAssignRadio : docTypeLabRadio;
+      if (targetRadio) targetRadio.checked = true;
+    }
+    if (docTitleInput) {
+      docTitleInput.placeholder = "e.g., Static Template Implementation";
+    }
+    handleDocTypeChange(false);
+  }
+
+  updateCourseLists();
+
+  if (!isRestore && currentLogoState !== "user") {
+    renderDefaultLogoInPreview();
+  }
+
+  if (shouldSave) {
+    queueDraftSave();
+  }
+}
+
+/**
  * Handle document type radio changes
  */
 function handleDocTypeChange(shouldSave = false) {
   if (!isBrowser) return;
   const docType = getSelectedDocType();
   const isLab = docType === "lab-report";
+  const isDiu = getSelectedTemplate() === "diu";
+
+  if (!isDiu) {
+    lastBaustDocType = docType;
+  }
 
   if (a4CoverEl) {
     a4CoverEl.setAttribute("data-cover-type", docType);
   }
 
   if (experimentDateGroup) {
-    experimentDateGroup.style.display = isLab ? "flex" : "none";
+    experimentDateGroup.style.display = isLab && !isDiu ? "flex" : "none";
   }
 
   const expDateValue =
@@ -518,8 +628,13 @@ function handleDocTypeChange(shouldSave = false) {
 
   if (docNumberLabel)
     docNumberLabel.textContent = isLab ? "Report no." : "Assignment no.";
-  if (docTitleLabel)
-    docTitleLabel.textContent = isLab ? "Report Title" : "Assignment Title";
+  if (docTitleLabel) {
+    docTitleLabel.textContent = isDiu
+      ? "Title / Topic"
+      : isLab
+        ? "Report Title"
+        : "Assignment Title";
+  }
   if (previewDocNumberLabel)
     previewDocNumberLabel.textContent = isLab ? "Report no." : "Assignment no.";
   if (previewDocTitleLabel)
@@ -546,9 +661,10 @@ function handleDocTypeChange(shouldSave = false) {
  */
 function updateCourseLists() {
   if (!isBrowser || !departmentInput) return;
+  const isDiu = getSelectedTemplate() === "diu";
   const deptInputVal = departmentInput.value.trim();
-  const levelVal = levelSelect ? levelSelect.value : null;
-  const termVal = termSelect ? termSelect.value : null;
+  const levelVal = !isDiu && levelSelect ? levelSelect.value : null;
+  const termVal = !isDiu && termSelect ? termSelect.value : null;
 
   currentFilteredCourses = filterCourses(
     dropdownData.courses,
@@ -587,17 +703,21 @@ function updateCourseLists() {
   // Cascade hint: visible ONLY when department is recognized and filtered courses list is empty
   const hintEl = cascadeHintEl || document.getElementById("cascade-hint");
   if (hintEl) {
-    const isVisible = isCascadeHintVisible({
-      departmentInput: deptInputVal,
-      departments: dropdownData.departments,
-      filteredCourses: currentFilteredCourses,
-    });
+    const isVisible =
+      !isDiu &&
+      isCascadeHintVisible({
+        departmentInput: deptInputVal,
+        departments: dropdownData.departments,
+        filteredCourses: currentFilteredCourses,
+      });
     hintEl.style.display = isVisible ? "block" : "none";
   }
 
   // Dynamic placeholder for Course Code input (Phase 7B / 7C)
   if (courseCodeInput) {
-    if (currentFilteredCourses.length > 0) {
+    if (isDiu) {
+      courseCodeInput.placeholder = "e.g., CSE 3100";
+    } else if (currentFilteredCourses.length > 0) {
       courseCodeInput.placeholder = "Select or type course code";
     } else if (!deptInputVal) {
       courseCodeInput.placeholder = "Select department first";
@@ -836,66 +956,77 @@ function renderTeacherForm() {
 }
 
 /**
+ * Create a DOM entry element for a single teacher preview block
+ */
+function createTeacherEntryElement(teacher) {
+  const entry = document.createElement("div");
+  entry.className = "teacher-entry";
+
+  // Line 1: Teacher Name + Name
+  const line1 = document.createElement("div");
+  line1.className = "teacher-line teacher-line-name";
+
+  const strong1 = document.createElement("strong");
+  strong1.className = "card-field-label";
+  strong1.textContent = "Teacher Name:";
+  line1.appendChild(strong1);
+  line1.appendChild(document.createTextNode(" "));
+
+  const nameSpan = document.createElement("span");
+  nameSpan.className = "card-field-value user-data";
+  nameSpan.textContent = teacher.name.trim();
+  line1.appendChild(nameSpan);
+
+  entry.appendChild(line1);
+
+  // Line 2 (Optional): Designation
+  if (teacher.designation && teacher.designation.trim()) {
+    const line2 = document.createElement("div");
+    line2.className = "teacher-line teacher-line-desig";
+
+    const strong2 = document.createElement("strong");
+    strong2.className = "card-field-label";
+    strong2.textContent = "Designation:";
+    line2.appendChild(strong2);
+    line2.appendChild(document.createTextNode(" "));
+
+    const desigSpan = document.createElement("span");
+    desigSpan.className = "card-field-value user-data";
+    desigSpan.textContent = teacher.designation.trim();
+    line2.appendChild(desigSpan);
+
+    entry.appendChild(line2);
+  }
+
+  return entry;
+}
+
+/**
  * Multi-Teacher Live Preview Renderer (Phase 7: Role removed)
  * Uses textContent exclusively — no innerHTML for user values.
- * Line 1 always shows: Teacher Name: <name>
- * Line 2 (if present): Designation: <designation>
+ * Populates all template teacher containers (BAUST and DIU).
  */
 function renderTeacherPreview() {
-  const container =
-    teachersPreviewContainer ||
-    (coverPreviewWrapper
-      ? coverPreviewWrapper.querySelector('[data-field="teachers-list"]')
-      : null);
-  if (!container) return;
-  container.textContent = "";
+  const containers = coverPreviewWrapper
+    ? Array.from(
+        coverPreviewWrapper.querySelectorAll('[data-field="teachers-list"]'),
+      )
+    : [];
+  if (containers.length === 0 && teachersPreviewContainer) {
+    containers.push(teachersPreviewContainer);
+  }
+  if (containers.length === 0) return;
 
   const activeTeachers = teachers.filter(isTeacherNonEmpty);
 
-  activeTeachers.forEach((teacher) => {
-    const entry = document.createElement("div");
-    entry.className = "teacher-entry";
-
-    // Line 1: Teacher Name + Name
-    const line1 = document.createElement("div");
-    line1.className = "teacher-line teacher-line-name";
-
-    const strong1 = document.createElement("strong");
-    strong1.className = "card-field-label";
-    strong1.textContent = "Teacher Name:";
-    line1.appendChild(strong1);
-    line1.appendChild(document.createTextNode(" "));
-
-    const nameSpan = document.createElement("span");
-    nameSpan.className = "card-field-value user-data";
-    nameSpan.textContent = teacher.name.trim();
-    line1.appendChild(nameSpan);
-
-    entry.appendChild(line1);
-
-    // Line 2 (Optional): Designation
-    if (teacher.designation && teacher.designation.trim()) {
-      const line2 = document.createElement("div");
-      line2.className = "teacher-line teacher-line-desig";
-
-      const strong2 = document.createElement("strong");
-      strong2.className = "card-field-label";
-      strong2.textContent = "Designation:";
-      line2.appendChild(strong2);
-      line2.appendChild(document.createTextNode(" "));
-
-      const desigSpan = document.createElement("span");
-      desigSpan.className = "card-field-value user-data";
-      desigSpan.textContent = teacher.designation.trim();
-      line2.appendChild(desigSpan);
-
-      entry.appendChild(line2);
-    }
-
-    container.appendChild(entry);
+  containers.forEach((container) => {
+    container.textContent = "";
+    activeTeachers.forEach((teacher) => {
+      container.appendChild(createTeacherEntryElement(teacher));
+    });
   });
 
-  // Synchronize dynamic card heights and signature placement
+  // Synchronize dynamic card heights and signature placement (BAUST cover)
   syncCardHeightsAndSignature();
 }
 
@@ -905,7 +1036,14 @@ function renderTeacherPreview() {
  * In multi-teacher case, expands both cards downward in unison with pinned signature line.
  */
 function syncCardHeightsAndSignature() {
-  if (!cardSubmittedTo || !cardSubmittedBy || !teachersPreviewContainer) return;
+  if (
+    getSelectedTemplate() === "diu" ||
+    !cardSubmittedTo ||
+    !cardSubmittedBy ||
+    !teachersPreviewContainer
+  ) {
+    return;
+  }
 
   const baseMinMm = 66.13;
   const mmToPx = a4CoverEl ? a4CoverEl.offsetWidth / 210 : 3.7795;
@@ -938,53 +1076,82 @@ function syncCardHeightsAndSignature() {
   }
 }
 
+function setLogoBoxImage(box, src, alt, imgClass, onError) {
+  if (!box) return;
+  box.textContent = "";
+  const img = document.createElement("img");
+  img.className = imgClass;
+  img.alt = alt;
+  img.src = src;
+  if (onError) img.onerror = onError;
+  box.appendChild(img);
+}
+
 /**
- * Render user-uploaded logo in preview
+ * Render user-uploaded logo in preview across templates
  */
 function renderUserLogoInPreview(blob) {
-  const box =
+  const objectUrl = URL.createObjectURL(blob);
+  const baustBox =
     logoBoxEl ||
     (coverPreviewWrapper
       ? coverPreviewWrapper.querySelector(".logo-box")
       : null);
-  if (!box) return;
-  box.textContent = "";
-  const img = document.createElement("img");
-  img.className = "logo-img";
-  img.alt = "Uploaded institution logo";
-  img.src = URL.createObjectURL(blob);
-  box.appendChild(img);
+  const diuBox =
+    diuLogoBoxEl ||
+    (coverPreviewWrapper
+      ? coverPreviewWrapper.querySelector(".diu-logo-box")
+      : null);
+
+  setLogoBoxImage(baustBox, objectUrl, "Uploaded institution logo", "logo-img");
+  setLogoBoxImage(diuBox, objectUrl, "Uploaded institution logo", "diu-logo-img");
   currentLogoState = "user";
 }
 
 /**
- * Render default institution logo in preview
+ * Render template default institution logo in preview
  */
 function renderDefaultLogoInPreview() {
-  const box =
+  const baustBox =
     logoBoxEl ||
     (coverPreviewWrapper
       ? coverPreviewWrapper.querySelector(".logo-box")
       : null);
-  if (!box) return;
-  box.textContent = "";
-  const img = document.createElement("img");
-  img.className = "logo-img";
-  img.alt = "Default institution logo";
-  img.src = "assets/default-logo.png";
-  img.onerror = () => {
-    currentLogoState = "none";
-    renderSvgPlaceholder();
-  };
-  box.appendChild(img);
+  const diuBox =
+    diuLogoBoxEl ||
+    (coverPreviewWrapper
+      ? coverPreviewWrapper.querySelector(".diu-logo-box")
+      : null);
+
+  setLogoBoxImage(
+    baustBox,
+    "assets/default-logo.png",
+    "Default institution logo",
+    "logo-img",
+    () => {
+      if (getSelectedTemplate() === "baust") currentLogoState = "none";
+      renderSvgPlaceholder(baustBox);
+    },
+  );
+  setLogoBoxImage(
+    diuBox,
+    "assets/daffodil_logo.png",
+    "Daffodil International University Logo",
+    "diu-logo-img diu-logo-default",
+    () => {
+      if (getSelectedTemplate() === "diu") currentLogoState = "none";
+      renderSvgPlaceholder(diuBox);
+    },
+  );
   currentLogoState = "default";
 }
 
 /**
- * Render defensive SVG placeholder when neither user nor default logo loads
+ * Render defensive SVG placeholder when default logo fails to load
  */
-function renderSvgPlaceholder() {
+function renderSvgPlaceholder(targetBox = null) {
   const box =
+    targetBox ||
     logoBoxEl ||
     (coverPreviewWrapper
       ? coverPreviewWrapper.querySelector(".logo-box")
@@ -1049,7 +1216,7 @@ async function handleLogoUpload(event) {
 }
 
 /**
- * Handle Logo Reset ("Reset logo" reverts to default logo)
+ * Handle Logo Reset ("Reset logo" reverts to active template's default logo)
  */
 async function handleResetLogo() {
   try {
@@ -1069,11 +1236,16 @@ async function handleResetLogo() {
  */
 function getCurrentFormDraft() {
   return {
+    template: getSelectedTemplate(),
     docType: getSelectedDocType(),
     university: universityInput ? universityInput.value : "",
     department: departmentInput ? departmentInput.value : "",
     level: levelSelect ? levelSelect.value : "",
     term: termSelect ? termSelect.value : "",
+    semester: semesterInput ? semesterInput.value : "",
+    year: yearInput ? yearInput.value : "",
+    levelTerm: levelTermInput ? levelTermInput.value : "",
+    section: sectionInput ? sectionInput.value : "",
     courseCode: courseCodeInput ? courseCodeInput.value : "",
     courseTitle: courseTitleInput ? courseTitleInput.value : "",
     docNumber: docNumberInput ? docNumberInput.value : "",
@@ -1097,11 +1269,17 @@ function applyDraftToForm(rawDraft) {
   const draft = migrateDraft(rawDraft);
   if (!draft) return;
 
+  activeTemplate = draft.template === "diu" ? "diu" : "baust";
+  syncTemplateCards(activeTemplate);
+
   if (draft.docType) {
     const targetRadio = document.querySelector(
       `input[name="doc-type"][value="${draft.docType}"]`,
     );
     if (targetRadio) targetRadio.checked = true;
+    if ((draft.template || "baust") === "baust") {
+      lastBaustDocType = draft.docType;
+    }
   }
 
   if (draft.university !== undefined && universityInput)
@@ -1110,6 +1288,13 @@ function applyDraftToForm(rawDraft) {
     departmentInput.value = draft.department;
   if (draft.level !== undefined && levelSelect) levelSelect.value = draft.level;
   if (draft.term !== undefined && termSelect) termSelect.value = draft.term;
+  if (draft.semester !== undefined && semesterInput)
+    semesterInput.value = draft.semester;
+  if (draft.year !== undefined && yearInput) yearInput.value = draft.year;
+  if (draft.levelTerm !== undefined && levelTermInput)
+    levelTermInput.value = draft.levelTerm;
+  if (draft.section !== undefined && sectionInput)
+    sectionInput.value = draft.section;
   if (draft.courseCode !== undefined && courseCodeInput)
     courseCodeInput.value = draft.courseCode;
   if (draft.courseTitle !== undefined && courseTitleInput)
@@ -1143,24 +1328,7 @@ function queueDraftSave() {
     if (isApplyingRemoteChange) return;
     const draft = {
       draftVersion: 2,
-      docType: getSelectedDocType(),
-      university: universityInput ? universityInput.value : "",
-      department: departmentInput ? departmentInput.value : "",
-      level: levelSelect ? levelSelect.value : "",
-      term: termSelect ? termSelect.value : "",
-      courseCode: courseCodeInput ? courseCodeInput.value : "",
-      courseTitle: courseTitleInput ? courseTitleInput.value : "",
-      docNumber: docNumberInput ? docNumberInput.value : "",
-      docTitle: docTitleInput ? docTitleInput.value : "",
-      comment: commentInput ? commentInput.value : "",
-      studentName: studentNameInput ? studentNameInput.value : "",
-      studentId: studentIdInput ? studentIdInput.value : "",
-      experimentDate: experimentDateInput ? experimentDateInput.value : "",
-      submissionDate: submissionDateInput ? submissionDateInput.value : "",
-      teachers: teachers.map((t) => ({
-        name: t.name || "",
-        designation: t.designation || "",
-      })),
+      ...getCurrentFormDraft(),
     };
 
     const res = saveDraft(draft);
@@ -1222,7 +1390,7 @@ function restoreDraft() {
 
 /**
  * Handle Start Over / Clear Form action with confirmation:
- * Resets fields to default values (BAUST / CSE / Level 2 / Term II),
+ * Resets fields to default values (BAUST / Level 2 / Term II),
  * other fields blank, 1 empty teacher entry, default logo.
  */
 async function handleClearForm() {
@@ -1234,6 +1402,8 @@ async function handleClearForm() {
   if (saveTimeout) clearTimeout(saveTimeout);
 
   teachers = [{ name: "", designation: "" }];
+  lastBaustDocType = "lab-report";
+  activeTemplate = "baust";
 
   // Reset default fields to DEFAULT_FORM_VALUES
   if (universityInput) universityInput.value = DEFAULT_FORM_VALUES.university;
@@ -1241,7 +1411,11 @@ async function handleClearForm() {
   if (levelSelect) levelSelect.value = DEFAULT_FORM_VALUES.level;
   if (termSelect) termSelect.value = DEFAULT_FORM_VALUES.term;
 
-  // Reset other fields to empty
+  // Reset DIU & other fields to empty
+  if (semesterInput) semesterInput.value = "";
+  if (yearInput) yearInput.value = "";
+  if (levelTermInput) levelTermInput.value = "";
+  if (sectionInput) sectionInput.value = "";
   if (courseCodeInput) courseCodeInput.value = "";
   if (courseTitleInput) courseTitleInput.value = "";
   if (docNumberInput) docNumberInput.value = "";
@@ -1255,15 +1429,16 @@ async function handleClearForm() {
   if (logoUploadInput) logoUploadInput.value = "";
   if (logoErrorEl) logoErrorEl.textContent = "";
 
-  const labRadio = document.getElementById("doc-type-lab");
-  if (labRadio) labRadio.checked = true;
+  if (docTypeLabRadio) {
+    docTypeLabRadio.disabled = false;
+    docTypeLabRadio.checked = true;
+  }
 
   clearDraft();
   await deleteLogo();
 
   renderDefaultLogoInPreview();
-  handleDocTypeChange();
-  updateCourseLists();
+  applyTemplateChange("baust", { isRestore: false });
   renderTeacherForm();
   renderTeacherPreview();
   syncAllToPreview();
@@ -1296,8 +1471,10 @@ function onStorageChange(e) {
     isApplyingRemoteChange = true;
     try {
       applyDraftToForm(remoteDraft);
-      handleDocTypeChange();
-      updateCourseLists();
+      applyTemplateChange(remoteDraft.template || "baust", { isRestore: true });
+      if (currentLogoState !== "user") {
+        renderDefaultLogoInPreview();
+      }
       renderTeacherForm();
       renderTeacherPreview();
       syncAllToPreview();
@@ -1492,11 +1669,8 @@ export async function init() {
     if (termSelect) termSelect.value = DEFAULT_FORM_VALUES.term;
   }
 
-  // 3. Setup Doc Type
-  handleDocTypeChange();
-
-  // 4. Update Course Lists cascade & hint
-  updateCourseLists();
+  // 3 & 4. Setup Active Template, Doc Type, and Course Lists cascade
+  applyTemplateChange(getSelectedTemplate(), { isRestore: true });
 
   // 5. Render Teacher Form and Preview
   renderTeacherForm();
@@ -1506,7 +1680,7 @@ export async function init() {
   syncAllToPreview();
   refreshAllMobileDropdowns();
 
-  // 7. Restore Logo from Storage or render default logo
+  // 7. Restore Logo from Storage or render template default logo
   let logoRestored = false;
   try {
     const logoBlob = await loadLogo();
@@ -1546,6 +1720,38 @@ export async function init() {
   }
 
   // 11. Event Listeners
+  const TEMPLATE_PREVIEW_FALLBACK =
+    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%25" height="100%25"><rect width="100%25" height="100%25" fill="%23f1f5f9"/><text x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-family="sans-serif" font-size="14">No Preview</text></svg>';
+
+  document.querySelectorAll(".template-img").forEach((img) => {
+    const applyFallback = () => {
+      if (img.dataset.fallbackApplied) return;
+      img.dataset.fallbackApplied = "true";
+      img.src = TEMPLATE_PREVIEW_FALLBACK;
+    };
+    img.addEventListener("error", applyFallback);
+    if (img.complete && img.naturalWidth === 0) {
+      applyFallback();
+    }
+  });
+
+  templateCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      const targetTemplate = card.dataset.template === "diu" ? "diu" : "baust";
+      if (targetTemplate !== activeTemplate) {
+        applyTemplateChange(targetTemplate, { shouldSave: true });
+        syncAllToPreview();
+      }
+      if (typeof card.scrollIntoView === "function") {
+        card.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "nearest",
+        });
+      }
+    });
+  });
+
   docTypeRadios.forEach((radio) => {
     radio.addEventListener("change", () => {
       handleDocTypeChange(true);
@@ -1583,6 +1789,22 @@ export async function init() {
     termSelect.addEventListener("change", onTermUpdate);
     termSelect.addEventListener("input", onTermUpdate);
   }
+
+  // DIU-specific field live bindings
+  [
+    [semesterInput, "semester"],
+    [yearInput, "year"],
+    [levelTermInput, "level-term"],
+    [sectionInput, "section"],
+  ].forEach(([el, fieldName]) => {
+    if (!el) return;
+    const onDiuFieldUpdate = () => {
+      updatePreviewField(fieldName, el.value);
+      queueDraftSave();
+    };
+    el.addEventListener("input", onDiuFieldUpdate);
+    el.addEventListener("change", onDiuFieldUpdate);
+  });
 
   // Course Code & Title
   if (courseCodeInput) {

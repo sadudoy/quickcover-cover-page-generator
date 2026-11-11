@@ -1,0 +1,343 @@
+/* ==========================================================================
+   Daffodil International University (DIU) — Assignment Cover Template
+   Matches reference/Assignment Cover Daffodil.docx on A4 (210mm x 297mm)
+   ========================================================================== */
+
+/* Template switching visibility */
+.a4-cover[data-template="baust"] #cover-diu,
+.a4-cover:not([data-template="diu"]) #cover-diu {
+  display: none;
+}
+
+.a4-cover[data-template="diu"] #cover-baust {
+  display: none;
+}
+
+/* DIU Sheet Container */
+#cover-diu {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  background: #ffffff;
+  color: #000000;
+  font-family: "Times New Roman", Times, serif;
+  line-height: 1.2;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+[data-theme="dark"] .a4-cover[data-template="diu"],
+[data-theme="dark"] #cover-diu {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Top Department Header & Divider Rule */
+#cover-diu .diu-header {
+  position: absolute;
+  top: 10mm;
+  left: 18.5mm;
+  width: 173mm;
+  text-align: center;
+  padding-bottom: 1.2mm;
+  border-bottom: 0.5pt solid #000000;
+}
+
+#cover-diu .diu-department-header {
+  margin: 0;
+  min-height: 4.8mm;
+  font-family: Calibri, "Segoe UI", Arial, sans-serif;
+  font-size: 12pt;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #000000;
+}
+
+/* DIU Wordmark & Shield Logo */
+#cover-diu .diu-logo-box {
+  position: absolute;
+  top: 17.5mm;
+  left: 69mm;
+  width: 72mm;
+  height: 20mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+#cover-diu .diu-logo-img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Built-in 320x320 square asset wraps the wide DIU wordmark with top/bottom white margins;
+   zoom width to ~78mm inside the 20mm clip box so the emblem renders at exact 71mm x 19mm. */
+#cover-diu .diu-logo-img.diu-logo-default {
+  width: 78mm;
+  height: 78mm;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+}
+
+/* Cover Title ("Assignment") */
+#cover-diu .diu-title-banner {
+  position: absolute;
+  top: 39.5mm;
+  left: 18.5mm;
+  width: 173mm;
+  margin: 0;
+  text-align: center;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 20pt !important;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #000000;
+}
+
+/* Vertical Stack of Reference Tables (173mm centered width on A4) */
+#cover-diu .diu-tables-stack {
+  position: absolute;
+  top: 50.5mm;
+  left: 18.5mm;
+  width: 173mm;
+  display: flex;
+  flex-direction: column;
+}
+
+#cover-diu .diu-table {
+  width: 173mm;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: #000000;
+  background: #ffffff;
+}
+
+#cover-diu .diu-table th,
+#cover-diu .diu-table td {
+  border: 0.5pt solid #000000;
+  padding: 1.2mm 2mm;
+  vertical-align: top;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+#cover-diu .diu-field-label {
+  font-weight: 700;
+}
+
+#cover-diu .user-data {
+  font-weight: 400;
+}
+
+/* Table 1: Course Code, Course Title, Title/Topic */
+#cover-diu .diu-info-table {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 14pt;
+  line-height: 1.35;
+}
+
+#cover-diu .diu-col-course-code {
+  width: 55.5mm;
+}
+
+#cover-diu .diu-col-course-title {
+  width: 117.5mm;
+}
+
+#cover-diu .diu-topic-cell {
+  min-height: 14mm;
+}
+
+/* Table 2: Evaluation Rubric Table */
+#cover-diu .diu-rubric-table {
+  margin-top: 5.5mm;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 14pt;
+  line-height: 1.15;
+}
+
+#cover-diu .diu-col-sl { width: 11mm; }
+#cover-diu .diu-col-criteria { width: 60.3mm; }
+#cover-diu .diu-col-tick { width: 7.94mm; }
+#cover-diu .diu-col-mark { width: 24.5mm; }
+#cover-diu .diu-col-remarks { width: 37.5mm; }
+
+#cover-diu .diu-rubric-table th {
+  font-weight: 700;
+}
+
+#cover-diu .diu-th-sl {
+  text-align: left;
+  vertical-align: top;
+  padding-top: 1.5mm;
+}
+
+#cover-diu .diu-th-criteria {
+  text-align: center;
+  vertical-align: middle;
+  padding: 1.5mm 2mm;
+}
+
+#cover-diu .diu-th-tick-group {
+  text-align: center;
+  vertical-align: middle;
+  padding: 1mm;
+  height: 11mm;
+}
+
+#cover-diu .diu-th-mark,
+#cover-diu .diu-th-remarks {
+  text-align: center;
+  vertical-align: top;
+  padding: 1.5mm 1mm;
+  word-break: normal;
+}
+
+#cover-diu .diu-tick-subhead {
+  position: relative;
+  height: 25.5mm;
+  padding: 0;
+  vertical-align: bottom !important;
+  text-align: center;
+}
+
+#cover-diu .diu-vertical-label {
+  position: absolute;
+  left: 50%;
+  bottom: 0mm;
+  transform-origin: 0 50%;
+  transform: rotate(-90deg);
+  display: inline-block;
+  font-weight: 700;
+  font-size: 13.5pt;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+#cover-diu .diu-rubric-band,
+[data-theme="dark"] #cover-diu .diu-rubric-band {
+  background-color: #e7e6e6 !important;
+  text-align: center;
+  font-weight: 700;
+  padding: 1mm 2mm;
+}
+
+#cover-diu .diu-rubric-row td {
+  height: 6.2mm;
+  vertical-align: middle;
+}
+
+#cover-diu .diu-criteria-name {
+  text-align: center;
+}
+
+#cover-diu .diu-total-label {
+  text-align: right;
+  font-weight: 700;
+  padding-right: 2mm;
+}
+
+/* Date of Submission & Teacher Signature Row */
+#cover-diu .diu-rubric-footer-row td {
+  height: 36mm;
+  vertical-align: bottom !important;
+  padding-bottom: 3mm;
+}
+
+#cover-diu .diu-date-cell {
+  padding: 2mm 3mm 6mm 2mm !important;
+  vertical-align: middle !important;
+  font-size: 14pt;
+}
+
+#cover-diu .diu-submission-date-line {
+  display: inline-block;
+  min-width: 72mm;
+  margin-left: 2mm;
+  padding: 0 2mm 0.4mm;
+  border-bottom: 1.5pt dotted #000000;
+  min-height: 4.5mm;
+  line-height: 1.2;
+  vertical-align: baseline;
+}
+
+#cover-diu .diu-signature-cell {
+  padding: 2mm;
+  vertical-align: bottom !important;
+  text-align: left;
+}
+
+#cover-diu .diu-signature-line {
+  border-top: 1.5pt dotted #000000;
+  width: 34mm;
+  height: 0;
+  margin-bottom: 1.5mm;
+}
+
+#cover-diu .diu-signature-label {
+  font-weight: 700;
+  font-size: 14pt;
+  line-height: 1.15;
+}
+
+/* Table 3: Semester / Year / Level-Term / Section */
+#cover-diu .diu-meta-bar {
+  margin-top: 7mm;
+  font-family: Calibri, "Segoe UI", Arial, sans-serif;
+  font-size: 12pt;
+  line-height: 1.3;
+}
+
+#cover-diu .diu-meta-bar td {
+  width: 25%;
+  padding: 1.4mm 2mm;
+  vertical-align: middle;
+}
+
+/* Table 4: Submitted by / Submitted to */
+#cover-diu .diu-submission-table {
+  margin-top: 6mm;
+  font-family: Calibri, "Segoe UI", Arial, sans-serif;
+  font-size: 12pt;
+  line-height: 1.35;
+}
+
+#cover-diu .diu-col-sub-by {
+  width: 82.5mm;
+}
+
+#cover-diu .diu-col-sub-to {
+  width: 90.5mm;
+}
+
+#cover-diu .diu-sub-header th {
+  text-align: left;
+  font-weight: 700;
+  padding: 1.4mm 2mm;
+}
+
+#cover-diu .diu-sub-body td {
+  min-height: 26mm;
+  height: 28mm;
+  padding: 2mm;
+  vertical-align: top;
+}
+
+#cover-diu .diu-student-row {
+  margin-bottom: 2.2mm;
+}
+
+#cover-diu .diu-teachers-preview .teacher-entry {
+  margin-bottom: 2.2mm;
+}
+
+#cover-diu .diu-teachers-preview .teacher-line {
+  font-size: 12pt;
+  line-height: 1.3;
+}
